@@ -1,0 +1,358 @@
+=== GPU info ===
+Tue Jun 17 08:57:15 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 565.57.01              Driver Version: 565.57.01      CUDA Version: 12.7     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-SXM4-80GB          On  |   00000000:88:00.0 Off |                   On |
+| N/A   48C    P0            191W /  400W |   20105MiB /  81920MiB |     N/A      Default |
+|                                         |                        |              Enabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA A100-SXM4-80GB          On  |   00000000:8B:00.0 Off |                   On |
+| N/A   44C    P0            115W /  400W |    7497MiB /  81920MiB |     N/A      Default |
+|                                         |                        |              Enabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA A100-SXM4-80GB          On  |   00000000:C8:00.0 Off |                   On |
+| N/A   28C    P0             50W /  400W |      96MiB /  81920MiB |     N/A      Default |
+|                                         |                        |              Enabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA A100-SXM4-80GB          On  |   00000000:CB:00.0 Off |                   On |
+| N/A   29C    P0             49W /  400W |      99MiB /  81920MiB |     N/A      Default |
+|                                         |                        |              Enabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| MIG devices:                                                                            |
++------------------+----------------------------------+-----------+-----------------------+
+| GPU  GI  CI  MIG |                     Memory-Usage |        Vol|        Shared         |
+|      ID  ID  Dev |                       BAR1-Usage | SM     Unc| CE ENC  DEC  OFA  JPG |
+|                  |                                  |        ECC|                       |
+|==================+==================================+===========+=======================|
+|  1    1   0   0  |              54MiB / 40192MiB    | 56      0 |  4   0    2    0    0 |
+|                  |                 1MiB / 65535MiB  |           |                       |
++------------------+----------------------------------+-----------+-----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0    3    0      86541      C   ...etro/code/lst_directory/bin/python3      18422MiB |
+|    0    6    0    2183446      C   python                                       1574MiB |
++-----------------------------------------------------------------------------------------+
+GPU 0: NVIDIA A100-SXM4-80GB (UUID: GPU-b9e506c6-d97c-8a2f-3940-a4cc4e0ba5ba)
+GPU 1: NVIDIA A100-SXM4-80GB (UUID: GPU-5225b1de-d51e-ea91-8a4f-2987beba1da5)
+  MIG 4g.40gb     Device  0: (UUID: MIG-70efff36-d5dc-5698-87a5-c0526fa1dc41)
+GPU 2: NVIDIA A100-SXM4-80GB (UUID: GPU-f597e56a-1dc7-4938-f421-ee171994d76c)
+GPU 3: NVIDIA A100-SXM4-80GB (UUID: GPU-ec20bcdd-74a4-de5a-f88f-e31910c3485c)
+================
+/home/vascul/vsayyalasomayajula/my-scratch/miniconda3/envs/GNN/lib/python3.12/site-packages/torch_geometric/typing.py:68: UserWarning: An issue occurred while importing 'pyg-lib'. Disabling its usage. Stacktrace: /lib64/libm.so.6: version `GLIBC_2.29' not found (required by /scratch/vascul/vsayyalasomayajula/PythonEnvs/GNN/lib/python3.12/site-packages/libpyg.so)
+  warnings.warn(f"An issue occurred while importing 'pyg-lib'. "
+/home/vascul/vsayyalasomayajula/my-scratch/miniconda3/envs/GNN/lib/python3.12/site-packages/torch_geometric/typing.py:124: UserWarning: An issue occurred while importing 'torch-sparse'. Disabling its usage. Stacktrace: /lib64/libm.so.6: version `GLIBC_2.29' not found (required by /scratch/vascul/vsayyalasomayajula/PythonEnvs/GNN/lib/python3.12/site-packages/libpyg.so)
+  warnings.warn(f"An issue occurred while importing 'torch-sparse'. "
+Loaded graph for patient ID: 20
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 37
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 62
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 26
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 91
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 94
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 7
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 39
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 95
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 14
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 87
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 8
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 77
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 96
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 22
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 18
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 23
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 72
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 75
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 53
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 57
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 32
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 69
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 93
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 21
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 66
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 73
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 38
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 86
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 34
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 24
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 9
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 46
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 1
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 25
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 92
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 6
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 61
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 70
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 79
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 16
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 83
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 41
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 10
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 78
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 30
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 11
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 76
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 50
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 90
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 82
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 63
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 5
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 29
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 60
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 89
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 31
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 43
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 33
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 74
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 35
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 85
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 4
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 64
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 17
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 48
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 52
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 12
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 47
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 67
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 81
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 36
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 13
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 45
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 80
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 68
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 19
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 15
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 55
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 54
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 88
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 71
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 2
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 49
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+Loaded graph for patient ID: 3
+Edge index shape: torch.Size([2, 171832])
+Edge attributes shape: torch.Size([171832])
+
+GraphCL Run 1/2
+Training GraphCL on 74 graphs with batch size 8
+Epoch 1, Loss: 1.9751
+Epoch 6, Loss: 1.9593
+Epoch 11, Loss: 1.9520
+Epoch 16, Loss: 1.9480
+Epoch 21, Loss: 1.9392
+Epoch 26, Loss: 1.9359
+Epoch 31, Loss: 1.9425
+Epoch 36, Loss: 1.9366
+Epoch 41, Loss: 1.9363
+Epoch 46, Loss: 1.9425
+Epoch 51, Loss: 1.9411
+Epoch 56, Loss: 1.9193
+Epoch 61, Loss: 1.9440
+Epoch 66, Loss: 1.9275
+Epoch 71, Loss: 1.9319
+Epoch 76, Loss: 1.8889
+Epoch 81, Loss: 1.7162
+Epoch 86, Loss: 1.9477
+Epoch 91, Loss: 1.7272
+Epoch 96, Loss: 1.8638
+
+GraphCL Run 2/2
+Training GraphCL on 74 graphs with batch size 8
+Epoch 1, Loss: 1.9469
+Epoch 6, Loss: 1.9522
+Epoch 11, Loss: 1.9373
+Epoch 16, Loss: 1.9354
+Epoch 21, Loss: 1.9515
+Epoch 26, Loss: 1.9279
+Epoch 31, Loss: 1.9546
+Epoch 36, Loss: 1.9325
+Epoch 41, Loss: 1.9122
+Epoch 46, Loss: 1.9369
+Epoch 51, Loss: 1.8681
+Epoch 56, Loss: 1.9195
+Epoch 61, Loss: 1.9288
+Epoch 66, Loss: 1.7092
+Epoch 71, Loss: 1.5728
+Epoch 76, Loss: 1.6426
+Epoch 81, Loss: 1.6299
+Epoch 86, Loss: 1.5380
+Epoch 91, Loss: 1.3509
+Epoch 96, Loss: 1.3450
+Embeddings saved as dictionaries in embeddings_dict_d2.npy
+Embeddings saved as arrays in embeddings_array_d2.npy

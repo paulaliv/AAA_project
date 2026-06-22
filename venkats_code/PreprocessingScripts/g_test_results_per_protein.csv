@@ -1,0 +1,1767 @@
+protein_index,protein,g_statistic,p_value,comment
+0,0,0.6122448979591837,0.7362964551863367,Test performed
+1,1,4.591156462585033,0.10070314671925,Test performed
+2,2,8.157413503035622,0.016929345351892715,Test performed
+3,3,5.988877950137031,0.05006470675783058,Test performed
+4,4,7.013036094668748,0.030001195523388872,Test performed
+5,5,,,All present or all missing
+6,6,1.8236525379382527,0.40178977738665295,Test performed
+7,7,5.0401055944765965,0.08045535881664205,Test performed
+8,8,3.472878084835544,0.17614653547661002,Test performed
+9,9,,,All present or all missing
+10,10,,,All present or all missing
+11,11,0.4934067692026421,0.7813724262556608,Test performed
+12,12,,,All present or all missing
+13,13,2.1768707482993195,0.3367429584768906,Test performed
+14,14,,,All present or all missing
+15,15,0.8514614637063618,0.6532922292271105,Test performed
+16,16,,,All present or all missing
+17,17,3.88205709634281,0.14355621932990018,Test performed
+18,18,,,All present or all missing
+19,19,,,All present or all missing
+20,20,5.487528344671201,0.06432774985466984,Test performed
+21,21,,,All present or all missing
+22,22,,,All present or all missing
+23,23,5.472891497736218,0.06480025445427536,Test performed
+24,24,,,All present or all missing
+25,25,,,All present or all missing
+26,26,,,All present or all missing
+27,27,3.17790230846437,0.2041396104552385,Test performed
+28,28,0.8514614637063618,0.6532922292271105,Test performed
+29,29,2.0135298563869988,0.36539916208202555,Test performed
+30,30,,,All present or all missing
+31,31,2.1700063245252745,0.33790071736220995,Test performed
+32,32,,,All present or all missing
+33,33,0.17132779037540935,0.9179026908914847,Test performed
+34,34,,,All present or all missing
+35,35,,,All present or all missing
+36,36,1.2038585926173748,0.5477538365628214,Test performed
+37,37,,,All present or all missing
+38,38,5.000848411927129,0.08205018506254558,Test performed
+39,39,,,All present or all missing
+40,40,0.8514614637063618,0.6532922292271105,Test performed
+41,41,,,All present or all missing
+42,42,,,All present or all missing
+43,43,,,All present or all missing
+44,44,0.23790087463556872,0.8878518039882978,Test performed
+45,45,5.988877950137031,0.05006470675783058,Test performed
+46,46,0.2379008746355684,0.8878518039882979,Test performed
+47,47,,,All present or all missing
+48,48,0.7947379865188084,0.6720859846746658,Test performed
+49,49,,,All present or all missing
+50,50,,,All present or all missing
+51,51,,,All present or all missing
+52,52,,,All present or all missing
+53,53,,,All present or all missing
+54,54,,,All present or all missing
+55,55,,,All present or all missing
+56,56,,,All present or all missing
+57,57,,,All present or all missing
+58,58,3.3118742780130925,0.19091305977135786,Test performed
+59,59,,,All present or all missing
+60,60,,,All present or all missing
+61,61,,,All present or all missing
+62,62,,,All present or all missing
+63,63,,,All present or all missing
+64,64,1.4578964417847344,0.4824161185445659,Test performed
+65,65,,,All present or all missing
+66,66,,,All present or all missing
+67,67,0.17132779037540935,0.9179026908914847,Test performed
+68,68,,,All present or all missing
+69,69,6.3043731778425665,0.042758529248229635,Test performed
+70,70,,,All present or all missing
+71,71,,,All present or all missing
+72,72,,,All present or all missing
+73,73,,,All present or all missing
+74,74,,,All present or all missing
+75,75,2.763358966775116,0.25115638567001836,Test performed
+76,76,,,All present or all missing
+77,77,6.425931791785452,0.040237097082382024,Test performed
+78,78,3.3359497645211933,0.1886286743816618,Test performed
+79,79,,,All present or all missing
+80,80,,,All present or all missing
+81,81,,,All present or all missing
+82,82,3.495821185617105,0.1741374075576074,Test performed
+83,83,,,All present or all missing
+84,84,,,All present or all missing
+85,85,6.317990399623053,0.04246839189733116,Test performed
+86,86,,,All present or all missing
+87,87,,,All present or all missing
+88,88,,,All present or all missing
+89,89,4.088235549647701,0.1294943828027503,Test performed
+90,90,10.331836734693876,0.005707818557097501,Test performed
+91,91,,,All present or all missing
+92,92,,,All present or all missing
+93,93,,,All present or all missing
+94,94,1.4952243523672102,0.4734958285650058,Test performed
+95,95,,,All present or all missing
+96,96,,,All present or all missing
+97,97,,,All present or all missing
+98,98,4.8646850044365575,0.0878308474612518,Test performed
+99,99,,,All present or all missing
+100,100,7.089896866830896,0.028870111204331736,Test performed
+101,101,,,All present or all missing
+102,102,,,All present or all missing
+103,103,3.900226757369614,0.1422579416538075,Test performed
+104,104,,,All present or all missing
+105,105,,,All present or all missing
+106,106,,,All present or all missing
+107,107,,,All present or all missing
+108,108,1.8387755102040817,0.398763107040602,Test performed
+109,109,,,All present or all missing
+110,110,,,All present or all missing
+111,111,,,All present or all missing
+112,112,,,All present or all missing
+113,113,1.1417439703153982,0.5650325238491394,Test performed
+114,114,0.06938775510204082,0.9659010550008585,Test performed
+115,115,,,All present or all missing
+116,116,,,All present or all missing
+117,117,,,All present or all missing
+118,118,,,All present or all missing
+119,119,1.7822197372099526,0.4102002316559542,Test performed
+120,120,3.3444172741885105,0.18783175499077012,Test performed
+121,121,0.3578398572543771,0.8361728502246025,Test performed
+122,122,,,All present or all missing
+123,123,0.09531285041489117,0.9534613160828096,Test performed
+124,124,,,All present or all missing
+125,125,,,All present or all missing
+126,126,,,All present or all missing
+127,127,,,All present or all missing
+128,128,0.41084854994629416,0.8143017552547787,Test performed
+129,129,,,All present or all missing
+130,130,4.227634450006419,0.12077605600547378,Test performed
+131,131,,,All present or all missing
+132,132,,,All present or all missing
+133,133,4.660007462900772,0.09729538403595712,Test performed
+134,134,1.3245944531658818,0.5156653725998199,Test performed
+135,135,,,All present or all missing
+136,136,1.1345044346852666,0.5670815165951504,Test performed
+137,137,,,All present or all missing
+138,138,0.5150113378684809,0.7729772443438951,Test performed
+139,139,,,All present or all missing
+140,140,0.993424849031608,0.6085279563727617,Test performed
+141,141,,,All present or all missing
+142,142,,,All present or all missing
+143,143,,,All present or all missing
+144,144,5.125088286680793,0.0771083160745438,Test performed
+145,145,,,All present or all missing
+146,146,,,All present or all missing
+147,147,,,All present or all missing
+148,148,4.829653172744507,0.08938283778001545,Test performed
+149,149,,,All present or all missing
+150,150,1.7566520278997677,0.4154778339723957,Test performed
+151,151,1.0771517538434834,0.5835787488332344,Test performed
+152,152,,,All present or all missing
+153,153,,,All present or all missing
+154,154,,,All present or all missing
+155,155,,,All present or all missing
+156,156,3.832224685883224,0.1471780290584191,Test performed
+157,157,3.1966103394674823,0.20223898845667976,Test performed
+158,158,3.3118742780130925,0.19091305977135786,Test performed
+159,159,,,All present or all missing
+160,160,4.104914456004045,0.128418960908441,Test performed
+161,161,,,All present or all missing
+162,162,,,All present or all missing
+163,163,,,All present or all missing
+164,164,,,All present or all missing
+165,165,1.0777916608820397,0.5833920606261362,Test performed
+166,166,,,All present or all missing
+167,167,,,All present or all missing
+168,168,6.334912061304311,0.04211058980336572,Test performed
+169,169,,,All present or all missing
+170,170,1.511996690568119,0.4695416160001533,Test performed
+171,171,,,All present or all missing
+172,172,1.1965532879818592,0.5497582493664892,Test performed
+173,173,,,All present or all missing
+174,174,,,All present or all missing
+175,175,,,All present or all missing
+176,176,,,All present or all missing
+177,177,1.0803200028381623,0.5826550192855551,Test performed
+178,178,,,All present or all missing
+179,179,,,All present or all missing
+180,180,,,All present or all missing
+181,181,,,All present or all missing
+182,182,,,All present or all missing
+183,183,,,All present or all missing
+184,184,,,All present or all missing
+185,185,0.2472749203984072,0.8837001592948703,Test performed
+186,186,,,All present or all missing
+187,187,3.802068772714566,0.1494139874717077,Test performed
+188,188,,,All present or all missing
+189,189,,,All present or all missing
+190,190,,,All present or all missing
+191,191,,,All present or all missing
+192,192,,,All present or all missing
+193,193,,,All present or all missing
+194,194,,,All present or all missing
+195,195,,,All present or all missing
+196,196,,,All present or all missing
+197,197,,,All present or all missing
+198,198,,,All present or all missing
+199,199,,,All present or all missing
+200,200,2.3014180796696784,0.31641234087016756,Test performed
+201,201,8.183549783549786,0.016709549581335654,Test performed
+202,202,1.4774935948405332,0.4777122107250359,Test performed
+203,203,0.09531285041489117,0.9534613160828096,Test performed
+204,204,,,All present or all missing
+205,205,,,All present or all missing
+206,206,,,All present or all missing
+207,207,4.899529797488981,0.08631387661492128,Test performed
+208,208,,,All present or all missing
+209,209,,,All present or all missing
+210,210,,,All present or all missing
+211,211,3.7762623476909187,0.15135439975834503,Test performed
+212,212,0.4601213919151618,0.7944853789890008,Test performed
+213,213,1.6326530612244894,0.44205254202382593,Test performed
+214,214,,,All present or all missing
+215,215,,,All present or all missing
+216,216,0.31135531135531136,0.8558350194720481,Test performed
+217,217,,,All present or all missing
+218,218,,,All present or all missing
+219,219,,,All present or all missing
+220,220,,,All present or all missing
+221,221,,,All present or all missing
+222,222,,,All present or all missing
+223,223,4.088235549647701,0.1294943828027503,Test performed
+224,224,0.8514614637063618,0.6532922292271105,Test performed
+225,225,,,All present or all missing
+226,226,,,All present or all missing
+227,227,,,All present or all missing
+228,228,2.5677165843506353,0.276966618143217,Test performed
+229,229,,,All present or all missing
+230,230,1.8387755102040817,0.398763107040602,Test performed
+231,231,,,All present or all missing
+232,232,0.28623409496689006,0.8666526234500419,Test performed
+233,233,,,All present or all missing
+234,234,,,All present or all missing
+235,235,1.1264245958123515,0.5693771141284523,Test performed
+236,236,,,All present or all missing
+237,237,1.0771517538434827,0.5835787488332346,Test performed
+238,238,1.2038585926173748,0.5477538365628214,Test performed
+239,239,0.570310315907185,0.751897582378134,Test performed
+240,240,,,All present or all missing
+241,241,1.5873015873015872,0.45219092239655023,Test performed
+242,242,,,All present or all missing
+243,243,,,All present or all missing
+244,244,,,All present or all missing
+245,245,,,All present or all missing
+246,246,,,All present or all missing
+247,247,,,All present or all missing
+248,248,9.703606667892382,0.007814273091593596,Test performed
+249,249,,,All present or all missing
+250,250,5.72537938252224,0.05711493194952316,Test performed
+251,251,1.0144408640649238,0.6021670189523889,Test performed
+252,252,,,All present or all missing
+253,253,,,All present or all missing
+254,254,0.14802721088435367,0.9286590589382073,Test performed
+255,255,,,All present or all missing
+256,256,,,All present or all missing
+257,257,,,All present or all missing
+258,258,0.7771428571428571,0.6780247898080576,Test performed
+259,259,1.3245944531658818,0.5156653725998199,Test performed
+260,260,0.2634978041849652,0.8765610700985416,Test performed
+261,261,,,All present or all missing
+262,262,1.155806993999414,0.561073426498706,Test performed
+263,263,8.881321845647555,0.011788144890533396,Test performed
+264,264,2.0408163265306123,0.36044778859782106,Test performed
+265,265,,,All present or all missing
+266,266,,,All present or all missing
+267,267,,,All present or all missing
+268,268,1.5298347910592809,0.4653723712248683,Test performed
+269,269,2.88664406676829,0.2361419826678707,Test performed
+270,270,,,All present or all missing
+271,271,,,All present or all missing
+272,272,,,All present or all missing
+273,273,,,All present or all missing
+274,274,4.544143744454304,0.10309835203514729,Test performed
+275,275,,,All present or all missing
+276,276,,,All present or all missing
+277,277,0.6550592264877977,0.7207019486369466,Test performed
+278,278,,,All present or all missing
+279,279,,,All present or all missing
+280,280,4.660007462900772,0.09729538403595712,Test performed
+281,281,,,All present or all missing
+282,282,0.1689636893718528,0.9189883397473143,Test performed
+283,283,3.6734693877551026,0.15933686121653332,Test performed
+284,284,,,All present or all missing
+285,285,,,All present or all missing
+286,286,1.3276190476190475,0.5148861226642656,Test performed
+287,287,,,All present or all missing
+288,288,,,All present or all missing
+289,289,4.552207675523038,0.10268349992979883,Test performed
+290,290,,,All present or all missing
+291,291,,,All present or all missing
+292,292,,,All present or all missing
+293,293,,,All present or all missing
+294,294,,,All present or all missing
+295,295,1.8296824311861908,0.4005802269350257,Test performed
+296,296,,,All present or all missing
+297,297,4.956268221574345,0.0838996270419883,Test performed
+298,298,,,All present or all missing
+299,299,,,All present or all missing
+300,300,,,All present or all missing
+301,301,1.0005611902708769,0.606360494034971,Test performed
+302,302,5.66402332361516,0.058894259091649956,Test performed
+303,303,,,All present or all missing
+304,304,1.7474803189088906,0.41738753031309606,Test performed
+305,305,,,All present or all missing
+306,306,,,All present or all missing
+307,307,1.9136702299967607,0.3841066175745176,Test performed
+308,308,,,All present or all missing
+309,309,,,All present or all missing
+310,310,4.553477192702376,0.10261834137836405,Test performed
+311,311,,,All present or all missing
+312,312,,,All present or all missing
+313,313,,,All present or all missing
+314,314,,,All present or all missing
+315,315,,,All present or all missing
+316,316,,,All present or all missing
+317,317,4.829653172744507,0.08938283778001545,Test performed
+318,318,3.390743142295937,0.1835310215241769,Test performed
+319,319,2.6810341622987997,0.2617103081202382,Test performed
+320,320,8.775510204081632,0.012428598862710053,Test performed
+321,321,,,All present or all missing
+322,322,,,All present or all missing
+323,323,,,All present or all missing
+324,324,1.0005611902708769,0.606360494034971,Test performed
+325,325,,,All present or all missing
+326,326,,,All present or all missing
+327,327,,,All present or all missing
+328,328,0.7771428571428571,0.6780247898080576,Test performed
+329,329,4.73685009718173,0.09362806987868597,Test performed
+330,330,,,All present or all missing
+331,331,,,All present or all missing
+332,332,11.561982507288631,0.0030856552247916697,Test performed
+333,333,6.825473432616289,0.03295089960413476,Test performed
+334,334,,,All present or all missing
+335,335,1.5562756634185204,0.4592604357378982,Test performed
+336,336,3.2336896663427286,0.19852408857967327,Test performed
+337,337,,,All present or all missing
+338,338,6.626218054789482,0.036402820270038654,Test performed
+339,339,,,All present or all missing
+340,340,,,All present or all missing
+341,341,3.261978704525288,0.19573582661750005,Test performed
+342,342,,,All present or all missing
+343,343,3.459908553585369,0.17729251616702793,Test performed
+344,344,,,All present or all missing
+345,345,0.2634978041849652,0.8765610700985416,Test performed
+346,346,,,All present or all missing
+347,347,,,All present or all missing
+348,348,,,All present or all missing
+349,349,,,All present or all missing
+350,350,0.06938775510204082,0.9659010550008585,Test performed
+351,351,0.5545610056888252,0.7578418904876244,Test performed
+352,352,,,All present or all missing
+353,353,,,All present or all missing
+354,354,,,All present or all missing
+355,355,,,All present or all missing
+356,356,1.3533782921538031,0.508297106994577,Test performed
+357,357,,,All present or all missing
+358,358,1.860619803476946,0.3944314564351681,Test performed
+359,359,,,All present or all missing
+360,360,,,All present or all missing
+361,361,2.3499319727891153,0.30882948391359033,Test performed
+362,362,,,All present or all missing
+363,363,,,All present or all missing
+364,364,,,All present or all missing
+365,365,,,All present or all missing
+366,366,0.5703103159071847,0.751897582378134,Test performed
+367,367,1.4774935948405332,0.4777122107250359,Test performed
+368,368,,,All present or all missing
+369,369,,,All present or all missing
+370,370,,,All present or all missing
+371,371,,,All present or all missing
+372,372,,,All present or all missing
+373,373,0.17132779037540935,0.9179026908914847,Test performed
+374,374,,,All present or all missing
+375,375,,,All present or all missing
+376,376,,,All present or all missing
+377,377,0.14802721088435367,0.9286590589382073,Test performed
+378,378,,,All present or all missing
+379,379,0.6354190027659417,0.7278141867223479,Test performed
+380,380,0.6354190027659417,0.7278141867223479,Test performed
+381,381,6.499647028622771,0.038781051528381155,Test performed
+382,382,5.675671908107506,0.058552238695294564,Test performed
+383,383,,,All present or all missing
+384,384,7.006956977802458,0.030092524640024598,Test performed
+385,385,,,All present or all missing
+386,386,1.9208461686561416,0.3827309242598737,Test performed
+387,387,6.425931791785452,0.040237097082382024,Test performed
+388,388,,,All present or all missing
+389,389,,,All present or all missing
+390,390,,,All present or all missing
+391,391,,,All present or all missing
+392,392,,,All present or all missing
+393,393,,,All present or all missing
+394,394,2.4424817096649982,0.2948640563367085,Test performed
+395,395,4.81637865874319,0.0899780678079983,Test performed
+396,396,,,All present or all missing
+397,397,,,All present or all missing
+398,398,,,All present or all missing
+399,399,,,All present or all missing
+400,400,,,All present or all missing
+401,401,,,All present or all missing
+402,402,,,All present or all missing
+403,403,,,All present or all missing
+404,404,2.3265627005519187,0.3124592087655494,Test performed
+405,405,3.1122448979591835,0.2109524663220395,Test performed
+406,406,,,All present or all missing
+407,407,,,All present or all missing
+408,408,,,All present or all missing
+409,409,,,All present or all missing
+410,410,3.7695561121833037,0.15186276070403915,Test performed
+411,411,,,All present or all missing
+412,412,,,All present or all missing
+413,413,,,All present or all missing
+414,414,,,All present or all missing
+415,415,,,All present or all missing
+416,416,,,All present or all missing
+417,417,,,All present or all missing
+418,418,0.7771428571428571,0.6780247898080576,Test performed
+419,419,2.79402914581286,0.24733426122497912,Test performed
+420,420,1.9329643446386915,0.38041893525844456,Test performed
+421,421,,,All present or all missing
+422,422,,,All present or all missing
+423,423,,,All present or all missing
+424,424,,,All present or all missing
+425,425,,,All present or all missing
+426,426,,,All present or all missing
+427,427,3.0516973374116234,0.21743644703192014,Test performed
+428,428,,,All present or all missing
+429,429,,,All present or all missing
+430,430,,,All present or all missing
+431,431,3.2659360040312415,0.19534891687817577,Test performed
+432,432,,,All present or all missing
+433,433,1.9829478458049883,0.37102941904454273,Test performed
+434,434,4.659209837781266,0.09733419439563164,Test performed
+435,435,0.17132779037540935,0.9179026908914847,Test performed
+436,436,,,All present or all missing
+437,437,6.621371600049638,0.03649113954608507,Test performed
+438,438,,,All present or all missing
+439,439,,,All present or all missing
+440,440,8.282185054472917,0.015905464854984425,Test performed
+441,441,,,All present or all missing
+442,442,,,All present or all missing
+443,443,0.20941978401018346,0.9005857518187922,Test performed
+444,444,4.593093394993466,0.10060566633584173,Test performed
+445,445,,,All present or all missing
+446,446,,,All present or all missing
+447,447,0.09348198210183697,0.9543345467700959,Test performed
+448,448,,,All present or all missing
+449,449,,,All present or all missing
+450,450,,,All present or all missing
+451,451,0.056828628257199636,0.9719855760091148,Test performed
+452,452,,,All present or all missing
+453,453,3.84963768115942,0.14590218601764735,Test performed
+454,454,,,All present or all missing
+455,455,,,All present or all missing
+456,456,,,All present or all missing
+457,457,,,All present or all missing
+458,458,,,All present or all missing
+459,459,,,All present or all missing
+460,460,,,All present or all missing
+461,461,,,All present or all missing
+462,462,,,All present or all missing
+463,463,,,All present or all missing
+464,464,0.09531285041489117,0.9534613160828096,Test performed
+465,465,1.1591583020154452,0.5601340488185895,Test performed
+466,466,,,All present or all missing
+467,467,,,All present or all missing
+468,468,,,All present or all missing
+469,469,6.465396825396825,0.03945090021949915,Test performed
+470,470,1.593917244966397,0.450697623376079,Test performed
+471,471,,,All present or all missing
+472,472,8.294301327088213,0.015809398665701413,Test performed
+473,473,,,All present or all missing
+474,474,2.1413040101885503,0.3427849470104125,Test performed
+475,475,2.238314680710994,0.32655485331293793,Test performed
+476,476,0.29835029835029847,0.8614182249936566,Test performed
+477,477,,,All present or all missing
+478,478,,,All present or all missing
+479,479,1.1345044346852666,0.5670815165951504,Test performed
+480,480,,,All present or all missing
+481,481,,,All present or all missing
+482,482,,,All present or all missing
+483,483,,,All present or all missing
+484,484,6.314176614041843,0.042549451829406025,Test performed
+485,485,0.26349780418496493,0.8765610700985416,Test performed
+486,486,,,All present or all missing
+487,487,,,All present or all missing
+488,488,,,All present or all missing
+489,489,,,All present or all missing
+490,490,,,All present or all missing
+491,491,3.121562801365757,0.20997193486770407,Test performed
+492,492,4.105191860293902,0.12840115015833667,Test performed
+493,493,,,All present or all missing
+494,494,8.525059392621005,0.014086622422654982,Test performed
+495,495,,,All present or all missing
+496,496,,,All present or all missing
+497,497,,,All present or all missing
+498,498,,,All present or all missing
+499,499,0.2634978041849652,0.8765610700985416,Test performed
+500,500,,,All present or all missing
+501,501,,,All present or all missing
+502,502,9.506122448979589,0.008625250918483467,Test performed
+503,503,0.8514614637063618,0.6532922292271105,Test performed
+504,504,,,All present or all missing
+505,505,,,All present or all missing
+506,506,3.2336896663427286,0.19852408857967327,Test performed
+507,507,3.1934869823068563,0.20255506749575036,Test performed
+508,508,0.06257914421179739,0.969194880635025,Test performed
+509,509,,,All present or all missing
+510,510,0.8066326530612246,0.6681007279087707,Test performed
+511,511,8.673469387755102,0.013079166033695494,Test performed
+512,512,,,All present or all missing
+513,513,,,All present or all missing
+514,514,,,All present or all missing
+515,515,7.649715623954499,0.02182153807181727,Test performed
+516,516,4.660631169761137,0.09726504686732546,Test performed
+517,517,0.3628117913832198,0.8340967337066291,Test performed
+518,518,6.273167044595618,0.0434309255091372,Test performed
+519,519,2.403039137733015,0.3007368741311377,Test performed
+520,520,3.182445910695105,0.20367637225228274,Test performed
+521,521,1.649221838791508,0.4384055343757426,Test performed
+522,522,0.8514614637063618,0.6532922292271105,Test performed
+523,523,2.1068645640074215,0.34873872294752367,Test performed
+524,524,,,All present or all missing
+525,525,3.121562801365757,0.20997193486770407,Test performed
+526,526,,,All present or all missing
+527,527,,,All present or all missing
+528,528,,,All present or all missing
+529,529,0.26349780418496493,0.8765610700985416,Test performed
+530,530,12.958111172396887,0.0015352599155306135,Test performed
+531,531,,,All present or all missing
+532,532,,,All present or all missing
+533,533,,,All present or all missing
+534,534,0.29835029835029847,0.8614182249936566,Test performed
+535,535,,,All present or all missing
+536,536,,,All present or all missing
+537,537,,,All present or all missing
+538,538,,,All present or all missing
+539,539,4.909691903295315,0.08587642354380896,Test performed
+540,540,,,All present or all missing
+541,541,,,All present or all missing
+542,542,,,All present or all missing
+543,543,4.105191860293902,0.12840115015833667,Test performed
+544,544,,,All present or all missing
+545,545,,,All present or all missing
+546,546,3.595875850340136,0.16564009857814146,Test performed
+547,547,,,All present or all missing
+548,548,,,All present or all missing
+549,549,,,All present or all missing
+550,550,0.41084854994629416,0.8143017552547787,Test performed
+551,551,,,All present or all missing
+552,552,,,All present or all missing
+553,553,6.815198168581626,0.03312062482046533,Test performed
+554,554,,,All present or all missing
+555,555,3.5519922254616136,0.16931470893402786,Test performed
+556,556,1.8284810731444552,0.4008209193557268,Test performed
+557,557,2.1539436173582525,0.3406254444769143,Test performed
+558,558,3.595875850340136,0.16564009857814146,Test performed
+559,559,7.709750566893423,0.021176244173618335,Test performed
+560,560,2.2130313919587765,0.3307092474983544,Test performed
+561,561,,,All present or all missing
+562,562,0.7434402332361516,0.6895472083236646,Test performed
+563,563,,,All present or all missing
+564,564,,,All present or all missing
+565,565,0.9521592209243548,0.6212140251431836,Test performed
+566,566,,,All present or all missing
+567,567,0.26349780418496493,0.8765610700985416,Test performed
+568,568,,,All present or all missing
+569,569,,,All present or all missing
+570,570,,,All present or all missing
+571,571,,,All present or all missing
+572,572,,,All present or all missing
+573,573,3.0413464086933484,0.21856469870869077,Test performed
+574,574,0.8066326530612246,0.6681007279087707,Test performed
+575,575,5.295062080776368,0.07082586356580457,Test performed
+576,576,,,All present or all missing
+577,577,3.121562801365757,0.20997193486770407,Test performed
+578,578,1.8656607942322228,0.39343854561165365,Test performed
+579,579,,,All present or all missing
+580,580,,,All present or all missing
+581,581,,,All present or all missing
+582,582,10.70400253124506,0.004738658190030583,Test performed
+583,583,3.113155976676385,0.21085639105552995,Test performed
+584,584,,,All present or all missing
+585,585,,,All present or all missing
+586,586,,,All present or all missing
+587,587,,,All present or all missing
+588,588,4.576033490319205,0.10146749834192434,Test performed
+589,589,,,All present or all missing
+590,590,,,All present or all missing
+591,591,,,All present or all missing
+592,592,0.9868480725623585,0.6105323263120139,Test performed
+593,593,,,All present or all missing
+594,594,,,All present or all missing
+595,595,1.8708167371576394,0.3924255785298617,Test performed
+596,596,,,All present or all missing
+597,597,,,All present or all missing
+598,598,,,All present or all missing
+599,599,,,All present or all missing
+600,600,,,All present or all missing
+601,601,,,All present or all missing
+602,602,6.825473432616289,0.03295089960413476,Test performed
+603,603,1.0617427923550375,0.5880922849658998,Test performed
+604,604,,,All present or all missing
+605,605,,,All present or all missing
+606,606,3.0839002267573687,0.2139634413475638,Test performed
+607,607,1.1264245958123515,0.5693771141284523,Test performed
+608,608,3.4046905475476903,0.18225558319025154,Test performed
+609,609,,,All present or all missing
+610,610,,,All present or all missing
+611,611,0.09531285041489117,0.9534613160828096,Test performed
+612,612,10.375922490208207,0.005583378359050675,Test performed
+613,613,0.17132779037540935,0.9179026908914847,Test performed
+614,614,,,All present or all missing
+615,615,4.19795918367347,0.1225814475665317,Test performed
+616,616,8.954251323589302,0.01136603607929378,Test performed
+617,617,,,All present or all missing
+618,618,0.41084854994629416,0.8143017552547787,Test performed
+619,619,,,All present or all missing
+620,620,,,All present or all missing
+621,621,6.701127284844642,0.03506458464249013,Test performed
+622,622,8.112059369202228,0.017317639293289593,Test performed
+623,623,,,All present or all missing
+624,624,,,All present or all missing
+625,625,,,All present or all missing
+626,626,,,All present or all missing
+627,627,,,All present or all missing
+628,628,,,All present or all missing
+629,629,,,All present or all missing
+630,630,,,All present or all missing
+631,631,3.17790230846437,0.2041396104552385,Test performed
+632,632,,,All present or all missing
+633,633,3.051697337411623,0.21743644703192017,Test performed
+634,634,,,All present or all missing
+635,635,3.5618398832183633,0.16848308135675596,Test performed
+636,636,0.04130223517978615,0.9795606564435174,Test performed
+637,637,0.3416012558869702,0.8429896252938601,Test performed
+638,638,2.8945658452060057,0.23520850036501878,Test performed
+639,639,,,All present or all missing
+640,640,,,All present or all missing
+641,641,,,All present or all missing
+642,642,2.012270540145105,0.3656293110818072,Test performed
+643,643,,,All present or all missing
+644,644,,,All present or all missing
+645,645,,,All present or all missing
+646,646,,,All present or all missing
+647,647,,,All present or all missing
+648,648,,,All present or all missing
+649,649,2.3373231148999687,0.31078262770994936,Test performed
+650,650,,,All present or all missing
+651,651,,,All present or all missing
+652,652,,,All present or all missing
+653,653,,,All present or all missing
+654,654,,,All present or all missing
+655,655,1.468020998353679,0.4799801648434512,Test performed
+656,656,,,All present or all missing
+657,657,0.6224978029489305,0.7325315249999089,Test performed
+658,658,,,All present or all missing
+659,659,7.879818594104308,0.01944997883579603,Test performed
+660,660,0.26349780418496493,0.8765610700985416,Test performed
+661,661,,,All present or all missing
+662,662,9.217105645677075,0.00996623077820217,Test performed
+663,663,5.116667047558104,0.0774336743578274,Test performed
+664,664,6.28364774853879,0.043203927467306925,Test performed
+665,665,,,All present or all missing
+666,666,2.6485419342562206,0.2659968088363813,Test performed
+667,667,0.06938775510204082,0.9659010550008585,Test performed
+668,668,0.10204081632653067,0.950259277288062,Test performed
+669,669,,,All present or all missing
+670,670,,,All present or all missing
+671,671,,,All present or all missing
+672,672,1.4984273279204157,0.4727381376615881,Test performed
+673,673,5.578231292517007,0.06147555602061367,Test performed
+674,674,,,All present or all missing
+675,675,,,All present or all missing
+676,676,0.17132779037540935,0.9179026908914847,Test performed
+677,677,,,All present or all missing
+678,678,,,All present or all missing
+679,679,,,All present or all missing
+680,680,3.303073737856347,0.19175497977507677,Test performed
+681,681,4.591156462585033,0.10070314671925,Test performed
+682,682,,,All present or all missing
+683,683,,,All present or all missing
+684,684,,,All present or all missing
+685,685,,,All present or all missing
+686,686,,,All present or all missing
+687,687,,,All present or all missing
+688,688,,,All present or all missing
+689,689,,,All present or all missing
+690,690,,,All present or all missing
+691,691,6.75374149659864,0.034154164664268655,Test performed
+692,692,1.3276190476190475,0.5148861226642656,Test performed
+693,693,,,All present or all missing
+694,694,1.2489795918367343,0.5355345907628817,Test performed
+695,695,,,All present or all missing
+696,696,,,All present or all missing
+697,697,,,All present or all missing
+698,698,,,All present or all missing
+699,699,4.1203896524596235,0.12742914093713625,Test performed
+700,700,4.691310486458733,0.09578441947145135,Test performed
+701,701,0.7771428571428571,0.6780247898080576,Test performed
+702,702,0.29835029835029847,0.8614182249936566,Test performed
+703,703,0.20941978401018346,0.9005857518187922,Test performed
+704,704,0.279092970521542,0.8697525915886425,Test performed
+705,705,6.011810489162408,0.049493929931110854,Test performed
+706,706,,,All present or all missing
+707,707,,,All present or all missing
+708,708,0.6398461023753761,0.726204915529518,Test performed
+709,709,,,All present or all missing
+710,710,1.4193650793650796,0.4918002997608003,Test performed
+711,711,,,All present or all missing
+712,712,4.7046058566795885,0.09514978656929193,Test performed
+713,713,1.6183467326324479,0.44522595291779865,Test performed
+714,714,0.47619047619047583,0.7881276277453111,Test performed
+715,715,,,All present or all missing
+716,716,3.17790230846437,0.2041396104552385,Test performed
+717,717,,,All present or all missing
+718,718,,,All present or all missing
+719,719,,,All present or all missing
+720,720,6.293673932157897,0.04298788418722904,Test performed
+721,721,5.193610643452551,0.07451123782183043,Test performed
+722,722,,,All present or all missing
+723,723,0.541487498009237,0.7628119426819455,Test performed
+724,724,,,All present or all missing
+725,725,,,All present or all missing
+726,726,,,All present or all missing
+727,727,,,All present or all missing
+728,728,,,All present or all missing
+729,729,0.4319007424597482,0.805775290517844,Test performed
+730,730,,,All present or all missing
+731,731,,,All present or all missing
+732,732,8.157413503035622,0.016929345351892715,Test performed
+733,733,0.29835029835029847,0.8614182249936566,Test performed
+734,734,0.7771428571428571,0.6780247898080576,Test performed
+735,735,,,All present or all missing
+736,736,,,All present or all missing
+737,737,,,All present or all missing
+738,738,2.0408163265306123,0.36044778859782106,Test performed
+739,739,2.374743900167628,0.30502182422950547,Test performed
+740,740,3.261978704525288,0.19573582661750005,Test performed
+741,741,2.940919398062255,0.2298198129545243,Test performed
+742,742,,,All present or all missing
+743,743,3.143708591650481,0.2076597624955706,Test performed
+744,744,,,All present or all missing
+745,745,,,All present or all missing
+746,746,,,All present or all missing
+747,747,,,All present or all missing
+748,748,1.0617427923550375,0.5880922849658998,Test performed
+749,749,9.21034569638839,0.009999973377974397,Test performed
+750,750,2.6810341622987997,0.2617103081202382,Test performed
+751,751,,,All present or all missing
+752,752,4.714151670520425,0.09469672755882311,Test performed
+753,753,,,All present or all missing
+754,754,1.8296824311861908,0.4005802269350257,Test performed
+755,755,,,All present or all missing
+756,756,,,All present or all missing
+757,757,,,All present or all missing
+758,758,,,All present or all missing
+759,759,7.537520551457835,0.023080659211449476,Test performed
+760,760,,,All present or all missing
+761,761,,,All present or all missing
+762,762,,,All present or all missing
+763,763,,,All present or all missing
+764,764,3.472878084835544,0.17614653547661002,Test performed
+765,765,,,All present or all missing
+766,766,,,All present or all missing
+767,767,,,All present or all missing
+768,768,,,All present or all missing
+769,769,,,All present or all missing
+770,770,,,All present or all missing
+771,771,,,All present or all missing
+772,772,,,All present or all missing
+773,773,,,All present or all missing
+774,774,,,All present or all missing
+775,775,,,All present or all missing
+776,776,4.416162069223294,0.10991136237473237,Test performed
+777,777,,,All present or all missing
+778,778,,,All present or all missing
+779,779,,,All present or all missing
+780,780,7.4145695574267005,0.024544075474976303,Test performed
+781,781,,,All present or all missing
+782,782,,,All present or all missing
+783,783,,,All present or all missing
+784,784,,,All present or all missing
+785,785,,,All present or all missing
+786,786,,,All present or all missing
+787,787,,,All present or all missing
+788,788,,,All present or all missing
+789,789,,,All present or all missing
+790,790,2.230215202300588,0.32787999673661455,Test performed
+791,791,0.35783985725437706,0.8361728502246025,Test performed
+792,792,,,All present or all missing
+793,793,,,All present or all missing
+794,794,,,All present or all missing
+795,795,,,All present or all missing
+796,796,,,All present or all missing
+797,797,,,All present or all missing
+798,798,6.443949701092558,0.039876230853814094,Test performed
+799,799,,,All present or all missing
+800,800,1.2832916185342065,0.526425315028838,Test performed
+801,801,,,All present or all missing
+802,802,,,All present or all missing
+803,803,,,All present or all missing
+804,804,5.1020408163265305,0.07800203146853765,Test performed
+805,805,,,All present or all missing
+806,806,,,All present or all missing
+807,807,,,All present or all missing
+808,808,0.26349780418496493,0.8765610700985416,Test performed
+809,809,,,All present or all missing
+810,810,,,All present or all missing
+811,811,,,All present or all missing
+812,812,,,All present or all missing
+813,813,,,All present or all missing
+814,814,,,All present or all missing
+815,815,,,All present or all missing
+816,816,,,All present or all missing
+817,817,9.866324152038437,0.007203688618506579,Test performed
+818,818,,,All present or all missing
+819,819,,,All present or all missing
+820,820,5.845486466604478,0.05378593736217213,Test performed
+821,821,,,All present or all missing
+822,822,0.279092970521542,0.8697525915886425,Test performed
+823,823,,,All present or all missing
+824,824,,,All present or all missing
+825,825,4.816378658743191,0.08997806780799825,Test performed
+826,826,,,All present or all missing
+827,827,1.2581085502194242,0.533095724578446,Test performed
+828,828,,,All present or all missing
+829,829,4.906995379605476,0.08599228553765274,Test performed
+830,830,7.047113745720018,0.02949434075480335,Test performed
+831,831,,,All present or all missing
+832,832,,,All present or all missing
+833,833,,,All present or all missing
+834,834,,,All present or all missing
+835,835,1.3245944531658818,0.5156653725998199,Test performed
+836,836,,,All present or all missing
+837,837,,,All present or all missing
+838,838,1.3533782921538031,0.508297106994577,Test performed
+839,839,,,All present or all missing
+840,840,2.777057311218803,0.24944204992212507,Test performed
+841,841,3.0516973374116234,0.21743644703192014,Test performed
+842,842,,,All present or all missing
+843,843,1.5798669194453732,0.453874995245637,Test performed
+844,844,1.0373584649806766,0.5953062901709423,Test performed
+845,845,2.7631099059670485,0.25118766422372657,Test performed
+846,846,1.7071285276860186,0.4258942240727881,Test performed
+847,847,2.6518153048765294,0.265561811840511,Test performed
+848,848,,,All present or all missing
+849,849,,,All present or all missing
+850,850,,,All present or all missing
+851,851,2.644923998307457,0.26647842402674665,Test performed
+852,852,2.7028951115329845,0.2588652673889929,Test performed
+853,853,,,All present or all missing
+854,854,,,All present or all missing
+855,855,1.3494576448571602,0.5092945111318424,Test performed
+856,856,0.23790087463556872,0.8878518039882978,Test performed
+857,857,,,All present or all missing
+858,858,1.014440864064924,0.6021670189523889,Test performed
+859,859,3.5714285714285716,0.16767724875179704,Test performed
+860,860,1.8106899902818276,0.4044023441902146,Test performed
+861,861,1.991685563114134,0.3694119797106263,Test performed
+862,862,,,All present or all missing
+863,863,,,All present or all missing
+864,864,,,All present or all missing
+865,865,,,All present or all missing
+866,866,8.525059392621005,0.014086622422654982,Test performed
+867,867,,,All present or all missing
+868,868,,,All present or all missing
+869,869,,,All present or all missing
+870,870,5.832536443148688,0.05413533188348071,Test performed
+871,871,,,All present or all missing
+872,872,0.29835029835029847,0.8614182249936566,Test performed
+873,873,5.756951903568446,0.056220380145157116,Test performed
+874,874,0.7947379865188084,0.6720859846746658,Test performed
+875,875,,,All present or all missing
+876,876,,,All present or all missing
+877,877,,,All present or all missing
+878,878,2.3414094701920174,0.3101482918433444,Test performed
+879,879,,,All present or all missing
+880,880,5.187151437151437,0.07475226855756088,Test performed
+881,881,0.6122448979591837,0.7362964551863367,Test performed
+882,882,2.9902818270165215,0.22421700729922492,Test performed
+883,883,3.1824459106951055,0.20367637225228277,Test performed
+884,884,,,All present or all missing
+885,885,,,All present or all missing
+886,886,,,All present or all missing
+887,887,0.5150113378684809,0.7729772443438951,Test performed
+888,888,0.8514614637063618,0.6532922292271105,Test performed
+889,889,3.226881055452485,0.19920107689910596,Test performed
+890,890,4.540590071948956,0.10328170376939945,Test performed
+891,891,,,All present or all missing
+892,892,0.6550592264877977,0.7207019486369466,Test performed
+893,893,,,All present or all missing
+894,894,,,All present or all missing
+895,895,,,All present or all missing
+896,896,1.1884877027734169,0.5519797868578116,Test performed
+897,897,4.956268221574344,0.08389962704198835,Test performed
+898,898,1.4455782312925167,0.48539653913139347,Test performed
+899,899,,,All present or all missing
+900,900,,,All present or all missing
+901,901,,,All present or all missing
+902,902,,,All present or all missing
+903,903,0.8461921353907416,0.6550157042400008,Test performed
+904,904,,,All present or all missing
+905,905,9.877780949209523,0.007162540986352578,Test performed
+906,906,,,All present or all missing
+907,907,1.7482917018991242,0.4172182340852222,Test performed
+908,908,,,All present or all missing
+909,909,1.9890019890019892,0.3699079846154235,Test performed
+910,910,,,All present or all missing
+911,911,,,All present or all missing
+912,912,3.6796536796536783,0.15884492934109,Test performed
+913,913,1.4620162446249394,0.48142341168704905,Test performed
+914,914,0.70586763133347,0.7026236945191588,Test performed
+915,915,,,All present or all missing
+916,916,,,All present or all missing
+917,917,,,All present or all missing
+918,918,,,All present or all missing
+919,919,,,All present or all missing
+920,920,0.14802721088435367,0.9286590589382073,Test performed
+921,921,,,All present or all missing
+922,922,,,All present or all missing
+923,923,6.344866495242435,0.04190151699319624,Test performed
+924,924,8.433523069091583,0.014746322717807906,Test performed
+925,925,1.5161279822933957,0.4685727103562114,Test performed
+926,926,6.980449837592694,0.03049401272319951,Test performed
+927,927,,,All present or all missing
+928,928,,,All present or all missing
+929,929,,,All present or all missing
+930,930,,,All present or all missing
+931,931,3.495821185617105,0.1741374075576074,Test performed
+932,932,,,All present or all missing
+933,933,4.825333396761967,0.08957610333880806,Test performed
+934,934,1.3775510204081634,0.5021906200234049,Test performed
+935,935,,,All present or all missing
+936,936,7.109261394975681,0.028591932039104775,Test performed
+937,937,0.22229780801209387,0.8948054988851277,Test performed
+938,938,1.0225932797361368,0.5997174568851553,Test performed
+939,939,9.220758537528724,0.009948044609683803,Test performed
+940,940,0.7270159525798625,0.6952331818126163,Test performed
+941,941,,,All present or all missing
+942,942,0.3981264637002344,0.8194980733152619,Test performed
+943,943,4.7222222222222205,0.09431537009970309,Test performed
+944,944,,,All present or all missing
+945,945,2.5140490979000303,0.28449928205540786,Test performed
+946,946,4.659209837781266,0.09733419439563164,Test performed
+947,947,,,All present or all missing
+948,948,,,All present or all missing
+949,949,0.056828628257199636,0.9719855760091148,Test performed
+950,950,0.8935349502119687,0.6396926354450054,Test performed
+951,951,1.7330031427775792,0.4204197881011632,Test performed
+952,952,0.9021544735830452,0.6369416449490459,Test performed
+953,953,2.0408163265306123,0.36044778859782106,Test performed
+954,954,9.220758537528724,0.009948044609683803,Test performed
+955,955,0.570310315907185,0.751897582378134,Test performed
+956,956,,,All present or all missing
+957,957,0.31135531135531136,0.8558350194720481,Test performed
+958,958,2.0484239871994983,0.3590793107444112,Test performed
+959,959,0.9021544735830452,0.6369416449490459,Test performed
+960,960,1.7359831334986606,0.41979383101979306,Test performed
+961,961,1.4455782312925167,0.48539653913139347,Test performed
+962,962,,,All present or all missing
+963,963,,,All present or all missing
+964,964,11.497237992941535,0.0031871792644732585,Test performed
+965,965,,,All present or all missing
+966,966,,,All present or all missing
+967,967,,,All present or all missing
+968,968,3.900226757369614,0.1422579416538075,Test performed
+969,969,,,All present or all missing
+970,970,,,All present or all missing
+971,971,,,All present or all missing
+972,972,0.09348198210183696,0.9543345467700959,Test performed
+973,973,2.381762228701004,0.30395332840352046,Test performed
+974,974,,,All present or all missing
+975,975,,,All present or all missing
+976,976,,,All present or all missing
+977,977,,,All present or all missing
+978,978,2.7185987007415573,0.25684066924513854,Test performed
+979,979,6.842058209185704,0.03267878773819467,Test performed
+980,980,7.615030774214449,0.022203277028369925,Test performed
+981,981,0.9021544735830452,0.6369416449490459,Test performed
+982,982,2.3373231148999687,0.31078262770994936,Test performed
+983,983,0.1521661296097387,0.9267392239493516,Test performed
+984,984,0.9414791557648701,0.6245402013169228,Test performed
+985,985,,,All present or all missing
+986,986,4.659209837781266,0.09733419439563164,Test performed
+987,987,,,All present or all missing
+988,988,0.870247764657702,0.6471844873902199,Test performed
+989,989,2.142335861547685,0.34260814106696597,Test performed
+990,990,,,All present or all missing
+991,991,,,All present or all missing
+992,992,,,All present or all missing
+993,993,,,All present or all missing
+994,994,,,All present or all missing
+995,995,,,All present or all missing
+996,996,,,All present or all missing
+997,997,0.8072709603321846,0.6678875351550225,Test performed
+998,998,3.7957355394565435,0.14988787420185246,Test performed
+999,999,4.7046058566795885,0.09514978656929193,Test performed
+1000,1000,10.106916892631178,0.006387205397004853,Test performed
+1001,1001,0.23790087463556872,0.8878518039882978,Test performed
+1002,1002,0.17030655179322773,0.918371509396498,Test performed
+1003,1003,,,All present or all missing
+1004,1004,,,All present or all missing
+1005,1005,0.6123744735989636,0.7362487536894671,Test performed
+1006,1006,,,All present or all missing
+1007,1007,0.16317389217725162,0.9216525722838816,Test performed
+1008,1008,,,All present or all missing
+1009,1009,3.1603552532123964,0.20593851479641753,Test performed
+1010,1010,7.774756128866639,0.020499022755584913,Test performed
+1011,1011,,,All present or all missing
+1012,1012,,,All present or all missing
+1013,1013,,,All present or all missing
+1014,1014,2.0408163265306123,0.36044778859782106,Test performed
+1015,1015,1.3276190476190475,0.5148861226642656,Test performed
+1016,1016,0.9414791557648702,0.6245402013169228,Test performed
+1017,1017,4.899529797488981,0.08631387661492128,Test performed
+1018,1018,,,All present or all missing
+1019,1019,,,All present or all missing
+1020,1020,,,All present or all missing
+1021,1021,6.7200388726919345,0.0347345838247894,Test performed
+1022,1022,2.6360544217687076,0.26766282375550754,Test performed
+1023,1023,,,All present or all missing
+1024,1024,8.256395088693226,0.016111893639549985,Test performed
+1025,1025,,,All present or all missing
+1026,1026,,,All present or all missing
+1027,1027,0.8514614637063618,0.6532922292271105,Test performed
+1028,1028,,,All present or all missing
+1029,1029,,,All present or all missing
+1030,1030,6.271986271986273,0.043456574103301414,Test performed
+1031,1031,3.3579468150896723,0.18656540439969402,Test performed
+1032,1032,4.660631169761138,0.09726504686732541,Test performed
+1033,1033,,,All present or all missing
+1034,1034,,,All present or all missing
+1035,1035,8.196905135680646,0.016598340344907692,Test performed
+1036,1036,4.540590071948956,0.10328170376939945,Test performed
+1037,1037,0.31135531135531136,0.8558350194720481,Test performed
+1038,1038,0.27210884353741494,0.8727951321413941,Test performed
+1039,1039,0.8295691609977326,0.6604825462016618,Test performed
+1040,1040,7.515724693425041,0.02333356617522367,Test performed
+1041,1041,,,All present or all missing
+1042,1042,0.8364585150299437,0.658211311236498,Test performed
+1043,1043,,,All present or all missing
+1044,1044,1.7042606516290724,0.426505368063379,Test performed
+1045,1045,,,All present or all missing
+1046,1046,,,All present or all missing
+1047,1047,,,All present or all missing
+1048,1048,3.5519922254616128,0.16931470893402803,Test performed
+1049,1049,3.5538230937746684,0.16915978338915422,Test performed
+1050,1050,4.6016530710408245,0.10017601046426229,Test performed
+1051,1051,0.8478120978120978,0.6544853686367991,Test performed
+1052,1052,1.8729665779355218,0.3920039789079675,Test performed
+1053,1053,4.82393622637525,0.08963870174089196,Test performed
+1054,1054,2.057823129251701,0.357395751122161,Test performed
+1055,1055,4.4664045020001355,0.10718464784522248,Test performed
+1056,1056,1.312741312741313,0.5187305737295334,Test performed
+1057,1057,,,All present or all missing
+1058,1058,0.9997763277646663,0.6065984955400388,Test performed
+1059,1059,,,All present or all missing
+1060,1060,,,All present or all missing
+1061,1061,3.3444172741885105,0.18783175499077012,Test performed
+1062,1062,1.935960325173153,0.37984949800817003,Test performed
+1063,1063,4.660007462900772,0.09729538403595712,Test performed
+1064,1064,,,All present or all missing
+1065,1065,1.686170971885257,0.4303805395561714,Test performed
+1066,1066,,,All present or all missing
+1067,1067,2.164140510005172,0.3388932035528726,Test performed
+1068,1068,3.063736263736264,0.21613152774584643,Test performed
+1069,1069,3.595875850340136,0.16564009857814146,Test performed
+1070,1070,0.38613000755857924,0.8244283814367159,Test performed
+1071,1071,3.5538230937746684,0.16915978338915422,Test performed
+1072,1072,0.9819021948402009,0.6120440038003195,Test performed
+1073,1073,,,All present or all missing
+1074,1074,8.751608751608751,0.012578020716693086,Test performed
+1075,1075,5.1020408163265305,0.07800203146853765,Test performed
+1076,1076,0.7947379865188084,0.6720859846746658,Test performed
+1077,1077,1.8443926141885323,0.3976447313651551,Test performed
+1078,1078,,,All present or all missing
+1079,1079,0.9157726108685597,0.6326193975064212,Test performed
+1080,1080,3.1632653061224487,0.20563908670000747,Test performed
+1081,1081,,,All present or all missing
+1082,1082,,,All present or all missing
+1083,1083,,,All present or all missing
+1084,1084,,,All present or all missing
+1085,1085,,,All present or all missing
+1086,1086,0.6398461023753761,0.726204915529518,Test performed
+1087,1087,4.690836743381899,0.09580711076160223,Test performed
+1088,1088,,,All present or all missing
+1089,1089,3.542172113600685,0.17014809794374613,Test performed
+1090,1090,,,All present or all missing
+1091,1091,,,All present or all missing
+1092,1092,2.0428260490372296,0.3600857705006599,Test performed
+1093,1093,3.113155976676385,0.21085639105552995,Test performed
+1094,1094,6.513115223916619,0.038520773492983024,Test performed
+1095,1095,5.123210123210122,0.07718076109638629,Test performed
+1096,1096,2.6430426716141,0.26672920844627285,Test performed
+1097,1097,,,All present or all missing
+1098,1098,4.909691903295315,0.08587642354380896,Test performed
+1099,1099,,,All present or all missing
+1100,1100,3.4733527696793,0.17610473339217475,Test performed
+1101,1101,7.351157517270475,0.025334738580099783,Test performed
+1102,1102,2.385599048362514,0.3033707803118759,Test performed
+1103,1103,3.6343764172335598,0.16248197464658667,Test performed
+1104,1104,,,All present or all missing
+1105,1105,3.953213938636679,0.1385385061408403,Test performed
+1106,1106,1.9329643446386915,0.38041893525844456,Test performed
+1107,1107,5.832536443148688,0.05413533188348071,Test performed
+1108,1108,4.906995379605476,0.08599228553765274,Test performed
+1109,1109,,,All present or all missing
+1110,1110,,,All present or all missing
+1111,1111,0.14802721088435367,0.9286590589382073,Test performed
+1112,1112,3.372244897959183,0.18523639681880655,Test performed
+1113,1113,7.680079420930933,0.021492747841122588,Test performed
+1114,1114,4.5351473922902485,0.1035631511668242,Test performed
+1115,1115,,,All present or all missing
+1116,1116,0.009241139378125676,0.9953900887207688,Test performed
+1117,1117,,,All present or all missing
+1118,1118,3.17790230846437,0.2041396104552385,Test performed
+1119,1119,3.0436136203115125,0.2183170728781322,Test performed
+1120,1120,1.8017351868283544,0.4062170755533797,Test performed
+1121,1121,,,All present or all missing
+1122,1122,2.5140490979000294,0.28449928205540803,Test performed
+1123,1123,4.7046058566795885,0.09514978656929193,Test performed
+1124,1124,1.1089367253750813,0.5743775405722993,Test performed
+1125,1125,,,All present or all missing
+1126,1126,1.3850490935290378,0.500311413836042,Test performed
+1127,1127,0.30894335405613615,0.8568677608399539,Test performed
+1128,1128,,,All present or all missing
+1129,1129,,,All present or all missing
+1130,1130,3.7427905944986692,0.1539087634521554,Test performed
+1131,1131,0.9021544735830452,0.6369416449490459,Test performed
+1132,1132,0.5217124443762466,0.7703916768822596,Test performed
+1133,1133,4.664777551974508,0.09706360672127964,Test performed
+1134,1134,0.6364806364806365,0.7274279532017198,Test performed
+1135,1135,,,All present or all missing
+1136,1136,7.617001687893201,0.022181407434705917,Test performed
+1137,1137,1.1003379640489657,0.5768523244704187,Test performed
+1138,1138,2.0353741496598636,0.3614299345539219,Test performed
+1139,1139,3.585587344985841,0.1664943885565031,Test performed
+1140,1140,,,All present or all missing
+1141,1141,0.8461921353907416,0.6550157042400008,Test performed
+1142,1142,,,All present or all missing
+1143,1143,,,All present or all missing
+1144,1144,3.7762623476909187,0.15135439975834503,Test performed
+1145,1145,2.3149707996406117,0.31427546524077765,Test performed
+1146,1146,2.3907639979068556,0.3025883436713997,Test performed
+1147,1147,,,All present or all missing
+1148,1148,,,All present or all missing
+1149,1149,3.8266061980347703,0.14759206934010866,Test performed
+1150,1150,,,All present or all missing
+1151,1151,12.076540877920582,0.002385681529257637,Test performed
+1152,1152,,,All present or all missing
+1153,1153,0.5192542648988647,0.7713391395261207,Test performed
+1154,1154,5.988877950137031,0.05006470675783058,Test performed
+1155,1155,,,All present or all missing
+1156,1156,0.9021544735830452,0.6369416449490459,Test performed
+1157,1157,6.977941422874569,0.030532282532485876,Test performed
+1158,1158,4.766501195072624,0.09225022126421407,Test performed
+1159,1159,,,All present or all missing
+1160,1160,,,All present or all missing
+1161,1161,,,All present or all missing
+1162,1162,10.59306752153877,0.0050089259867477105,Test performed
+1163,1163,1.412143088527928,0.4935793986158167,Test performed
+1164,1164,7.109261394975681,0.028591932039104775,Test performed
+1165,1165,,,All present or all missing
+1166,1166,0.36045587065995205,0.8350798455163956,Test performed
+1167,1167,0.279092970521542,0.8697525915886425,Test performed
+1168,1168,4.864685004436557,0.08783084746125182,Test performed
+1169,1169,1.9829478458049883,0.37102941904454273,Test performed
+1170,1170,5.193610643452551,0.07451123782183043,Test performed
+1171,1171,3.32198150196039,0.18995069300882414,Test performed
+1172,1172,,,All present or all missing
+1173,1173,,,All present or all missing
+1174,1174,5.8350850118404605,0.054066392011330865,Test performed
+1175,1175,8.28479976896419,0.015884684317014296,Test performed
+1176,1176,0.6122448979591837,0.7362964551863367,Test performed
+1177,1177,8.756369931485137,0.012548113219999737,Test performed
+1178,1178,,,All present or all missing
+1179,1179,0.6122448979591837,0.7362964551863367,Test performed
+1180,1180,9.26706895382738,0.009720341990570282,Test performed
+1181,1181,,,All present or all missing
+1182,1182,4.95155060904541,0.08409776359884845,Test performed
+1183,1183,6.455864770150486,0.03963937307636164,Test performed
+1184,1184,4.664777551974508,0.09706360672127964,Test performed
+1185,1185,3.8237875795479477,0.14780021884674438,Test performed
+1186,1186,9.128048142333856,0.010420043467016337,Test performed
+1187,1187,0.8066326530612246,0.6681007279087707,Test performed
+1188,1188,3.104076606011862,0.2118157887553869,Test performed
+1189,1189,,,All present or all missing
+1190,1190,,,All present or all missing
+1191,1191,,,All present or all missing
+1192,1192,0.2222978080120939,0.8948054988851277,Test performed
+1193,1193,1.8498395029007273,0.39656324142309046,Test performed
+1194,1194,0.11698875238320858,0.9431835446682887,Test performed
+1195,1195,0.8066326530612246,0.6681007279087707,Test performed
+1196,1196,,,All present or all missing
+1197,1197,0.997509803360334,0.6072863203562444,Test performed
+1198,1198,2.3232507288629733,0.31297706545557186,Test performed
+1199,1199,4.8979591836734695,0.08638168612061387,Test performed
+1200,1200,,,All present or all missing
+1201,1201,3.768572105459099,0.15193749607640333,Test performed
+1202,1202,,,All present or all missing
+1203,1203,,,All present or all missing
+1204,1204,1.991685563114134,0.3694119797106263,Test performed
+1205,1205,4.659209837781266,0.09733419439563164,Test performed
+1206,1206,0.6358328772121873,0.7276635904581219,Test performed
+1207,1207,1.9829478458049887,0.3710294190445426,Test performed
+1208,1208,1.2402848117133833,0.5378678366105301,Test performed
+1209,1209,3.290580847723705,0.19295651547902185,Test performed
+1210,1210,2.166586679464618,0.3384789618286037,Test performed
+1211,1211,2.549664793453613,0.27947780569125985,Test performed
+1212,1212,0.9562093235562625,0.6199573077521473,Test performed
+1213,1213,,,All present or all missing
+1214,1214,,,All present or all missing
+1215,1215,7.7871103089761995,0.02037278872685692,Test performed
+1216,1216,3.226881055452485,0.19920107689910596,Test performed
+1217,1217,5.442176870748299,0.06580309301990146,Test performed
+1218,1218,7.460396746111031,0.023988076776604014,Test performed
+1219,1219,,,All present or all missing
+1220,1220,,,All present or all missing
+1221,1221,6.484973736329976,0.03906662065953476,Test performed
+1222,1222,1.1089367253750815,0.5743775405722991,Test performed
+1223,1223,,,All present or all missing
+1224,1224,0.17030655179322773,0.918371509396498,Test performed
+1225,1225,2.267573696145125,0.32181229182059545,Test performed
+1226,1226,0.9278401115135806,0.6288138225029114,Test performed
+1227,1227,6.337055730296898,0.04206547840085265,Test performed
+1228,1228,,,All present or all missing
+1229,1229,,,All present or all missing
+1230,1230,1.014440864064924,0.6021670189523889,Test performed
+1231,1231,0.14802721088435367,0.9286590589382073,Test performed
+1232,1232,,,All present or all missing
+1233,1233,7.802561114031279,0.02021600711361955,Test performed
+1234,1234,1.0229153086295943,0.5996209014842574,Test performed
+1235,1235,,,All present or all missing
+1236,1236,,,All present or all missing
+1237,1237,6.783987441130299,0.033641538167388546,Test performed
+1238,1238,6.491609977324264,0.03893720772735716,Test performed
+1239,1239,3.7296889640514665,0.15492030090293457,Test performed
+1240,1240,0.3791233474521882,0.8273216913126218,Test performed
+1241,1241,3.969479683765398,0.13741635944839406,Test performed
+1242,1242,1.5436595924400809,0.4621666233960251,Test performed
+1243,1243,2.2590108304394017,0.3231930632701698,Test performed
+1244,1244,1.2355369498226643,0.5391462145024288,Test performed
+1245,1245,0.3981264637002344,0.8194980733152619,Test performed
+1246,1246,,,All present or all missing
+1247,1247,0.009241139378125677,0.9953900887207688,Test performed
+1248,1248,,,All present or all missing
+1249,1249,7.405781906549954,0.02465215512583985,Test performed
+1250,1250,,,All present or all missing
+1251,1251,0.8461921353907416,0.6550157042400008,Test performed
+1252,1252,,,All present or all missing
+1253,1253,,,All present or all missing
+1254,1254,1.457896441784734,0.4824161185445659,Test performed
+1255,1255,0.7947379865188084,0.6720859846746658,Test performed
+1256,1256,1.9916855631141341,0.3694119797106262,Test performed
+1257,1257,,,All present or all missing
+1258,1258,1.9136702299967607,0.3841066175745176,Test performed
+1259,1259,,,All present or all missing
+1260,1260,4.857791644006832,0.08813409460320876,Test performed
+1261,1261,5.007502171681275,0.08177766752086858,Test performed
+1262,1262,1.6492218387915079,0.4384055343757427,Test performed
+1263,1263,2.238314680710994,0.32655485331293793,Test performed
+1264,1264,1.799455782312925,0.4066803059937578,Test performed
+1265,1265,0.7947379865188084,0.6720859846746658,Test performed
+1266,1266,3.0436136203115125,0.2183170728781322,Test performed
+1267,1267,3.987802017358667,0.13616321415978475,Test performed
+1268,1268,2.142335861547685,0.34260814106696597,Test performed
+1269,1269,2.72108843537415,0.25652113562024753,Test performed
+1270,1270,10.13122765736006,0.006310036432461272,Test performed
+1271,1271,6.4921950923226435,0.03892581802139219,Test performed
+1272,1272,,,All present or all missing
+1273,1273,0.3338597343699386,0.8462589597791215,Test performed
+1274,1274,0.1689636893718528,0.9189883397473143,Test performed
+1275,1275,3.025192159730634,0.2203372217956029,Test performed
+1276,1276,8.979510561691821,0.011223390052065867,Test performed
+1277,1277,5.153359589449817,0.07602600739067046,Test performed
+1278,1278,4.807256235827665,0.09038941420762744,Test performed
+1279,1279,3.5714285714285716,0.16767724875179704,Test performed
+1280,1280,0.9157726108685597,0.6326193975064212,Test performed
+1281,1281,5.6848726186705285,0.058283496224147205,Test performed
+1282,1282,,,All present or all missing
+1283,1283,1.1884877027734169,0.5519797868578116,Test performed
+1284,1284,,,All present or all missing
+1285,1285,0.8461921353907416,0.6550157042400008,Test performed
+1286,1286,7.4145695574267005,0.024544075474976303,Test performed
+1287,1287,3.390743142295937,0.1835310215241769,Test performed
+1288,1288,0.19867799336483372,0.9054357162879351,Test performed
+1289,1289,,,All present or all missing
+1290,1290,6.731073804244534,0.03454346467879971,Test performed
+1291,1291,6.6837505977447655,0.03537056510719727,Test performed
+1292,1292,0.056828628257199636,0.9719855760091148,Test performed
+1293,1293,0.8236396462280322,0.6624436223290902,Test performed
+1294,1294,4.825333396761968,0.08957610333880803,Test performed
+1295,1295,3.07986495090647,0.21439557790244,Test performed
+1296,1296,,,All present or all missing
+1297,1297,1.2355369498226643,0.5391462145024288,Test performed
+1298,1298,3.372244897959183,0.18523639681880655,Test performed
+1299,1299,2.3014180796696784,0.31641234087016756,Test performed
+1300,1300,,,All present or all missing
+1301,1301,3.8237875795479477,0.14780021884674438,Test performed
+1302,1302,4.499410430839001,0.10543029920800003,Test performed
+1303,1303,,,All present or all missing
+1304,1304,4.190299496421944,0.1230518154849836,Test performed
+1305,1305,0.10513296227581932,0.948791242237626,Test performed
+1306,1306,6.812495112987724,0.03316541852871501,Test performed
+1307,1307,2.938594506538758,0.23008712135771844,Test performed
+1308,1308,,,All present or all missing
+1309,1309,2.738990332975295,0.254235273647607,Test performed
+1310,1310,,,All present or all missing
+1311,1311,0.34967365324508176,0.8395940089826288,Test performed
+1312,1312,0.9021544735830452,0.6369416449490459,Test performed
+1313,1313,,,All present or all missing
+1314,1314,0.1689636893718528,0.9189883397473143,Test performed
+1315,1315,,,All present or all missing
+1316,1316,,,All present or all missing
+1317,1317,1.376353358244706,0.5024914374360466,Test performed
+1318,1318,,,All present or all missing
+1319,1319,,,All present or all missing
+1320,1320,,,All present or all missing
+1321,1321,3.5975958132413095,0.1654977123994025,Test performed
+1322,1322,4.553477192702376,0.10261834137836405,Test performed
+1323,1323,6.128079610222468,0.046698660158676256,Test performed
+1324,1324,0.8044957113280091,0.6688149555702763,Test performed
+1325,1325,,,All present or all missing
+1326,1326,0.6122448979591837,0.7362964551863367,Test performed
+1327,1327,1.5825616757293774,0.45326386580152445,Test performed
+1328,1328,,,All present or all missing
+1329,1329,1.4625850340136053,0.4812865168900372,Test performed
+1330,1330,,,All present or all missing
+1331,1331,3.0413464086933484,0.21856469870869077,Test performed
+1332,1332,,,All present or all missing
+1333,1333,1.8498395029007282,0.39656324142309013,Test performed
+1334,1334,1.1345044346852666,0.5670815165951504,Test performed
+1335,1335,4.013097776424003,0.1344518833962213,Test performed
+1336,1336,3.025192159730634,0.2203372217956029,Test performed
+1337,1337,8.41797183989875,0.014861431380317185,Test performed
+1338,1338,,,All present or all missing
+1339,1339,,,All present or all missing
+1340,1340,7.169066760903494,0.027749613121574902,Test performed
+1341,1341,8.618771833057547,0.01344180144841535,Test performed
+1342,1342,10.884353741496598,0.004330047050985806,Test performed
+1343,1343,1.1264245958123515,0.5693771141284523,Test performed
+1344,1344,3.290580847723705,0.19295651547902185,Test performed
+1345,1345,2.7233126105306558,0.2562360202177981,Test performed
+1346,1346,4.534218058808223,0.10361128470092602,Test performed
+1347,1347,,,All present or all missing
+1348,1348,0.263497804184965,0.8765610700985416,Test performed
+1349,1349,8.898453927025358,0.01168759841915314,Test performed
+1350,1350,,,All present or all missing
+1351,1351,0.5839081775767812,0.7468028218086815,Test performed
+1352,1352,1.8155219076878064,0.40342650409659564,Test performed
+1353,1353,2.5789628489976932,0.2754135687934301,Test performed
+1354,1354,7.680079420930933,0.021492747841122588,Test performed
+1355,1355,4.444292597991578,0.10837625118420385,Test performed
+1356,1356,0.8461921353907416,0.6550157042400008,Test performed
+1357,1357,,,All present or all missing
+1358,1358,2.3499319727891157,0.30882948391359033,Test performed
+1359,1359,2.884248083940864,0.23642504825674215,Test performed
+1360,1360,1.4455782312925172,0.48539653913139336,Test performed
+1361,1361,,,All present or all missing
+1362,1362,,,All present or all missing
+1363,1363,0.2634978041849652,0.8765610700985416,Test performed
+1364,1364,,,All present or all missing
+1365,1365,4.7046058566795885,0.09514978656929193,Test performed
+1366,1366,4.534218058808223,0.10361128470092602,Test performed
+1367,1367,,,All present or all missing
+1368,1368,8.979510561691821,0.011223390052065867,Test performed
+1369,1369,5.272108843537415,0.07164338722077188,Test performed
+1370,1370,3.083900226757369,0.21396344134756387,Test performed
+1371,1371,1.1264245958123515,0.5693771141284523,Test performed
+1372,1372,,,All present or all missing
+1373,1373,0.7741347905282329,0.6790453289451577,Test performed
+1374,1374,,,All present or all missing
+1375,1375,,,All present or all missing
+1376,1376,4.807256235827665,0.09038941420762744,Test performed
+1377,1377,1.962580263521959,0.37482721028964144,Test performed
+1378,1378,1.27746068246212,0.5279623306794554,Test performed
+1379,1379,,,All present or all missing
+1380,1380,6.197339727717396,0.04510916383539812,Test performed
+1381,1381,5.9377514446638875,0.05136102193387633,Test performed
+1382,1382,,,All present or all missing
+1383,1383,3.949428828135027,0.1388009461808834,Test performed
+1384,1384,0.06938775510204082,0.9659010550008585,Test performed
+1385,1385,0.6122448979591837,0.7362964551863367,Test performed
+1386,1386,0.1521661296097387,0.9267392239493516,Test performed
+1387,1387,7.351157517270475,0.025334738580099783,Test performed
+1388,1388,8.433523069091583,0.014746322717807906,Test performed
+1389,1389,7.507699256765079,0.023427385312916653,Test performed
+1390,1390,5.604395604395604,0.06067656089486814,Test performed
+1391,1391,,,All present or all missing
+1392,1392,6.3720010148581565,0.04133686726186388,Test performed
+1393,1393,7.615030774214449,0.022203277028369925,Test performed
+1394,1394,3.595875850340136,0.16564009857814146,Test performed
+1395,1395,7.381835851223604,0.02494909011935279,Test performed
+1396,1396,0.17132779037540935,0.9179026908914847,Test performed
+1397,1397,6.317990399623053,0.04246839189733116,Test performed
+1398,1398,,,All present or all missing
+1399,1399,5.05657364986811,0.07979560709838367,Test performed
+1400,1400,2.5334240362811795,0.2817565107321527,Test performed
+1401,1401,0.2634978041849652,0.8765610700985416,Test performed
+1402,1402,8.46695821185617,0.014501849210505595,Test performed
+1403,1403,3.953213938636679,0.1385385061408403,Test performed
+1404,1404,0.348487609329446,0.8400920543269246,Test performed
+1405,1405,0.20941978401018363,0.9005857518187921,Test performed
+1406,1406,0.8391863238802014,0.6573141858521454,Test performed
+1407,1407,,,All present or all missing
+1408,1408,3.083900226757369,0.21396344134756387,Test performed
+1409,1409,1.4625850340136055,0.4812865168900371,Test performed
+1410,1410,1.312741312741313,0.5187305737295334,Test performed
+1411,1411,1.9136702299967607,0.3841066175745176,Test performed
+1412,1412,8.354026925455496,0.01534426542454624,Test performed
+1413,1413,0.1689636893718528,0.9189883397473143,Test performed
+1414,1414,,,All present or all missing
+1415,1415,3.643535641114335,0.16173957151205223,Test performed
+1416,1416,7.657397770638189,0.021737880713531554,Test performed
+1417,1417,,,All present or all missing
+1418,1418,3.585587344985841,0.1664943885565031,Test performed
+1419,1419,2.3414094701920174,0.3101482918433444,Test performed
+1420,1420,,,All present or all missing
+1421,1421,,,All present or all missing
+1422,1422,,,All present or all missing
+1423,1423,2.5351799411949782,0.2815092504685683,Test performed
+1424,1424,8.298840663025771,0.015773557269364916,Test performed
+1425,1425,4.685267590745572,0.0960742647560608,Test performed
+1426,1426,0.8391863238802014,0.6573141858521454,Test performed
+1427,1427,2.8256425722998557,0.24345545582517478,Test performed
+1428,1428,10.327668743103883,0.005719726030221505,Test performed
+1429,1429,,,All present or all missing
+1430,1430,,,All present or all missing
+1431,1431,0.48505344995140925,0.7846427777393425,Test performed
+1432,1432,0.14802721088435367,0.9286590589382073,Test performed
+1433,1433,8.31118846646797,0.015676472880111463,Test performed
+1434,1434,,,All present or all missing
+1435,1435,,,All present or all missing
+1436,1436,9.637188208616783,0.00807813617629553,Test performed
+1437,1437,2.3907639979068556,0.3025883436713997,Test performed
+1438,1438,2.049877327980372,0.3588184732244038,Test performed
+1439,1439,10.790566893424037,0.004537933954031404,Test performed
+1440,1440,,,All present or all missing
+1441,1441,,,All present or all missing
+1442,1442,0.4102749747349047,0.8145353203956741,Test performed
+1443,1443,,,All present or all missing
+1444,1444,1.0229153086295941,0.5996209014842575,Test performed
+1445,1445,,,All present or all missing
+1446,1446,0.8503401360544216,0.6536586092462395,Test performed
+1447,1447,1.8656607942322225,0.39343854561165376,Test performed
+1448,1448,0.05682862825719964,0.9719855760091148,Test performed
+1449,1449,,,All present or all missing
+1450,1450,7.242717599860455,0.02674630890742037,Test performed
+1451,1451,6.971975393028024,0.030623496765993505,Test performed
+1452,1452,0.1480272108843537,0.9286590589382073,Test performed
+1453,1453,0.8044957113280093,0.6688149555702763,Test performed
+1454,1454,0.8364585150299437,0.658211311236498,Test performed
+1455,1455,,,All present or all missing
+1456,1456,,,All present or all missing
+1457,1457,0.17030655179322773,0.918371509396498,Test performed
+1458,1458,0.2634978041849652,0.8765610700985416,Test performed
+1459,1459,0.26383777554737764,0.8764120799313783,Test performed
+1460,1460,0.1480272108843537,0.9286590589382073,Test performed
+1461,1461,3.6946008989019736,0.15766220944685896,Test performed
+1462,1462,,,All present or all missing
+1463,1463,4.7046058566795885,0.09514978656929193,Test performed
+1464,1464,3.6306316812439263,0.16278648568504892,Test performed
+1465,1465,0.9157726108685597,0.6326193975064212,Test performed
+1466,1466,,,All present or all missing
+1467,1467,5.487528344671201,0.06432774985466984,Test performed
+1468,1468,6.499647028622771,0.038781051528381155,Test performed
+1469,1469,0.6442250813368825,0.7246166369002698,Test performed
+1470,1470,0.8364585150299437,0.658211311236498,Test performed
+1471,1471,1.8387755102040817,0.398763107040602,Test performed
+1472,1472,2.5140490979000294,0.28449928205540803,Test performed
+1473,1473,,,All present or all missing
+1474,1474,0.3416012558869702,0.8429896252938601,Test performed
+1475,1475,0.2426145283288142,0.8857617549301557,Test performed
+1476,1476,3.2659360040312415,0.19534891687817577,Test performed
+1477,1477,,,All present or all missing
+1478,1478,2.1641405100051716,0.3388932035528728,Test performed
+1479,1479,,,All present or all missing
+1480,1480,0.9868480725623585,0.6105323263120139,Test performed
+1481,1481,,,All present or all missing
+1482,1482,2.8945658452060057,0.23520850036501878,Test performed
+1483,1483,10.57811638168781,0.005046510872400514,Test performed
+1484,1484,3.922721088435374,0.1406669071219866,Test performed
+1485,1485,0.884509054763458,0.6425860588919519,Test performed
+1486,1486,0.9320743222662196,0.6274839655989035,Test performed
+1487,1487,3.2149659863945583,0.200391366267446,Test performed
+1488,1488,7.928108120324542,0.018985987722901852,Test performed
+1489,1489,0.2266666666666668,0.8928529928432785,Test performed
+1490,1490,1.1264245958123515,0.5693771141284523,Test performed
+1491,1491,0.6358328772121873,0.7276635904581219,Test performed
+1492,1492,2.1097628240485387,0.3482337211897472,Test performed
+1493,1493,,,All present or all missing
+1494,1494,6.906651549508691,0.031640232913285896,Test performed
+1495,1495,0.5192542648988647,0.7713391395261207,Test performed
+1496,1496,2.4555027490448236,0.2929505737340341,Test performed
+1497,1497,4.370727685013399,0.11243681691780426,Test performed
+1498,1498,3.6439084724799002,0.16170942352951162,Test performed
+1499,1499,3.459908553585369,0.17729251616702793,Test performed
+1500,1500,0.279092970521542,0.8697525915886425,Test performed
+1501,1501,0.9868480725623581,0.6105323263120139,Test performed
+1502,1502,6.124625850340135,0.046779372808653887,Test performed
+1503,1503,5.268329554043841,0.07177889576225512,Test performed
+1504,1504,1.3245944531658818,0.5156653725998199,Test performed
+1505,1505,,,All present or all missing
+1506,1506,,,All present or all missing
+1507,1507,2.377726952850106,0.30456721525892055,Test performed
+1508,1508,,,All present or all missing
+1509,1509,0.8163265306122449,0.6648703197043959,Test performed
+1510,1510,4.923148504684892,0.08530056060555968,Test performed
+1511,1511,1.6183467326324479,0.44522595291779865,Test performed
+1512,1512,2.5945313190211143,0.2732780074876331,Test performed
+1513,1513,,,All present or all missing
+1514,1514,2.2674606941336886,0.3218304750524164,Test performed
+1515,1515,,,All present or all missing
+1516,1516,2.6644897959183678,0.2638842027626945,Test performed
+1517,1517,,,All present or all missing
+1518,1518,3.3359497645211933,0.1886286743816618,Test performed
+1519,1519,3.5538230937746684,0.16915978338915422,Test performed
+1520,1520,5.428104956268222,0.06626771337639319,Test performed
+1521,1521,6.455864770150486,0.03963937307636164,Test performed
+1522,1522,3.32198150196039,0.18995069300882414,Test performed
+1523,1523,3.390743142295937,0.1835310215241769,Test performed
+1524,1524,0.279092970521542,0.8697525915886425,Test performed
+1525,1525,7.367890850033707,0.025123655536572413,Test performed
+1526,1526,6.250250450811462,0.04393143194754983,Test performed
+1527,1527,6.107365678634276,0.04718482986024224,Test performed
+1528,1528,7.013036094668748,0.030001195523388872,Test performed
+1529,1529,4.401948749424583,0.11069524714830027,Test performed
+1530,1530,1.1884877027734169,0.5519797868578116,Test performed
+1531,1531,1.5298347910592807,0.4653723712248685,Test performed
+1532,1532,10.777460317460317,0.004567769997389899,Test performed
+1533,1533,0.8241457502541248,0.6622760108450363,Test performed
+1534,1534,1.1530207321023647,0.561855619976019,Test performed
+1535,1535,3.832224685883224,0.1471780290584191,Test performed
+1536,1536,,,All present or all missing
+1537,1537,6.314176614041843,0.042549451829406025,Test performed
+1538,1538,,,All present or all missing
+1539,1539,2.374743900167628,0.30502182422950547,Test performed
+1540,1540,2.738990332975295,0.254235273647607,Test performed
+1541,1541,,,All present or all missing
+1542,1542,0.31135531135531136,0.8558350194720481,Test performed
+1543,1543,1.9160997732426308,0.3836402990479075,Test performed
+1544,1544,,,All present or all missing
+1545,1545,2.02348576608695,0.36358474134998625,Test performed
+1546,1546,2.0909778052635204,0.35151991834686175,Test performed
+1547,1547,2.8945658452060057,0.23520850036501878,Test performed
+1548,1548,,,All present or all missing
+1549,1549,8.809601554907678,0.012218540381109942,Test performed
+1550,1550,0.1689636893718528,0.9189883397473143,Test performed
+1551,1551,,,All present or all missing
+1552,1552,7.805086192182967,0.020190499720109827,Test performed
+1553,1553,0.20941978401018346,0.9005857518187922,Test performed
+1554,1554,0.36045587065995205,0.8350798455163956,Test performed
+1555,1555,1.2456707788304666,0.5364213159722176,Test performed
+1556,1556,4.906995379605476,0.08599228553765274,Test performed
+1557,1557,1.4841054002788128,0.4761355482110241,Test performed
+1558,1558,0.15216612960973874,0.9267392239493516,Test performed
+1559,1559,0.357839857254377,0.8361728502246025,Test performed
+1560,1560,1.755825253689515,0.41564962265659255,Test performed
+1561,1561,6.618931000971817,0.03653569684794565,Test performed
+1562,1562,0.8461921353907416,0.6550157042400008,Test performed
+1563,1563,0.12294618844215449,0.9403782470082698,Test performed
+1564,1564,1.2355369498226643,0.5391462145024288,Test performed
+1565,1565,4.544143744454304,0.10309835203514729,Test performed
+1566,1566,,,All present or all missing
+1567,1567,,,All present or all missing
+1568,1568,0.824145750254125,0.6622760108450363,Test performed
+1569,1569,1.4455782312925172,0.48539653913139336,Test performed
+1570,1570,0.06938775510204082,0.9659010550008585,Test performed
+1571,1571,4.4213059373409225,0.10962904081023982,Test performed
+1572,1572,4.807256235827665,0.09038941420762744,Test performed
+1573,1573,2.906157746117315,0.2338491866130226,Test performed
+1574,1574,,,All present or all missing
+1575,1575,1.8708167371576394,0.3924255785298617,Test performed
+1576,1576,1.5716030001744286,0.4557542682719373,Test performed
+1577,1577,,,All present or all missing
+1578,1578,1.7208163265306122,0.4229893983445009,Test performed
+1579,1579,,,All present or all missing
+1580,1580,3.949428828135027,0.1388009461808834,Test performed
+1581,1581,6.906651549508691,0.031640232913285896,Test performed
+1582,1582,11.472108843537418,0.003227477451068582,Test performed
+1583,1583,5.836281179138323,0.05403406545426839,Test performed
+1584,1584,1.9160997732426308,0.3836402990479075,Test performed
+1585,1585,,,All present or all missing
+1586,1586,6.499647028622771,0.038781051528381155,Test performed
+1587,1587,3.5538230937746684,0.16915978338915422,Test performed
+1588,1588,6.293673932157897,0.04298788418722904,Test performed
+1589,1589,0.05682862825719964,0.9719855760091148,Test performed
+1590,1590,1.3555605392340084,0.5077427945224571,Test performed
+1591,1591,0.34521271195045194,0.8414687888187711,Test performed
+1592,1592,,,All present or all missing
+1593,1593,3.289378461350945,0.19307255449883443,Test performed
+1594,1594,2.482993197278911,0.28895144983305887,Test performed
+1595,1595,1.0994538660534638,0.5771073778311892,Test performed
+1596,1596,1.7330031427775792,0.4204197881011632,Test performed
+1597,1597,2.627452307622883,0.2688165361496512,Test performed
+1598,1598,13.291627072114876,0.0012994508380189237,Test performed
+1599,1599,0.14802721088435367,0.9286590589382073,Test performed
+1600,1600,,,All present or all missing
+1601,1601,1.365005018400803,0.5053507637163559,Test performed
+1602,1602,4.317045814741666,0.1154955927945985,Test performed
+1603,1603,,,All present or all missing
+1604,1604,1.6503684807256234,0.4381542593283201,Test performed
+1605,1605,,,All present or all missing
+1606,1606,4.704605856679589,0.09514978656929185,Test performed
+1607,1607,8.183549783549786,0.016709549581335654,Test performed
+1608,1608,3.5519922254616136,0.16931470893402786,Test performed
+1609,1609,2.374743900167628,0.30502182422950547,Test performed
+1610,1610,,,All present or all missing
+1611,1611,2.729668443954158,0.25542301600106004,Test performed
+1612,1612,1.8106899902818268,0.4044023441902148,Test performed
+1613,1613,0.8478120978120978,0.6544853686367991,Test performed
+1614,1614,0.758539975129837,0.684360818810383,Test performed
+1615,1615,1.2737262737262731,0.5289490651802007,Test performed
+1616,1616,,,All present or all missing
+1617,1617,3.7303129868727534,0.15487197154136073,Test performed
+1618,1618,,,All present or all missing
+1619,1619,0.5255353372876241,0.7689205209078488,Test performed
+1620,1620,2.455502749044823,0.2929505737340342,Test performed
+1621,1621,0.24261452832881425,0.8857617549301556,Test performed
+1622,1622,,,All present or all missing
+1623,1623,2.0484239871994983,0.3590793107444112,Test performed
+1624,1624,2.3014180796696784,0.31641234087016756,Test performed
+1625,1625,0.8514614637063618,0.6532922292271105,Test performed
+1626,1626,3.5714285714285716,0.16767724875179704,Test performed
+1627,1627,2.3486084475866082,0.3090339233539357,Test performed
+1628,1628,4.878492935635792,0.08722655472022835,Test performed
+1629,1629,3.9277182444884304,0.14031587859749034,Test performed
+1630,1630,7.185277739213598,0.02752559803574719,Test performed
+1631,1631,4.686760707168872,0.09600256649157303,Test performed
+1632,1632,0.22154455651992616,0.8951425691444298,Test performed
+1633,1633,6.919436670989465,0.03143861591359277,Test performed
+1634,1634,6.200407481288255,0.04504002497498306,Test performed
+1635,1635,1.836734693877551,0.39917021584348367,Test performed
+1636,1636,9.037445335276967,0.010902941457800583,Test performed
+1637,1637,2.851411074407589,0.2403388353861274,Test performed
+1638,1638,,,All present or all missing
+1639,1639,,,All present or all missing
+1640,1640,4.607654250511393,0.09987587387411817,Test performed
+1641,1641,3.0436136203115125,0.2183170728781322,Test performed
+1642,1642,,,All present or all missing
+1643,1643,0.857663639618527,0.6512694505915297,Test performed
+1644,1644,5.166048582197648,0.07554518755516283,Test performed
+1645,1645,2.321035005867704,0.31332399283429146,Test performed
+1646,1646,6.842058209185704,0.03267878773819467,Test performed
+1647,1647,4.883633256258168,0.0870026563418186,Test performed
+1648,1648,8.152206695486075,0.016973476694412334,Test performed
+1649,1649,7.229857929566383,0.02691883733475978,Test performed
+1650,1650,3.585587344985841,0.1664943885565031,Test performed
+1651,1651,0.09531285041489117,0.9534613160828096,Test performed
+1652,1652,,,All present or all missing
+1653,1653,6.825473432616289,0.03295089960413476,Test performed
+1654,1654,,,All present or all missing
+1655,1655,10.396825396825395,0.005525327825465432,Test performed
+1656,1656,,,All present or all missing
+1657,1657,0.8044957113280093,0.6688149555702763,Test performed
+1658,1658,5.445118180309818,0.06570639051199499,Test performed
+1659,1659,,,All present or all missing
+1660,1660,0.263497804184965,0.8765610700985416,Test performed
+1661,1661,0.2753482345319079,0.8713826140292608,Test performed
+1662,1662,2.374743900167628,0.30502182422950547,Test performed
+1663,1663,6.271986271986273,0.043456574103301414,Test performed
+1664,1664,7.774756128866639,0.020499022755584913,Test performed
+1665,1665,1.6150598170302612,0.4459582645801994,Test performed
+1666,1666,6.011810489162408,0.049493929931110854,Test performed
+1667,1667,8.41797183989875,0.014861431380317185,Test performed
+1668,1668,,,All present or all missing
+1669,1669,2.3643669179383466,0.30660854002510635,Test performed
+1670,1670,3.3542068738964397,0.1869146026137075,Test performed
+1671,1671,0.6875486513013163,0.7090889331779254,Test performed
+1672,1672,,,All present or all missing
+1673,1673,8.673469387755102,0.013079166033695494,Test performed
+1674,1674,,,All present or all missing
+1675,1675,6.768707482993197,0.03389954313613922,Test performed
+1676,1676,,,All present or all missing
+1677,1677,4.766501195072624,0.09225022126421407,Test performed
+1678,1678,0.16896368937185283,0.9189883397473143,Test performed
+1679,1679,3.083900226757369,0.21396344134756387,Test performed
+1680,1680,3.3444172741885105,0.18783175499077012,Test performed
+1681,1681,,,All present or all missing
+1682,1682,4.766501195072624,0.09225022126421407,Test performed
+1683,1683,,,All present or all missing
+1684,1684,0.510204081632653,0.7748374288832494,Test performed
+1685,1685,2.729668443954158,0.25542301600106004,Test performed
+1686,1686,3.6734693877551026,0.15933686121653332,Test performed
+1687,1687,4.607654250511393,0.09987587387411817,Test performed
+1688,1688,3.2952966132689636,0.19250208259558005,Test performed
+1689,1689,,,All present or all missing
+1690,1690,3.188817398880736,0.20302854390809308,Test performed
+1691,1691,9.712513357833554,0.007779550810355771,Test performed
+1692,1692,,,All present or all missing
+1693,1693,1.2038585926173748,0.5477538365628214,Test performed
+1694,1694,1.2581085502194242,0.533095724578446,Test performed
+1695,1695,3.041346408693347,0.21856469870869089,Test performed
+1696,1696,2.7633589667751157,0.2511563856700184,Test performed
+1697,1697,0.5039513036665388,0.7772636627838093,Test performed
+1698,1698,,,All present or all missing
+1699,1699,8.955646258503402,0.011358111402936001,Test performed
+1700,1700,1.9916855631141341,0.3694119797106262,Test performed
+1701,1701,,,All present or all missing
+1702,1702,6.273167044595618,0.0434309255091372,Test performed
+1703,1703,,,All present or all missing
+1704,1704,3.86638237384506,0.14468574173621526,Test performed
+1705,1705,6.225887615320101,0.04446985177281998,Test performed
+1706,1706,1.8583693275742552,0.3948755354795942,Test performed
+1707,1707,7.776054421768708,0.020485720205832055,Test performed
+1708,1708,,,All present or all missing
+1709,1709,3.949428828135027,0.1388009461808834,Test performed
+1710,1710,,,All present or all missing
+1711,1711,,,All present or all missing
+1712,1712,0.7270159525798624,0.6952331818126163,Test performed
+1713,1713,1.9136702299967607,0.3841066175745176,Test performed
+1714,1714,1.8236525379382527,0.40178977738665295,Test performed
+1715,1715,1.3555605392340084,0.5077427945224571,Test performed
+1716,1716,1.8844144800777451,0.3897665768118581,Test performed
+1717,1717,0.06938775510204082,0.9659010550008585,Test performed
+1718,1718,0.35718250003964264,0.836447727523202,Test performed
+1719,1719,5.248825720764497,0.0724823017741355,Test performed
+1720,1720,0.5217124443762466,0.7703916768822596,Test performed
+1721,1721,1.0803200028381632,0.5826550192855549,Test performed
+1722,1722,0.5628459809644479,0.7547090332161607,Test performed
+1723,1723,,,All present or all missing
+1724,1724,0.31135531135531136,0.8558350194720481,Test performed
+1725,1725,1.8844144800777451,0.3897665768118581,Test performed
+1726,1726,0.11720904578047442,0.9430796618359192,Test performed
+1727,1727,3.8553158406219628,0.1454885455355722,Test performed
+1728,1728,4.3381180223285485,0.11428510733935439,Test performed
+1729,1729,3.536672850958565,0.1706165862729968,Test performed
+1730,1730,7.546915317851277,0.02297249475454255,Test performed
+1731,1731,2.4117681260538406,0.299427169977262,Test performed
+1732,1732,4.664777551974508,0.09706360672127964,Test performed
+1733,1733,,,All present or all missing
+1734,1734,6.27997100479536,0.04328342540330579,Test performed
+1735,1735,1.3276190476190475,0.5148861226642656,Test performed
+1736,1736,2.482993197278911,0.28895144983305887,Test performed
+1737,1737,0.2634978041849652,0.8765610700985416,Test performed
+1738,1738,0.2634978041849652,0.8765610700985416,Test performed
+1739,1739,,,All present or all missing
+1740,1740,0.08911808450978959,0.9564191292845378,Test performed
+1741,1741,0.5551858424529229,0.75760516373117,Test performed
+1742,1742,2.455502749044823,0.2929505737340342,Test performed
+1743,1743,6.225887615320101,0.04446985177281998,Test performed
+1744,1744,3.9277182444884304,0.14031587859749034,Test performed
+1745,1745,1.0617427923550375,0.5880922849658998,Test performed
+1746,1746,0.7996112730806606,0.6704503444210851,Test performed
+1747,1747,1.4455782312925167,0.48539653913139347,Test performed
+1748,1748,0.8461921353907416,0.6550157042400008,Test performed
+1749,1749,1.3639759863076781,0.5056108416948395,Test performed
+1750,1750,0.009241139378125676,0.9953900887207688,Test performed
+1751,1751,1.8729665779355222,0.39200397890796745,Test performed
+1752,1752,6.75374149659864,0.034154164664268655,Test performed
+1753,1753,0.31135531135531136,0.8558350194720481,Test performed
+1754,1754,1.8087530578733948,0.40479418390460276,Test performed
+1755,1755,2.012270540145105,0.3656293110818072,Test performed
+1756,1756,3.6237304628109226,0.16334916847377606,Test performed
+1757,1757,1.8498395029007273,0.39656324142309046,Test performed
+1758,1758,3.4046905475476903,0.18225558319025154,Test performed
+1759,1759,0.345212711950452,0.8414687888187711,Test performed
+1760,1760,0.14728532922603021,0.929003600397835,Test performed
+1761,1761,7.037717309145881,0.029633237634340226,Test performed
+1762,1762,2.1851635892452217,0.3353495713605249,Test performed
+1763,1763,1.9916855631141341,0.3694119797106262,Test performed
+1764,1764,7.7437177056615,0.020819632800160387,Test performed
+1765,1765,4.664777551974508,0.09706360672127964,Test performed
