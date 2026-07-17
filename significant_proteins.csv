@@ -1,0 +1,69 @@
+protein_index,protein,g_statistic,p_value,comment,missing_rate,p_adj
+671,BRAP,4.491439297604996,0.03406498601741737,Test performed,"cohort
+AAA             0.484848
+AAA_Diabetes    0.157895
+Name: missing, dtype: float64",1.0
+1149,CNST,4.078052056386338,0.043443715157523495,Test performed,"cohort
+AAA             0.303030
+AAA_Diabetes    0.631579
+Name: missing, dtype: float64",1.0
+1424,DAP,4.651930290747412,0.031018648131952483,Test performed,"cohort
+AAA             0.242424
+AAA_Diabetes    0.000000
+Name: missing, dtype: float64",1.0
+1467,DDHD2,7.756000217496885,0.005353438548618168,Test performed,"cohort
+AAA             0.333333
+AAA_Diabetes    0.000000
+Name: missing, dtype: float64",1.0
+1796,EMC8,4.403546015084876,0.03586428500194387,Test performed,"cohort
+AAA             0.333333
+AAA_Diabetes    0.052632
+Name: missing, dtype: float64",1.0
+2203,GFER,6.372470500254606,0.011590412754891566,Test performed,"cohort
+AAA             0.545455
+AAA_Diabetes    0.157895
+Name: missing, dtype: float64",1.0
+2516,HLA-DQA2,6.673150545809275,0.009787602048786334,Test performed,"cohort
+AAA             0.30303
+AAA_Diabetes    0.00000
+Name: missing, dtype: float64",1.0
+2626,HTATSF1,4.403546015084876,0.03586428500194387,Test performed,"cohort
+AAA             0.333333
+AAA_Diabetes    0.052632
+Name: missing, dtype: float64",1.0
+2733,IGKV1-13;IGKV1D-13,4.0127831807499055,0.04515655033780301,Test performed,"cohort
+AAA             0.212121
+AAA_Diabetes    0.526316
+Name: missing, dtype: float64",1.0
+2790,IL1RAP,4.868354678648189,0.02735356826452351,Test performed,"cohort
+AAA             0.000000
+AAA_Diabetes    0.210526
+Name: missing, dtype: float64",1.0
+3482,MRPL23,4.423534598429207,0.035446538004493926,Test performed,"cohort
+AAA             0.545455
+AAA_Diabetes    0.210526
+Name: missing, dtype: float64",1.0
+3505,MRPL54,4.651930290747412,0.031018648131952483,Test performed,"cohort
+AAA             0.242424
+AAA_Diabetes    0.000000
+Name: missing, dtype: float64",1.0
+3507,MRPL57,3.8947175675287693,0.048438182855138213,Test performed,"cohort
+AAA             0.393939
+AAA_Diabetes    0.105263
+Name: missing, dtype: float64",1.0
+4548,PRR14,5.3919444069939875,0.020229916528502187,Test performed,"cohort
+AAA             0.515152
+AAA_Diabetes    0.157895
+Name: missing, dtype: float64",1.0
+4860,RCOR3,5.434613474368167,0.019741459290592,Test performed,"cohort
+AAA             0.636364
+AAA_Diabetes    0.263158
+Name: missing, dtype: float64",1.0
+6148,TRIR,5.63839157163606,0.017571319772072748,Test performed,"cohort
+AAA             0.272727
+AAA_Diabetes    0.000000
+Name: missing, dtype: float64",1.0
+6325,UNC119B,4.746095680346228,0.029364848151095236,Test performed,"cohort
+AAA             0.424242
+AAA_Diabetes    0.105263
+Name: missing, dtype: float64",1.0
