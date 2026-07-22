@@ -1965,7 +1965,7 @@ AAA             0.575758
 AAA_Diabetes    0.315789
 Name: missing, dtype: float64",1.0
 687,BTD,,,All present or all missing,,
-688,BTF3,1.6619395007268394,0.19734165971890832,Test performed,"cohort
+688,BTF3,1.6619395007268394,0.1973416597189083,Test performed,"cohort
 AAA             0.484848
 AAA_Diabetes    0.263158
 Name: missing, dtype: float64",1.0
@@ -3218,7 +3218,7 @@ Name: missing, dtype: float64",1.0
 AAA             0.090909
 AAA_Diabetes    0.105263
 Name: missing, dtype: float64",1.0
-1098,CLN8,0.07224646394712975,0.78809357981629,Test performed,"cohort
+1098,CLN8,0.07224646394712964,0.7880935798162901,Test performed,"cohort
 AAA             0.393939
 AAA_Diabetes    0.473684
 Name: missing, dtype: float64",1.0
@@ -3875,7 +3875,7 @@ Name: missing, dtype: float64",1.0
 AAA             0.151515
 AAA_Diabetes    0.263158
 Name: missing, dtype: float64",1.0
-1323,CST7,0.07224646394712975,0.78809357981629,Test performed,"cohort
+1323,CST7,0.07224646394712964,0.7880935798162901,Test performed,"cohort
 AAA             0.393939
 AAA_Diabetes    0.473684
 Name: missing, dtype: float64",1.0
@@ -7108,7 +7108,7 @@ AAA             0.090909
 AAA_Diabetes    0.000000
 Name: missing, dtype: float64",1.0
 2428,HABP2,,,All present or all missing,,
-2429,HACD2,0.07224646394712975,0.78809357981629,Test performed,"cohort
+2429,HACD2,0.07224646394712964,0.7880935798162901,Test performed,"cohort
 AAA             0.393939
 AAA_Diabetes    0.473684
 Name: missing, dtype: float64",1.0
@@ -7273,7 +7273,7 @@ Name: missing, dtype: float64",1.0
 AAA             0.030303
 AAA_Diabetes    0.000000
 Name: missing, dtype: float64",1.0
-2486,HERPUD1,0.07224646394712975,0.78809357981629,Test performed,"cohort
+2486,HERPUD1,0.07224646394712964,0.7880935798162901,Test performed,"cohort
 AAA             0.393939
 AAA_Diabetes    0.473684
 Name: missing, dtype: float64",1.0
@@ -8625,7 +8625,7 @@ Name: missing, dtype: float64",1.0
 AAA             0.424242
 AAA_Diabetes    0.157895
 Name: missing, dtype: float64",1.0
-2962,KIF1C,0.07224646394712975,0.78809357981629,Test performed,"cohort
+2962,KIF1C,0.07224646394712964,0.7880935798162901,Test performed,"cohort
 AAA             0.393939
 AAA_Diabetes    0.473684
 Name: missing, dtype: float64",1.0
@@ -9965,7 +9965,7 @@ Name: missing, dtype: float64",1.0
 AAA             0.121212
 AAA_Diabetes    0.157895
 Name: missing, dtype: float64",1.0
-3390,MIDEAS,1.6619395007268394,0.19734165971890832,Test performed,"cohort
+3390,MIDEAS,1.6619395007268394,0.1973416597189083,Test performed,"cohort
 AAA             0.484848
 AAA_Diabetes    0.263158
 Name: missing, dtype: float64",1.0
@@ -11058,7 +11058,7 @@ Name: missing, dtype: float64",1.0
 AAA             0.121212
 AAA_Diabetes    0.105263
 Name: missing, dtype: float64",1.0
-3721,NDUFAF5,0.07224646394712975,0.78809357981629,Test performed,"cohort
+3721,NDUFAF5,0.07224646394712964,0.7880935798162901,Test performed,"cohort
 AAA             0.393939
 AAA_Diabetes    0.473684
 Name: missing, dtype: float64",1.0
@@ -14842,7 +14842,7 @@ Name: missing, dtype: float64",1.0
 AAA             0.242424
 AAA_Diabetes    0.105263
 Name: missing, dtype: float64",1.0
-4961,RNF25,0.07224646394712975,0.78809357981629,Test performed,"cohort
+4961,RNF25,0.07224646394712964,0.7880935798162901,Test performed,"cohort
 AAA             0.393939
 AAA_Diabetes    0.473684
 Name: missing, dtype: float64",1.0
@@ -15224,7 +15224,7 @@ AAA_Diabetes    0.105263
 Name: missing, dtype: float64",1.0
 5122,SAA4,,,All present or all missing,,
 5123,SACM1L,,,All present or all missing,,
-5124,SACS,0.07224646394712975,0.78809357981629,Test performed,"cohort
+5124,SACS,0.07224646394712964,0.7880935798162901,Test performed,"cohort
 AAA             0.393939
 AAA_Diabetes    0.473684
 Name: missing, dtype: float64",1.0
@@ -19163,7 +19163,7 @@ Name: missing, dtype: float64",1.0
 AAA             0.515152
 AAA_Diabetes    0.421053
 Name: missing, dtype: float64",1.0
-6369,UTP20,1.6619395007268394,0.19734165971890832,Test performed,"cohort
+6369,UTP20,1.6619395007268394,0.1973416597189083,Test performed,"cohort
 AAA             0.484848
 AAA_Diabetes    0.263158
 Name: missing, dtype: float64",1.0
@@ -19279,7 +19279,7 @@ Name: missing, dtype: float64",1.0
 AAA             0.393939
 AAA_Diabetes    0.368421
 Name: missing, dtype: float64",1.0
-6413,VMO1,0.07224646394712975,0.78809357981629,Test performed,"cohort
+6413,VMO1,0.07224646394712964,0.7880935798162901,Test performed,"cohort
 AAA             0.393939
 AAA_Diabetes    0.473684
 Name: missing, dtype: float64",1.0
@@ -19939,7 +19939,7 @@ Name: missing, dtype: float64",1.0
 AAA             0.515152
 AAA_Diabetes    0.473684
 Name: missing, dtype: float64",1.0
-6611,ZNF638,1.6619395007268394,0.19734165971890832,Test performed,"cohort
+6611,ZNF638,1.6619395007268394,0.1973416597189083,Test performed,"cohort
 AAA             0.484848
 AAA_Diabetes    0.263158
 Name: missing, dtype: float64",1.0
