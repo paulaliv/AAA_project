@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
 ## dir loading
-plasma_data = pd.read_excel('plasma_data_imputed_30.xlsx')
-tissue_data = pd.read_excel('tissue_data_imputed_30.xlsx')
+plasma_data = pd.read_excel('PR80_30/plasma_data_imputed_30.xlsx')
+tissue_data = pd.read_excel('PR80_30/tissue_data_imputed_30.xlsx')
 
 assert plasma_data.shape[1] == tissue_data.shape[1]
 
@@ -16,24 +16,41 @@ print(f'Number of tissue proteins: {len(tissue_proteins)}')
 common_proteins = [protein for protein in tissue_proteins if protein in plasma_proteins]
 
 #print(common_proteins)
-print(f' Common proteins: {len(common_proteins)}')
+print(f'Common proteins: {len(common_proteins)}')
 all_proteins = list(set(plasma_proteins) | set(tissue_proteins))
-print(len(all_proteins))
+print(f'all proteins: {len(all_proteins)}')
 #print(set(plasma_proteins) & set(tissue_proteins))
 # for protein in all_proteins:
 #     print(protein)
 #Pathway enrichment analysis
-string_df = pd.read_csv(
-    "/scratch/bmep/plalfken/Venkat/pathway_datasets/9606.protein.links.v12.0.txt.gz",
-    sep=" ",
-    compression="gzip"
-)
-aliases= pd.read_csv(
-    "/scratch/bmep/plalfken/Venkat/pathway_datasets/9606.protein.aliases.v12.0.txt.gz",
-    sep="\t",
-    compression="gzip"
-)
-outdated_symbols = pd.read_csv("/scratch/bmep/plalfken/Venkat/pathway_datasets/hgnc_complete_set.txt", sep="\t")
+remote = False
+if remote:
+
+    string_df = pd.read_csv(
+        "/scratch/bmep/plalfken/Venkat/pathway_datasets/9606.protein.links.v12.0.txt.gz",
+        sep=" ",
+        compression="gzip"
+    )
+    aliases= pd.read_csv(
+        "/scratch/bmep/plalfken/Venkat/pathway_datasets/9606.protein.aliases.v12.0.txt.gz",
+        sep="\t",
+        compression="gzip"
+    )
+    outdated_symbols = pd.read_csv("/scratch/bmep/plalfken/Venkat/pathway_datasets/hgnc_complete_set.txt", sep="\t")
+
+else:
+    string_df = pd.read_csv(
+        r"C:\Users\P095551\OneDrive - Amsterdam UMC\Bureaublad\pathway_datasets\9606.protein.links.v12.0.txt.gz",
+        sep=" ",
+        compression="gzip"
+    )
+    aliases = pd.read_csv(
+        r"C:\Users\P095551\OneDrive - Amsterdam UMC\Bureaublad\pathway_datasets\9606.protein.aliases.v12.0.txt.gz",
+        sep="\t",
+        compression="gzip"
+    )
+    outdated_symbols = pd.read_csv(r"C:\Users\P095551\OneDrive - Amsterdam UMC\Bureaublad\pathway_datasets\hgnc_complete_set.txt", sep="\t")
+
 #print(outdated_symbols.columns)
 #print(outdated_symbols[['prev_symbol','alias_symbol']].head())
 #print(aliases_df.head())
@@ -80,56 +97,65 @@ gene2string = (
     .to_dict()
 )
 #print(gene2string)
-def clean_gene(gene):
-    # remove contaminants
-    gene = gene.split(";cRAP-")[0]
+# def clean_gene(gene):
+#     # remove contaminants
+#     gene = gene.split(";cRAP-")[0]
+#
+#     # take first protein from protein groups
+#     gene = gene.split(";")[0]
+#
+#     return gene
+# rename_dict = {}
+# for protein in all_proteins:
+#     new_name = clean_gene(protein)
+#     if new_name != protein:
+#         rename_dict[protein] = new_name
+# rename_df = (
+#     pd.DataFrame.from_dict(rename_dict, orient="index", columns=["new_gene"])
+#     .rename_axis("original_gene")
+#     .reset_index()
+# )
+#
+# print(rename_df.head())
 
-    # take first protein from protein groups
-    gene = gene.split(";")[0]
-
-    return gene
-rename_dict = {}
-for protein in all_proteins:
-    new_name = clean_gene(protein)
-    if new_name != protein:
-        rename_dict[protein] = new_name
-rename_df = (
-    pd.DataFrame.from_dict(rename_dict, orient="index", columns=["new_gene"])
-    .rename_axis("original_gene")
-    .reset_index()
-)
-
-print(rename_df.head())
+#
+# all_proteins = [rename_dict.get(p, p) for p in all_proteins]
+# print(rename_dict)
+proteins_found_shared = [protein for protein in all_proteins if protein in gene2string.keys()]
 
 
-all_proteins = [rename_dict.get(p, p) for p in all_proteins]
-print(rename_dict)
-proteins_found = [protein for protein in all_proteins if protein in gene2string.keys()]
+print(f'Number of proteins found: {len(proteins_found_shared)}/{len(all_proteins)}')
+leftover = [protein for protein in all_proteins if protein not in proteins_found_shared]
+# for protein in leftover:
+#     if protein in rename_dict_1.keys():
+#         rename_dict[protein] = rename_dict_1[protein]
+#         print(protein, rename_dict_1[protein])
+# rename_df.to_csv('protein_renaming.csv', index=False)
+# print('final mapping:',rename_dict)
+# all_proteins = [rename_dict.get(p, p) for p in all_proteins]
+# proteins_found = [protein for protein in all_proteins if protein in gene2string.keys()]
 
-print(f'Number of proteins found: {len(proteins_found)}/{len(all_proteins)}')
-leftover = [protein for protein in all_proteins if protein not in proteins_found]
-for protein in leftover:
-    if protein in rename_dict_1.keys():
-        rename_dict[protein] = rename_dict_1[protein]
-        print(protein, rename_dict_1[protein])
-rename_df.to_csv('protein_renaming.csv', index=False)
-print('final mapping:',rename_dict)
-all_proteins = [rename_dict.get(p, p) for p in all_proteins]
-proteins_found = [protein for protein in all_proteins if protein in gene2string.keys()]
-
-print(f'Number of proteins found: {len(proteins_found)}/{len(all_proteins)}')
-leftover = [protein for protein in all_proteins if protein not in proteins_found]
+# print(f'Number of proteins found: {len(proteins_found)}/{len(all_proteins)}')
+# leftover = [protein for protein in all_proteins if protein not in proteins_found]
 print(f'proteins left: {leftover}')
 
-tissue_data["Genes"] = tissue_data["Genes"].map(
-    lambda x: rename_dict.get(x, x)
-)
+# tissue_data["Genes"] = tissue_data["Genes"].map(
+#     lambda x: rename_dict.get(x, x)
+# )
+#
+# plasma_data["Genes"] = plasma_data["Genes"].map(
+#     lambda x: rename_dict.get(x, x)
+# )
+proteins_found_plasma= [protein for protein in plasma_proteins if protein in gene2string.keys()]
+proteins_found_tissue= [protein for protein in tissue_proteins if protein in gene2string.keys()]
+proteins_found_common= [protein for protein in common_proteins if protein in gene2string.keys()]
 
-plasma_data["Genes"] = plasma_data["Genes"].map(
-    lambda x: rename_dict.get(x, x)
-)
+print(f'Number of TISSUE proteins found: {len(proteins_found_tissue)}/{len(tissue_proteins)}')
+print(f'Number of PLASMA proteins found: {len(proteins_found_plasma)}/{len(plasma_proteins)}')
 
-
+print(f'Number of common proteins found: {len(proteins_found_common)}/{len(common_proteins)}')
+leftover = pd.DataFrame(leftover, columns=["Genes not found in STRING"])
+leftover.to_csv('PR80_30/genes_not_found_by_string.csv', index=False)
 #tissue_data.to_csv('tissue_data_imputed_30_renamed.csv', index=False)
 #plasma_data.to_csv('plasma_data_imputed_30_renamed.csv', index=False)
 
@@ -199,10 +225,28 @@ print("Collapsed gene edges:", len(gene_edges_collapsed))
 
 print(gene_edges_collapsed.head())
 gene_edges_model = gene_edges_collapsed[
-    gene_edges_collapsed["gene1"].isin(proteins_found)
+    gene_edges_collapsed["gene1"].isin(proteins_found_shared)
     &
-    gene_edges_collapsed["gene2"].isin(proteins_found)
+    gene_edges_collapsed["gene2"].isin(proteins_found_shared)
 ]
+
+gene_edges_model_plasma = gene_edges_collapsed[
+    gene_edges_collapsed["gene1"].isin(plasma_proteins)
+    &
+    gene_edges_collapsed["gene2"].isin(plasma_proteins)
+]
+gene_edges_model_tissue = gene_edges_collapsed[
+    gene_edges_collapsed["gene1"].isin(tissue_proteins)
+    &
+    gene_edges_collapsed["gene2"].isin(tissue_proteins)
+]
+
+gene_edges_model_common_only = gene_edges_collapsed[
+    gene_edges_collapsed["gene1"].isin(common_proteins)
+    &
+    gene_edges_collapsed["gene2"].isin(common_proteins)
+]
+
 #gene_edges_model.to_csv('gene_edges_model.csv', index=False)
 
 gene2string_df = pd.DataFrame(
@@ -224,34 +268,99 @@ graph_genes = set(
 
 print('Number of edges:', len(gene_edges_model))
 print('Actual number of nodes:',len(graph_genes))
-connectivity_400 = gene_edges_model[
+model_400 = gene_edges_model[
     gene_edges_model["combined_score"] >= 400
 ]
-graph_genes_400 = set(
-    connectivity_400["gene1"]
+genes_400 = set(
+    model_400["gene1"]
 ).union(
-    set(connectivity_400["gene2"])
+    set(model_400["gene2"])
 )
-connectivity_700 = gene_edges_model[
+model_700 = gene_edges_model[
     gene_edges_model["combined_score"] >= 700
 ]
 graph_genes_700 = set(
-    connectivity_700["gene1"]
+    model_700["gene1"]
 ).union(
-    set(connectivity_700["gene2"])
+    set(model_700["gene2"])
 )
 
-connectivity_400.to_csv('gene_edges_model_400.csv', index=False)
-connectivity_700.to_csv('gene_edges_model_700.csv', index=False)
+model_400_tissue = gene_edges_model_tissue[
+    gene_edges_model_tissue["combined_score"] >= 400
+]
+model_700_tissue = gene_edges_model_tissue[
+    gene_edges_model_tissue["combined_score"] >= 700
+]
+
+model_400_plasma= gene_edges_model_plasma[
+    gene_edges_model_plasma["combined_score"] >= 400
+]
+model_700_plasma= gene_edges_model_plasma[
+    gene_edges_model_plasma["combined_score"] >= 700
+]
+
+model_400_common= gene_edges_model_common_only[
+    gene_edges_model_common_only["combined_score"] >= 400
+]
+model_700_common= gene_edges_model_common_only[
+    gene_edges_model_common_only["combined_score"] >= 700
+]
+
+model_400_tissue.to_csv('PR80_30/gene_edges_model_tissue_400.csv', index=False)
+model_700_tissue.to_csv('PR80_30/gene_edges_model_tissue_700.csv', index=False)
+
+
+model_400_plasma.to_csv('PR80_30/gene_edges_model_plasma_400.csv', index=False)
+model_700_plasma.to_csv('PR80_30/gene_edges_model_plasma_700.csv', index=False)
+
+
+model_400_common.to_csv('PR80_30/gene_edges_model_common_400.csv', index=False)
+model_700_common.to_csv('PR80_30/gene_edges_model_common_700.csv', index=False)
+
+
+model_400.to_csv('PR80_30/gene_edges_model_union_400.csv', index=False)
+model_700.to_csv('PR80_30/gene_edges_model_union_700.csv', index=False)
 
 print('connectivity values stats:')
-print('edges above value of 400:',len(connectivity_400))
-print('nodes with only edges above 400:',len(graph_genes_400))
-print('edges above value of 700:',len(connectivity_700))
-print('nodes with only edges above 700:',len(graph_genes_700))
-print('mean:',gene_edges_model["combined_score"].mean())
-print('max:',gene_edges_model["combined_score"].max())
-print('min:',gene_edges_model["combined_score"].min())
+
+import pandas as pd
+
+def graph_stats(edge_df, model_name):
+    stats = {"Model": model_name}
+
+    # Overall graph
+    stats["Total edges"] = len(edge_df)
+    stats["Total nodes"] = len(set(edge_df["gene1"]).union(edge_df["gene2"]))
+    stats["Mean score"] = edge_df["combined_score"].mean()
+    stats["Max score"] = edge_df["combined_score"].max()
+    stats["Min score"] = edge_df["combined_score"].min()
+
+    # Threshold = 400
+    edges_400 = edge_df[edge_df["combined_score"] >= 400]
+    nodes_400 = set(edges_400["gene1"]).union(edges_400["gene2"])
+
+    stats["Edges ≥400"] = len(edges_400)
+    stats["Nodes ≥400"] = len(nodes_400)
+
+    # Threshold = 700
+    edges_700 = edge_df[edge_df["combined_score"] >= 700]
+    nodes_700 = set(edges_700["gene1"]).union(edges_700["gene2"])
+
+    stats["Edges ≥700"] = len(edges_700)
+    stats["Nodes ≥700"] = len(nodes_700)
+
+    return stats
+
+summary = pd.DataFrame([
+    graph_stats(gene_edges_model, "Union"),
+    graph_stats(gene_edges_model_tissue, "Tissue"),
+    graph_stats(gene_edges_model_plasma, "Plasma"),
+    graph_stats(gene_edges_model_common_only, "Common")
+])
+
+print(summary)
+
+summary.to_csv("PR80_30/graph_summary_statistics.csv", index=False)
 # for p in leftover:
 #     print(
 #         p,

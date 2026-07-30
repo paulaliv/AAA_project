@@ -1,0 +1,45 @@
+protein_index,protein,g_statistic,p_value,comment,missing_rate,p_adj
+123,AFAP1,3.9929746343596406,0.04569033406548626,Test performed,"cohort
+AAA             0.035714
+AAA_Diabetes    0.294118
+Name: missing, dtype: float64",1.0
+652,CD180,3.8681931569245815,0.04920947097826878,Test performed,"cohort
+AAA             0.071429
+AAA_Diabetes    0.352941
+Name: missing, dtype: float64",1.0
+1134,DHRSX,5.798904586650535,0.016036162111362284,Test performed,"cohort
+AAA             0.035714
+AAA_Diabetes    0.352941
+Name: missing, dtype: float64",1.0
+1139,DHX36,4.692698815788539,0.030291034904604597,Test performed,"cohort
+AAA             0.000000
+AAA_Diabetes    0.235294
+Name: missing, dtype: float64",1.0
+1176,DNAJC25,3.8681931569245815,0.04920947097826878,Test performed,"cohort
+AAA             0.071429
+AAA_Diabetes    0.352941
+Name: missing, dtype: float64",1.0
+1567,FRZB,4.045077485448237,0.04430034495898944,Test performed,"cohort
+AAA             0.25
+AAA_Diabetes    0.00
+Name: missing, dtype: float64",1.0
+1662,GIPC1,4.692698815788539,0.030291034904604597,Test performed,"cohort
+AAA             0.000000
+AAA_Diabetes    0.235294
+Name: missing, dtype: float64",1.0
+1852,HDHD3,4.692698815788539,0.030291034904604597,Test performed,"cohort
+AAA             0.000000
+AAA_Diabetes    0.235294
+Name: missing, dtype: float64",1.0
+1885,HLA-DQA2,4.045077485448237,0.04430034495898944,Test performed,"cohort
+AAA             0.25
+AAA_Diabetes    0.00
+Name: missing, dtype: float64",1.0
+3182,PLIN1,3.9929746343596406,0.04569033406548626,Test performed,"cohort
+AAA             0.035714
+AAA_Diabetes    0.294118
+Name: missing, dtype: float64",1.0
+3594,RBSN,6.729178113271916,0.009484829329391273,Test performed,"cohort
+AAA             0.000000
+AAA_Diabetes    0.294118
+Name: missing, dtype: float64",1.0
