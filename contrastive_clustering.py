@@ -16,13 +16,13 @@ import matplotlib.pyplot as plt
 import torch.nn as nn
 from torch_geometric.nn import GCNConv
 from torch_geometric.nn import global_mean_pool
-tissue_data = pd.read_csv('PR80_30/tissue_data_imputed_30_renamed.csv')
+tissue_data = pd.read_excel('PR80_30/tissue_data_imputed_30.xlsx')
 # patients = tissue_data.columns[2:].to_numpy()
 # print(patients)
-gene_to_idx = pd.read_csv('gene_to_idx_400.csv')
+gene_to_idx = pd.read_csv('PR80_30/gene_to_idx_400_common_only.csv')
 # gene_edges_model = pd.read_csv('gene_edges_model.csv')
 
-graphs = torch.load("PR80_30/proteins_graphs_400_is_observed_feature.pt", weights_only=False)
+graphs = torch.load("PR80_30/proteins_graphs_400_common_only.pt", weights_only=False)
 ### graph structure
 # 6559 nodes
 # 2 node features per node
@@ -112,7 +112,7 @@ class GraphEncoder(nn.Module):
         super().__init__()
 
         self.conv1 = SAGEConv(
-            2,
+            1,
             hidden_dim
         )
 
@@ -650,7 +650,7 @@ def training_loop():
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/fold_{fold + 1}_loss.png",
+            f"training_plots/common_only/fold_{fold + 1}_loss.png",
             dpi=300
         )
 
@@ -679,7 +679,7 @@ def training_loop():
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/fold_{fold + 1}_similarity_emb.png",
+            f"training_plots/common_only/fold_{fold + 1}_similarity_emb.png",
             dpi=300
         )
 
@@ -714,7 +714,7 @@ def training_loop():
 
         plt.close()
 
-        torch.save(  fold_embeddings,f"embeddings/fold_{fold}_embeddings.pt" )
-        torch.save(fold_embeddings_proj,f"embeddings/fold_{fold}_embeddings_proj.pt" )
+        torch.save(  fold_embeddings,f"embeddings_common_only/fold_{fold}_embeddings.pt" )
+        torch.save(fold_embeddings_proj,f"embeddings_common_only/fold_{fold}_embeddings_proj.pt" )
 
 training_loop()
