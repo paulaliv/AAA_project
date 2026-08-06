@@ -1,0 +1,9 @@
+,Plasma graph,Tissue graph,Common only graph,Union graph
+edges above 400,28410,280228,26808,283933
+nodes above 400,1340,6397,1253,6490
+components above 400,1,2,1,2
+largest component 400,1340,6395,1253,6488
+edges above 700,7934,84161,7587,84947
+nodes above 700,1191,5866,1121,5942
+components above 700,9,10,6,12
+largest component 700,1174,5848,1110,5920
