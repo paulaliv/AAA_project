@@ -11,6 +11,7 @@ from torch_geometric.loader import DataLoader
 from torch_geometric.nn import SAGEConv
 from torch_geometric.nn import GlobalAttention
 import matplotlib.pyplot as plt
+from torch_geometric.nn import global_mean_pool
 
 #for gcn
 import torch.nn as nn
@@ -116,19 +117,20 @@ class GraphEncoder(nn.Module):
             hidden_dim
         )
 
-        self.conv2 = SAGEConv(
-            hidden_dim,
-            hidden_dim
-        )
-
-
-        self.pool = GlobalAttention(
-            gate_nn=nn.Sequential(
-                nn.Linear(hidden_dim,32),
-                nn.ReLU(),
-                nn.Linear(32,1)
-            )
-        )
+        # self.conv2 = SAGEConv(
+        #     hidden_dim,
+        #     hidden_dim
+        # )
+        #
+        #
+        # self.pool = GlobalAttention(
+        #     gate_nn=nn.Sequential(
+        #         nn.Linear(hidden_dim,32),
+        #         nn.ReLU(),
+        #         nn.Linear(32,1)
+        #     )
+        # )
+        # self.encoder = global_mean_pool
 
 
     def forward(self,x,edge_index,batch):
@@ -141,63 +143,21 @@ class GraphEncoder(nn.Module):
         x = torch.relu(x)
 
 
-        x = self.conv2(
-            x,
-            edge_index
-        )
+        # x = self.conv2(
+        #     x,
+        #     edge_index
+        # )
+        #
+        # x = torch.relu(x)
 
-        x = torch.relu(x)
-
-
-        x = self.pool(
+        x = global_mean_pool(
             x,
             batch
         )
 
+
+
         return x
-# class GraphEncoder(nn.Module):
-#
-#     def __init__(
-#         self,
-#         hidden_dim=64
-#     ):
-#         super().__init__()
-#
-#         self.conv1 = GCNConv(
-#             1,
-#             hidden_dim
-#         )
-#
-#         self.conv2 = GCNConv(
-#             hidden_dim,
-#             hidden_dim
-#         )
-#         self.dropout = nn.Dropout(0.3)
-#
-#
-#     def forward(self, x, edge_index, batch):
-#
-#         x = self.conv1(
-#             x,
-#             edge_index
-#         )
-#
-#         x = torch.relu(x)
-#
-#
-#         x = self.conv2(
-#             x,
-#             edge_index
-#         )
-#
-#         x = torch.relu(x)
-#
-#
-#         x = global_mean_pool(
-#             x,
-#             batch
-#         )
-#         return x
 
 class ProjectionHead(nn.Module):
 
@@ -236,42 +196,7 @@ def pair_collate(batch):
 
     return tissue_batch, plasma_batch
 
-def contrastive_loss(
-    tissue_z,
-    plasma_z,
-    temperature=0.1
-):
 
-    tissue_z = nn.functional.normalize(
-        tissue_z,
-        dim=1
-    )
-
-    plasma_z = nn.functional.normalize(
-        plasma_z,
-        dim=1
-    )
-
-
-    logits = (
-        tissue_z @ plasma_z.T
-    ) / temperature
-
-    print(f'Loss logits: {logits[:3, :3]}')
-
-
-    labels = torch.arange(
-        len(logits),
-        device=logits.device
-    )
-
-
-    loss = nn.CrossEntropyLoss()(
-        logits,
-        labels
-    )
-
-    return loss
 def symmetric_contrastive_loss(
     tissue_z,
     plasma_z,
@@ -416,6 +341,40 @@ def training_loop():
                 tissue = tissue.to(device)
                 plasma = plasma.to(device)
 
+                X_tissue = tissue.x.squeeze(-1)
+                X_plasma = plasma.x.squeeze(-1)
+
+                # reshape: [total_nodes] -> [batch_size, n_proteins]
+                X_tissue = X_tissue.reshape(tissue.num_graphs, -1)
+                X_plasma = X_plasma.reshape(plasma.num_graphs, -1)
+                print(X_tissue.shape)
+                print(X_plasma.shape)
+
+                X_tissue = F.normalize(X_tissue, dim=1)
+                X_plasma = F.normalize(X_plasma, dim=1)
+
+                tissue_sim = X_tissue @ X_tissue.T
+                plasma_sim = X_plasma @ X_plasma.T
+                cross_sim = X_tissue @ X_plasma.T
+
+                mask = ~torch.eye(
+                    tissue_sim.size(0),
+                    dtype=torch.bool,
+                    device=tissue_sim.device
+                )
+
+                print("Raw tissue ↔ tissue:",
+                      tissue_sim[mask].mean().item())
+
+                print("Raw plasma ↔ plasma:",
+                      plasma_sim[mask].mean().item())
+
+                print("Raw positive tissue ↔ plasma:",
+                      cross_sim.diag().mean().item())
+
+                print("Raw negative tissue ↔ plasma:",
+                      cross_sim[mask].mean().item())
+
                 # graph encoder
 
                 tissue_emb = encoder(
@@ -429,11 +388,7 @@ def training_loop():
                     plasma.edge_index,
                     plasma.batch
                 )
-                # print('tissue embedding mean,std:')
-                # print(
-                #     tissue_emb.mean(),
-                #     tissue_emb.std()
-                # )
+
 
                 print(
                     plasma_emb.mean(),
@@ -459,13 +414,33 @@ def training_loop():
                 optimizer.zero_grad()
 
                 loss.backward()
+                # before optimizer.step()
+                old_weight = encoder.conv1.lin_l.weight.detach().clone()
 
                 optimizer.step()
+
+                change = (
+                        encoder.conv1.lin_l.weight.detach() - old_weight
+                ).norm()
+
+                print("Parameter change:", change.item())
 
                 total_loss += loss.item()
 
             epoch_train_loss = total_loss / len(train_loader)
             train_losses.append(epoch_train_loss)
+
+            for name, p in encoder.named_parameters():
+                if p.grad is not None:
+                    print(
+                        name,
+                        "grad:",
+                        p.grad.norm().item()
+                    )
+
+
+
+
 
             print(
                 f"Epoch {epoch}: "

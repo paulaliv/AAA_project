@@ -11,6 +11,7 @@ from torch_geometric.loader import DataLoader
 from torch_geometric.nn import SAGEConv
 from torch_geometric.nn import GlobalAttention
 import matplotlib.pyplot as plt
+from torch_geometric.nn import global_mean_pool
 
 #for gcn
 import torch.nn as nn
@@ -113,16 +114,26 @@ class GraphEncoder_Tissue(nn.Module):
 
         super().__init__()
 
-        self.conv1 = SAGEConv(
+        self.conv1 = GCNConv(
             1,
             hidden_dim
         )
+        #
+        # self.conv2 = SAGEConv(
+        #     hidden_dim,
+        #     hidden_dim
+        # )
+        # self.conv1 = GCNConv(
+        #     1,
+        #     hidden_dim
+        # )
 
-        self.conv2 = SAGEConv(
+        self.conv2 = GCNConv(
             hidden_dim,
             hidden_dim
         )
 
+        # self.pool = global_mean_pool
 
         self.pool = GlobalAttention(
             gate_nn=nn.Sequential(
@@ -134,6 +145,7 @@ class GraphEncoder_Tissue(nn.Module):
 
 
     def forward(self,x,edge_index,batch):
+
 
         x = self.conv1(
             x,
@@ -155,6 +167,10 @@ class GraphEncoder_Tissue(nn.Module):
             x,
             batch
         )
+        # x = global_mean_pool(
+        #     x,
+        #     batch
+        # )
 
         return x
 
@@ -164,16 +180,15 @@ class GraphEncoder_Plasma(nn.Module):
 
         super().__init__()
 
-        self.conv1 = SAGEConv(
-            1,
-            hidden_dim
-        )
+        self.conv1 = GCNConv(
+                        1,
+                        hidden_dim
+                    )
 
-        self.conv2 = SAGEConv(
-            hidden_dim,
-            hidden_dim
-        )
-
+        self.conv2 = GCNConv(
+                        hidden_dim,
+                        hidden_dim
+                    )
 
         self.pool = GlobalAttention(
             gate_nn=nn.Sequential(
@@ -182,25 +197,30 @@ class GraphEncoder_Plasma(nn.Module):
                 nn.Linear(32,1)
             )
         )
+        # self.pool = global_mean_pool
 
 
     def forward(self,x,edge_index,batch):
 
-        x = self.conv1(
+        x= self.conv1(
             x,
             edge_index
         )
 
         x = torch.relu(x)
 
-
+        #
         x = self.conv2(
             x,
             edge_index
         )
 
         x = torch.relu(x)
-
+        #
+        # x = global_mean_pool(
+        #     x,
+        #     batch
+        # )
 
         x = self.pool(
             x,
@@ -525,6 +545,7 @@ def training_loop():
 
                 # graph encoder
 
+
                 tissue_emb = encoder_tissue(
                     tissue.x,
                     tissue.edge_index,
@@ -537,11 +558,38 @@ def training_loop():
                     plasma.batch
                 )
 
-                print(
-                    plasma_emb.mean(),
-                    plasma_emb.std()
+
+                tissue_emb_1 = F.normalize(tissue_emb, dim=1)
+                plasma_emb_1 = F.normalize(plasma_emb, dim=1)
+
+                tissue_sim = tissue_emb_1 @ tissue_emb_1.T
+                plasma_sim = plasma_emb_1 @ plasma_emb_1.T
+                cross_sim = tissue_emb_1 @ plasma_emb_1.T
+                mask = ~torch.eye(
+                    tissue_sim.size(0),
+                    dtype=torch.bool,
+                    device=tissue_sim.device
                 )
 
+                print(
+                    "Tissue ↔ Tissue:",
+                    tissue_sim[mask].mean().item()
+                )
+
+                print(
+                    "Plasma ↔ Plasma:",
+                    plasma_sim[mask].mean().item()
+                )
+
+                print(
+                    "Tissue ↔ Plasma positive:",
+                    cross_sim.diag().mean().item()
+                )
+
+                print(
+                    "Tissue ↔ Plasma negative:",
+                    cross_sim[mask].mean().item()
+                )
                 # projection space
                 #
                 # tissue_proj = projector_tissue(
@@ -762,7 +810,7 @@ def training_loop():
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/fold_{fold + 1}_loss.png",
+            f"training_plots/GCN_loss/fold_{fold + 1}_loss.png",
             dpi=300
         )
 
@@ -826,7 +874,7 @@ def training_loop():
 
         plt.close()
 
-        torch.save(  fold_embeddings,f"embeddings/fold_{fold}_embeddings.pt" )
-        torch.save(fold_embeddings_proj, f"embeddings/fold_{fold}_embeddings_proj.pt")
+        torch.save(  fold_embeddings,f"embeddings_GCN/fold_{fold}_embeddings.pt" )
+        torch.save(fold_embeddings_proj, f"embeddings_GCN/fold_{fold}_embeddings_proj.pt")
 
 training_loop()
