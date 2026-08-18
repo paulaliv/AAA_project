@@ -114,24 +114,30 @@ class GraphEncoder_Tissue(nn.Module):
 
         super().__init__()
 
-        self.conv1 = GCNConv(
+        self.conv1 = SAGEConv(
             1,
             hidden_dim
         )
-        #
-        # self.conv2 = SAGEConv(
-        #     hidden_dim,
-        #     hidden_dim
-        # )
+
+        self.conv2 = SAGEConv(
+            hidden_dim,
+            hidden_dim
+        )
+        self.mlp = nn.Sequential(
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim)
+        )
+
         # self.conv1 = GCNConv(
         #     1,
         #     hidden_dim
         # )
 
-        self.conv2 = GCNConv(
-            hidden_dim,
-            hidden_dim
-        )
+        # self.conv2 = GCNConv(
+        #     hidden_dim,
+        #     hidden_dim
+        # )
 
         # self.pool = global_mean_pool
 
@@ -167,10 +173,13 @@ class GraphEncoder_Tissue(nn.Module):
             x,
             batch
         )
+
         # x = global_mean_pool(
         #     x,
         #     batch
         # )
+
+        #x = self.mlp(x)
 
         return x
 
@@ -180,15 +189,17 @@ class GraphEncoder_Plasma(nn.Module):
 
         super().__init__()
 
-        self.conv1 = GCNConv(
+        self.conv1 = SAGEConv(
                         1,
                         hidden_dim
                     )
 
-        self.conv2 = GCNConv(
+        self.conv2 = SAGEConv(
                         hidden_dim,
                         hidden_dim
                     )
+
+
 
         self.pool = GlobalAttention(
             gate_nn=nn.Sequential(
@@ -197,7 +208,7 @@ class GraphEncoder_Plasma(nn.Module):
                 nn.Linear(32,1)
             )
         )
-        # self.pool = global_mean_pool
+
 
 
     def forward(self,x,edge_index,batch):
@@ -209,23 +220,21 @@ class GraphEncoder_Plasma(nn.Module):
 
         x = torch.relu(x)
 
-        #
+
         x = self.conv2(
             x,
             edge_index
         )
 
         x = torch.relu(x)
-        #
+
+        x = self.pool(x, batch)
+
         # x = global_mean_pool(
         #     x,
         #     batch
         # )
-
-        x = self.pool(
-            x,
-            batch
-        )
+        #x= self.mlp(x)
 
         return x
 # class GraphEncoder(nn.Module):
@@ -455,6 +464,11 @@ def training_loop():
         negative_similarities_emb = []
         positive_similarities_proj = []
         negative_similarities_proj = []
+        retrieval_accuracy_emb_train = []
+        retrieval_accuracy_proj_train = []
+        retrieval_accuracy_emb_val = []
+        retrieval_accuracy_proj_val = []
+
 
         fold_embeddings = {
             "epoch0": {"tissue": {}, "plasma": {}},
@@ -538,6 +552,10 @@ def training_loop():
             # projector_tissue.train()
 
             total_loss = 0
+            retrieval_accuracies = []
+            retrieval_accuracies_proj = []
+            recall =[]
+            median_ranks = []
 
             for tissue, plasma in train_loader:
                 tissue = tissue.to(device)
@@ -570,6 +588,22 @@ def training_loop():
                     dtype=torch.bool,
                     device=tissue_sim.device
                 )
+                mask_cross =~torch.eye(
+                    cross_sim.size(0),
+                    dtype=torch.bool,
+                    device=tissue_sim.device
+
+                )
+                predicted = cross_sim.argmax(dim=1)
+                true = torch.arange(
+                    cross_sim.size(0)
+                )
+
+                retrieval_accuracy = (
+                        predicted == true
+                ).float().mean()
+                retrieval_accuracies.append(retrieval_accuracy.item())
+                print('Training')
 
                 print(
                     "Tissue ↔ Tissue:",
@@ -580,16 +614,27 @@ def training_loop():
                     "Plasma ↔ Plasma:",
                     plasma_sim[mask].mean().item()
                 )
+                ranks = torch.argsort(
+                    torch.argsort(cross_sim, dim=1, descending=True),
+                    dim=1
+                ) + 1
+
+                true_ranks = ranks[torch.arange(cross_sim.size(0)), torch.arange(cross_sim.size(0))]
+                recall_5 = (true_ranks <= 5).float().mean()
+                recall.append(recall_5)
+                median_ranks.append(ranks.median().item())
+
+
+
+
+                # rank of the true matching plasma sample
+
 
                 print(
-                    "Tissue ↔ Plasma positive:",
-                    cross_sim.diag().mean().item()
+                    f'Mean similarity embedding space: positive similarity: {cross_sim.diag().mean().item():.4f} | negative similarity: {cross_sim[mask].mean().item():.4f} | Difference: {cross_sim.diag().mean().item() - cross_sim[mask_cross].mean().item():.4f}'
                 )
 
-                print(
-                    "Tissue ↔ Plasma negative:",
-                    cross_sim[mask].mean().item()
-                )
+
                 # projection space
                 #
                 # tissue_proj = projector_tissue(
@@ -607,7 +652,23 @@ def training_loop():
                 plasma_proj_shared = projector_shared(
                     plasma_emb
                 )
+                tissue_proj_norm = F.normalize(tissue_proj_shared, dim=1)
+                plasma_proj_norm = F.normalize(plasma_proj_shared, dim=1)
+                cross_sim_proj = tissue_proj_norm @ plasma_proj_norm.T
 
+                print(
+                    f'Mean similarity projection space: positive similarity: {cross_sim_proj.diag().mean().item():.4f} | negative similarity: {cross_sim_proj[mask].mean().item():.4f} | Difference: {cross_sim_proj.diag().mean().item() - cross_sim_proj[mask].mean().item():.4f}'
+                )
+
+                predicted = cross_sim_proj.argmax(dim=1)
+                true_proj = torch.arange(
+                    cross_sim_proj.size(0)
+                )
+
+                retrieval_accuracy_proj = (
+                        predicted == true_proj
+                ).float().mean()
+                retrieval_accuracies_proj.append(retrieval_accuracy_proj.item())
 
                 loss_shared = symmetric_contrastive_loss(
                     tissue_proj_shared,
@@ -618,6 +679,15 @@ def training_loop():
                 optimizer.zero_grad()
 
                 loss_shared.backward()
+                print(
+                    "Tissue encoder gradient:",
+                    encoder_tissue.conv1.lin_l.weight.grad.norm().item()
+                )
+
+                print(
+                    "Plasma encoder gradient:",
+                    encoder_plasma.conv1.lin_l.weight.grad.norm().item()
+                )
 
                 optimizer.step()
 
@@ -625,10 +695,12 @@ def training_loop():
 
             epoch_train_loss = total_loss / len(train_loader)
             train_losses.append(epoch_train_loss)
+            retrieval_accuracy_emb_train.append(np.mean(retrieval_accuracies))
+            retrieval_accuracy_proj_train.append(np.mean(retrieval_accuracies_proj))
 
             print(
                 f"Epoch {epoch}: "
-                f"Loss: {epoch_train_loss:.4f}"
+                f"Train Loss: {epoch_train_loss:.4f} | retrieval accuracy embedding: {np.mean(retrieval_accuracies)} | recall@5: {np.mean(recall)} | median rank: {np.mean(median_ranks)} | retrieval accuracy proj: {np.mean(retrieval_accuracies_proj)}"
             )
 
             val_loss_total = 0
@@ -702,9 +774,16 @@ def training_loop():
                     mean_negative_similarity = negative_similarity.mean()
 
                     print(
-                        f'Mean positive similarity: {mean_positive_similarity:.4f}',
-                        f'Mean negative similarity: {mean_negative_similarity:.4f}'
+                        f'Mean similarity embedding space: positive similarity: {mean_positive_similarity:.4f} | negative similarity: {mean_negative_similarity:.4f} | Difference: {mean_negative_similarity - mean_positive_similarity:.4f}'
                     )
+
+                    ranks = torch.argsort(
+                        torch.argsort(similarity_matrix, dim=1, descending=True),
+                        dim=1
+                    ) + 1
+
+                    # rank of the true matching plasma sample
+                    true_ranks = ranks[torch.arange(similarity_matrix.size(0)), torch.arange(similarity_matrix.size(0))]
 
                     predicted = similarity_matrix.argmax(dim=1)
                     true = torch.arange(
@@ -729,9 +808,9 @@ def training_loop():
                     mean_negative_similarity_proj = negative_similarity_proj.mean()
 
                     print(
-                        f'Mean positive similarity projection space: {mean_positive_similarity_proj:.4f}',
-                        f'Mean negative similarity projection space: {mean_negative_similarity_proj:.4f}'
+                        f'Mean similarity projection space: positive similarity: {mean_positive_similarity_proj:.4f} | negative similarity: {mean_negative_similarity_proj:.4f} | Difference: {mean_positive_similarity_proj - mean_negative_similarity_proj:.4f}'
                     )
+
                     predicted_proj = similarity_matrix_proj.argmax(dim=1)
                     true_proj= torch.arange(
                         similarity_matrix_proj.size(0)
@@ -740,7 +819,7 @@ def training_loop():
                     retrieval_accuracy_proj = (
                             predicted_proj == true_proj
                     ).float().mean()
-                    print(f'retrieval accuracy projection space: {retrieval_accuracy_proj}')
+
 
                     positive_similarities_emb.append(
                         mean_positive_similarity.item()
@@ -784,6 +863,16 @@ def training_loop():
 
             epoch_val_loss = val_loss_total / val_batches
             val_losses.append(epoch_val_loss)
+            recall_5 = (true_ranks <= 5).float().mean()
+            median_rank = np.median(true_ranks)
+            print(
+                f"Val Loss: {epoch_val_loss:.4f} | retrieval accuracy embedding: {retrieval_accuracy} | Recall@{5}: {recall_5:.3f} | Median rank: {median_rank} | retrieval accuracy proj: {retrieval_accuracy_proj}"
+            )
+            retrieval_accuracy_emb_val.append(retrieval_accuracy)
+            retrieval_accuracy_proj_val.append(retrieval_accuracy_proj)
+
+
+
 
             epochs_range = range(1, epochs + 1)
 
@@ -810,7 +899,7 @@ def training_loop():
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/GCN_loss/fold_{fold + 1}_loss.png",
+            f"training_plots/fold_{fold + 1}_loss.png",
             dpi=300
         )
 
@@ -874,7 +963,66 @@ def training_loop():
 
         plt.close()
 
-        torch.save(  fold_embeddings,f"embeddings_GCN/fold_{fold}_embeddings.pt" )
-        torch.save(fold_embeddings_proj, f"embeddings_GCN/fold_{fold}_embeddings_proj.pt")
+        # Similarity plot proj
+        plt.figure(figsize=(6, 4))
+
+        plt.plot(
+            epochs_range,
+            retrieval_accuracy_proj_train,
+            label="Retrieval accuracy proj train"
+        )
+
+        plt.plot(
+            epochs_range,
+            retrieval_accuracy_emb_train,
+            label="Retrieval accuracy embedding train"
+        )
+
+        plt.xlabel("Epoch")
+        plt.ylabel("Retrieval accuracy")
+        plt.legend()
+        plt.title(f"Fold {fold + 1} Retrieval Accuracy Training Samples")
+
+        plt.tight_layout()
+
+        plt.savefig(
+            f"training_plots/fold_{fold + 1}_retrieval_acc_train.png",
+            dpi=300
+        )
+
+        plt.close()
+
+
+        # Similarity plot proj
+        plt.figure(figsize=(6, 4))
+
+        plt.plot(
+            epochs_range,
+            retrieval_accuracy_proj_val,
+            label="Retrieval accuracy proj val"
+        )
+
+        plt.plot(
+            epochs_range,
+            retrieval_accuracy_emb_val,
+            label="Retrieval accuracy embedding val"
+        )
+
+        plt.xlabel("Epoch")
+        plt.ylabel("Retrieval accuracy")
+        plt.legend()
+        plt.title(f"Fold {fold + 1} Retrieval Accuracy Validation Samples")
+
+        plt.tight_layout()
+
+        plt.savefig(
+            f"training_plots/fold_{fold + 1}_retrieval_acc_val.png",
+            dpi=300
+        )
+
+        plt.close()
+
+        torch.save(  fold_embeddings,f"embeddings/fold_{fold}_embeddings.pt" )
+        torch.save(fold_embeddings_proj, f"embeddings/fold_{fold}_embeddings_proj.pt")
 
 training_loop()
