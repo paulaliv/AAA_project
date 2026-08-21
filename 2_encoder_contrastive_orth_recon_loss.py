@@ -422,6 +422,8 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
         retrieval_accuracy_proj_val = []
         val_recall = []
         train_recall = []
+        val_rank = []
+        train_rank = []
 
 
 
@@ -730,6 +732,8 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
             epoch_recall_5 = np.mean(
                 np.array(all_ranks) <= 5
             )
+            train_recall.append(epoch_recall_5)
+
             epoch_train_loss = total_loss / len(train_loader)
             epoch_train_loss_shared = total_loss_shared / len(train_loader)
             epoch_train_loss_diff = total_loss_diff / len(train_loader)
@@ -744,13 +748,16 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
             epoch_retrieval_accuracy_proj = (
                     correct_retrieval_proj / total_samples
             )
-            train_recall.append(epoch_recall_5)
+
+            median_rank = np.median(np.array(all_ranks))
+            train_rank.append(median_rank)
+
             retrieval_accuracy_emb_train.append(epoch_retrieval_accuracy)
             retrieval_accuracy_proj_train.append(epoch_retrieval_accuracy_proj)
 
             print(
                 f"Epoch {epoch}: "
-                f"Train Loss: {epoch_train_loss:.4f} |Train Loss Shared: {epoch_train_loss_shared:.4f} | Train Loss Orth: {lamda_orth*epoch_train_loss_diff:.4f} | | Train Loss Recon: {lamda_orth*epoch_train_loss_recon:.4f} | retrieval accuracy embedding: {epoch_retrieval_accuracy:.4f} | retrieval accuracy proj: {epoch_retrieval_accuracy_proj:.4f} | Recall@5: {epoch_recall_5:.4f}"
+                f"Train Loss: {epoch_train_loss:.4f} |Train Loss Shared: {epoch_train_loss_shared:.4f} | Train Loss Orth: {lamda_orth*epoch_train_loss_diff:.4f} | | Train Loss Recon: {lamda_orth*epoch_train_loss_recon:.4f} | retrieval accuracy embedding: {epoch_retrieval_accuracy:.4f} | retrieval accuracy proj: {epoch_retrieval_accuracy_proj:.4f} | Median Rank: {median_rank} | Recall@5: {epoch_recall_5:.4f}"
             )
 
             val_loss_Total = 0
@@ -995,6 +1002,8 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
             epoch_val_recall_5 = np.mean(
                 np.array(all_ranks_val) <= 5
             )
+            median_rank = np.median(all_ranks_val)
+
             epoch_val_loss_shared = val_loss_Total_shared / val_batches
             epoch_val_loss_diff = val_loss_Total_diff / val_batches
             epoch_val_loss_recon = val_loss_Total_recon / val_batches
@@ -1013,10 +1022,11 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
             retrieval_accuracy_emb_val.append(epoch_val_retrieval_accuracy)
             retrieval_accuracy_proj_val.append(epoch_val_retrieval_accuracy_proj)
             val_recall.append(epoch_val_recall_5)
+            val_rank.append(median_rank)
 
 
             print(
-                f"Val Loss: {epoch_val_loss:.4f} | Val Loss Shared: {epoch_val_loss_shared:.4f} | Val Loss Orth: {lamda_orth*epoch_val_loss_diff:.4f} | Val Loss Recon: {lamda_recon*epoch_val_loss_recon:.4f} | retrieval accuracy embedding: {epoch_val_retrieval_accuracy:.4f} |  retrieval accuracy proj: {epoch_val_retrieval_accuracy_proj:.4f} | recall@5: {epoch_val_recall_5:.4f}"
+                f"Val Loss: {epoch_val_loss:.4f} | Val Loss Shared: {epoch_val_loss_shared:.4f} | Val Loss Orth: {lamda_orth*epoch_val_loss_diff:.4f} | Val Loss Recon: {lamda_recon*epoch_val_loss_recon:.4f} | retrieval accuracy embedding: {epoch_val_retrieval_accuracy:.4f} |  retrieval accuracy proj: {epoch_val_retrieval_accuracy_proj:.4f} | rank: {median_rank} | recall@5: {epoch_val_recall_5:.4f}"
             )
 
 
@@ -1150,7 +1160,7 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
         plt.plot(
             epochs_range,
             retrieval_accuracy_proj_train,
-            label="Retrieval accuracy proj train"
+            label="Recall@1 train"
         )
         plt.plot(
             epochs_range,
@@ -1162,7 +1172,7 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
         plt.plot(
             epochs_range,
             retrieval_accuracy_proj_val,
-            label="Retrieval accuracy proj val"
+            label="Recall@1 val"
         )
         plt.plot(
             epochs_range,
@@ -1180,6 +1190,35 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
 
         plt.savefig(
             f"training_plots/orth_recon/fold_{fold + 1}_retrieval_acc.png",
+            dpi=300
+        )
+
+        plt.close()
+
+        # Median rank plot proj
+        plt.figure(figsize=(6, 4))
+
+        plt.plot(
+            epochs_range,
+            train_rank,
+            label="Median rank train"
+        )
+
+        plt.plot(
+            epochs_range,
+            val_rank,
+            label="Median rank val"
+        )
+
+        plt.xlabel("Epoch")
+        plt.ylabel("Median rank")
+        plt.legend()
+        plt.title(f"Fold {fold + 1} Median Rank Similarity")
+
+        plt.tight_layout()
+
+        plt.savefig(
+            f"training_plots/orth_recon/fold_{fold + 1}_median_rank.png",
             dpi=300
         )
 
