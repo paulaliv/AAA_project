@@ -1064,7 +1064,7 @@ def training_loop(lamda_orth =0.1):
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/fold_{fold + 1}_shared_loss.png",
+            f"training_plots/orth/fold_{fold + 1}_shared_loss.png",
             dpi=300
         )
 
@@ -1094,7 +1094,7 @@ def training_loop(lamda_orth =0.1):
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/fold_{fold + 1}_orth_loss.png",
+            f"training_plots/orth/fold_{fold + 1}_orth_loss.png",
             dpi=300
         )
 
@@ -1124,7 +1124,7 @@ def training_loop(lamda_orth =0.1):
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/fold_{fold + 1}_similarity_proj.png",
+            f"training_plots/orth/fold_{fold + 1}_similarity_proj.png",
             dpi=300
         )
 
