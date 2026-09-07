@@ -485,6 +485,8 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
         random_state=42
     )
 
+    all_results = []
+
     for fold, (train_idx, val_idx) in enumerate(kf.split(patients)):
         train_losses = []
         train_losses_shared = []
@@ -501,6 +503,10 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
         negative_similarities_emb = []
         positive_similarities_proj = []
         negative_similarities_proj = []
+
+        similarity_differences = []
+        similarity_differences_val = []
+
         retrieval_accuracy_emb_train = []
         retrieval_accuracy_proj_train = []
         retrieval_accuracy_emb_val = []
@@ -671,6 +677,7 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
             correct_retrieval_proj = 0
 
             all_ranks = []
+            epoch_sim_differences = []
 
 
             for tissue, plasma, patient in train_loader:
@@ -736,9 +743,9 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
                 # rank of the true matching plasma sample
 
 
-                print(
-                    f'Mean similarity embedding space: positive similarity: {cross_sim.diag().mean().item():.4f} | negative similarity: {cross_sim[mask].mean().item():.4f} | Difference: {cross_sim.diag().mean().item() - cross_sim[mask_cross].mean().item():.4f}'
-                )
+                # print(
+                #     f'Mean similarity embedding space: positive similarity: {cross_sim.diag().mean().item():.4f} | negative similarity: {cross_sim[mask].mean().item():.4f} | Difference: {cross_sim.diag().mean().item() - cross_sim[mask_cross].mean().item():.4f}'
+                # )
 
 
                 # projection space
@@ -763,9 +770,10 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
                 plasma_proj_norm = F.normalize(plasma_proj_shared, dim=1)
                 cross_sim_proj = tissue_proj_norm @ plasma_proj_norm.T
 
-                print(
-                    f'Mean similarity projection space: positive similarity: {cross_sim_proj.diag().mean().item():.4f} | negative similarity: {cross_sim_proj[mask].mean().item():.4f} | Difference: {cross_sim_proj.diag().mean().item() - cross_sim_proj[mask].mean().item():.4f}'
-                )
+                # print(
+                #     f'Mean similarity projection space: positive similarity: {cross_sim_proj.diag().mean().item():.4f} | negative similarity: {cross_sim_proj[mask].mean().item():.4f} | Difference: {cross_sim_proj.diag().mean().item() - cross_sim_proj[mask].mean().item():.4f}'
+                # )
+                epoch_sim_differences.append(cross_sim_proj.diag().mean().item() - cross_sim_proj[mask].mean().item())
 
                 predicted_proj = cross_sim_proj.argmax(dim=1)
                 true_proj = torch.arange(
@@ -873,6 +881,12 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
             median_rank = np.median(np.array(all_ranks))
             train_rank.append(median_rank)
 
+            mean_sim_differences = np.mean(np.array(epoch_sim_differences))
+            print(f'Epoch pos/negative similarity difference: {mean_sim_differences:.4f}')
+            similarity_differences.append(mean_sim_differences)
+
+
+
             retrieval_accuracy_emb_train.append(epoch_retrieval_accuracy)
             retrieval_accuracy_proj_train.append(epoch_retrieval_accuracy_proj)
 
@@ -891,12 +905,15 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
             correct_retrieval_proj = 0
             total_samples = 0
             all_ranks_val = []
+            # epoch_sim_differences_val = []
             with torch.no_grad():
                 encoder_tissue.eval()
                 encoder_plasma.eval()
                 projector_shared.eval()
                 projector_tissue.eval()
                 projector_plasma.eval()
+                decoder_tissue.eval()
+                decoder_plasma.eval()
                 for tissue, plasma, patient in val_loader:
                     print(f'Val batch size: {len(patient)}')
                     tissue = tissue.to(device)
@@ -1005,9 +1022,9 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
                     negative_similarity = similarity_matrix[mask]
                     mean_negative_similarity = negative_similarity.mean()
 
-                    print(
-                        f'Mean similarity embedding space: positive similarity: {mean_positive_similarity:.4f} | negative similarity: {mean_negative_similarity:.4f} | Difference: {mean_negative_similarity - mean_positive_similarity:.4f}'
-                    )
+                    # print(
+                    #     f'Mean similarity embedding space: positive similarity: {mean_positive_similarity:.4f} | negative similarity: {mean_negative_similarity:.4f} | Difference: {mean_negative_similarity - mean_positive_similarity:.4f}'
+                    # )
 
 
                     predicted = similarity_matrix.argmax(dim=1)
@@ -1041,6 +1058,7 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1):
                     print(
                         f'Mean similarity projection space: positive similarity: {mean_positive_similarity_proj:.4f} | negative similarity: {mean_negative_similarity_proj:.4f} | Difference: {mean_positive_similarity_proj - mean_negative_similarity_proj:.4f}'
                     )
+                    similarity_differences_val.append(mean_positive_similarity_proj - mean_negative_similarity_proj)
 
                     predicted_proj = similarity_matrix_proj.argmax(dim=1)
                     true_proj= torch.arange(

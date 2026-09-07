@@ -357,7 +357,7 @@ class Task_Head(nn.Module):
             nn.Linear(64, n_pathways)
         )
 
-        def forward(self, plasma_proj_shared):
+    def forward(self, plasma_proj_shared):
             return self.task_head(plasma_proj_shared)
 
 def task_loss(pred,target):
@@ -495,11 +495,12 @@ def get_pathway_scores(patients, fold_pathways, pathway_scores):
     return pathway_scores
 
 
-def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
+def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     prediction_pathways = ['REACTOME_NON_INTEGRIN_MEMBRANE_ECM_INTERACTIONS','REACTOME_COLLAGEN_DEGRADATION','REACTOME_DEGRADATION_OF_THE_EXTRACELLULAR_MATRIX','REACTOME_INTEGRIN_SIGNALING','REACTOME_EXTRACELLULAR_MATRIX_ORGANIZATION']
 
+    task_fold_results = []
 
     kf = KFold(
         n_splits=5,
@@ -619,9 +620,13 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
         fold_pathway_scores_plasma = get_pathway_scores(train_patients,fold_pathways_plasma,plasma_scores_common)
         fold_pathway_scores_tissue = get_pathway_scores(train_patients,fold_pathways_tissue,tissue_scores_common)
 
+        fold_target_pathway_scores = get_pathway_scores(train_patients,prediction_pathways, tissue_scores_common)
+
         #Standardize pathway scores in each training fold
         scaler_plasma = StandardScaler()
         scaler_tissue = StandardScaler()
+
+        scaler_task = StandardScaler()
 
         fold_plasma_pathway_scores_scaled = pd.DataFrame(
             scaler_plasma.fit_transform(fold_pathway_scores_plasma),
@@ -633,6 +638,12 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
             scaler_tissue.fit_transform(fold_pathway_scores_tissue),
             index=fold_pathway_scores_tissue.index,
             columns=fold_pathway_scores_tissue.columns
+        )
+
+        fold_target_tissue_pathways_scaled = pd.DataFrame(
+            scaler_task.fit_transform(fold_target_pathway_scores),
+            index= fold_target_pathway_scores.index,
+            columns=fold_target_pathway_scores.columns
         )
 
         encoder_tissue = GraphEncoder_Tissue(
@@ -653,7 +664,7 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
         decoder_plasma = Decoder_MLP(n_pathways=decoder_dims).to(device)
         decoder_tissue = Decoder_MLP(n_pathways=decoder_dims_tissue).to(device)
 
-        task_head = Task_Head(in_dimensions=32,n_pathways=5)
+        task_head = Task_Head(in_dimensions=32,n_pathways=5).to(device)
 
 
 
@@ -707,7 +718,7 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
 
 
             for tissue, plasma, patient in train_loader:
-                print(f"Train batch size: {len(patient)}")
+
                 tissue = tissue.to(device)
                 plasma = plasma.to(device)
 
@@ -834,12 +845,11 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
 
                 batch_tissue_pathways = fold_tissue_pathway_scores_scaled.loc[list(patient)]
 
-                target_pathways = fold_tissue_pathway_scores_scaled.loc[
-                    list(patient), prediction_pathways
-                ]
+                target_pathways_scaled = fold_target_tissue_pathways_scaled.loc[list(patient)]
 
-                target_pathways = torch.tensor(
-                    target_pathways.values,
+
+                target_pathways_scaled = torch.tensor(
+                    target_pathways_scaled.values,
                     dtype=torch.float32,
                     device=device
                 )
@@ -872,8 +882,8 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
                 ###### Task Loss
                 pred_task = task_head(plasma_proj_shared)
 
-                loss_task = task_loss(pred_task,target_pathways)
-                print(f'Train task loss : {loss_task:.4f}')
+                loss_task = task_loss(pred_task,target_pathways_scaled)
+
 
 
 
@@ -936,7 +946,13 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
 
             print(
                 f"Epoch {epoch}: "
-                f"Train Loss: {epoch_train_loss:.4f} |Train Loss Shared: {epoch_train_loss_shared:.4f} | Train Loss Orth: {lamda_orth*epoch_train_loss_diff:.4f} | | Train Loss Recon: Plasma: {lamda_orth*epoch_train_loss_recon_plasma:.4f} Tissue: {lamda_recon*epoch_train_loss_recon_tissue:.4f}| retrieval accuracy embedding: {epoch_retrieval_accuracy:.4f} | retrieval accuracy proj: {epoch_retrieval_accuracy_proj:.4f} | Median Rank: {median_rank} | Recall@5: {epoch_recall_5:.4f}"
+                f"Train Loss: {epoch_train_loss:.4f} |Train Loss Shared: {epoch_train_loss_shared:.4f} | "
+                ''
+                f"Train Loss Orth: {lamda_orth*epoch_train_loss_diff:.4f}  | Train Loss Recon: Plasma: {lamda_orth*epoch_train_loss_recon_plasma:.4f} Tissue: {lamda_recon*epoch_train_loss_recon_tissue:.4f}| "
+                ''
+                f'Train task loss : {lamda_task * epoch_train_loss_task:.4f}|'
+                ''
+                f"retrieval accuracy embedding: {epoch_retrieval_accuracy:.4f} | retrieval accuracy proj: {epoch_retrieval_accuracy_proj:.4f} | Median Rank: {median_rank} | Recall@5: {epoch_recall_5:.4f}"
             )
 
             val_loss_Total = 0
@@ -950,8 +966,8 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
             correct_retrieval_proj = 0
             total_samples = 0
             all_ranks_val = []
-            all_preds = []
-            all_targets = []
+            all_preds_epoch = []
+            all_targets_epoch = []
 
             with torch.no_grad():
                 encoder_tissue.eval()
@@ -959,8 +975,11 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
                 projector_shared.eval()
                 projector_tissue.eval()
                 projector_plasma.eval()
+                decoder_plasma.eval()
+                decoder_tissue.eval()
+                task_head.eval()
                 for tissue, plasma, patient in val_loader:
-                    print(f'Val batch size: {len(patient)}')
+
                     tissue = tissue.to(device)
                     plasma = plasma.to(device)
 
@@ -1007,12 +1026,18 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
                     )
 
                     tissue_pathways_scaled = scaler_tissue.transform(tissue_pathways)
-                    target_pathways = tissue_pathways_scaled.loc[
+                    tissue_scores_common_val = tissue_scores_common.copy()
+                    tissue_scores_common_val = tissue_scores_common_val.set_index('Name')
+
+
+                    target_pathways = tissue_scores_common_val.loc[
                         list(patient), prediction_pathways
                     ]
-                    target_pathways = torch.tensor(
-                        target_pathways, dtype=torch.float32,device=device
+                    target_pathways_scaled = scaler_task.transform(target_pathways)
+                    target_pathways_scaled = torch.tensor(
+                        target_pathways_scaled, dtype=torch.float32,device=device
                     )
+
                     tissue_pathways_scaled = torch.tensor(
                         tissue_pathways_scaled,
                         dtype=torch.float32,
@@ -1042,10 +1067,10 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
 
                     pred_val = task_head(plasma_proj_shared)
 
-                    val_loss_task = task_loss(pred_val, target_pathways)
-                    all_preds.append(pred_val)
-                    all_targets.append(target_pathways)
-                    print(f' Validation Task loss: {val_loss_task:.4f}')
+                    val_loss_task = task_loss(pred_val, target_pathways_scaled)
+                    all_preds_epoch.append(pred_val)
+                    all_targets_epoch.append(target_pathways_scaled)
+
 
 
                     val_loss_total = val_loss_shared + lamda_orth * val_loss_diff + lamda_recon*val_loss_recon_plasma + lamda_recon * val_loss_recon_tissue +lamda_task *val_loss_task
@@ -1222,10 +1247,13 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
             epoch_val_loss_diff = val_loss_Total_diff / val_batches
             epoch_val_loss_recon_plasma = val_loss_Total_recon_plasma / val_batches
             epoch_val_loss_recon_tissue = val_loss_Total_recon_tissue / val_batches
+            epoch_val_loss_task = val_loss_Total_task / val_batches
+
             val_losses_shared.append(epoch_val_loss_shared)
             val_losses_diff.append(lamda_orth*epoch_val_loss_diff)
             val_losses_recon_plasma.append(lamda_recon*epoch_val_loss_recon_plasma)
             val_losses_recon_tissue.append(lamda_recon*epoch_val_loss_recon_tissue)
+            val_losses_task.append(lamda_task*epoch_val_loss_task)
 
 
             epoch_val_retrieval_accuracy = (
@@ -1241,18 +1269,67 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
             val_recall.append(epoch_val_recall_5)
             val_rank.append(median_rank)
 
-            all_preds = torch.cat(all_preds, dim=0)
-            all_targets = torch.cat(all_targets, dim=0)
+            all_preds_epoch = torch.cat(all_preds_epoch, dim=0)
+            all_targets_epoch = torch.cat(all_targets_epoch, dim=0)
+
+            # all_preds = torch.cat(all_preds, dim=0)
+            # all_targets = torch.cat(all_targets, dim=0)
 
 
             print(
-                f"Val Loss: {epoch_val_loss:.4f} | Val Loss Shared: {epoch_val_loss_shared:.4f} | Val Loss Orth: {lamda_orth*epoch_val_loss_diff:.4f} | Val Loss Recon: Plasma: {lamda_recon*epoch_val_loss_recon_plasma:.4f}, Tissue: {lamda_recon*epoch_val_loss_recon_tissue:.4f} | retrieval accuracy: embedding: {epoch_val_retrieval_accuracy:.4f}, proj: {epoch_val_retrieval_accuracy_proj:.4f} | rank: {median_rank} | recall@5: {epoch_val_recall_5:.4f}"
+                f"Val Loss: {epoch_val_loss:.4f} | Val Loss Shared: {epoch_val_loss_shared:.4f} | "
+                ''
+                f"Val Loss Orth: {lamda_orth*epoch_val_loss_diff:.4f} | Val Loss Recon: Plasma: {lamda_recon*epoch_val_loss_recon_plasma:.4f}, Tissue: {lamda_recon*epoch_val_loss_recon_tissue:.4f} | "
+                ''
+                f' Val Task loss: {lamda_task*epoch_val_loss_task:.4f} | '
+                ''
+                f"retrieval accuracy: embedding: {epoch_val_retrieval_accuracy:.4f}, proj: {epoch_val_retrieval_accuracy_proj:.4f} | "
+                f"rank: {median_rank} | recall@5: {epoch_val_recall_5:.4f}"
             )
 
 
 
 
             epochs_range = range(1, epochs + 1)
+
+        from sklearn.metrics import mean_squared_error, mean_absolute_error
+        from scipy.stats import pearsonr, spearmanr
+        from sklearn.metrics import r2_score
+
+
+        for i, pathway in enumerate(prediction_pathways):
+            y_true = all_targets_epoch[:, i].numpy()
+            y_pred = all_preds_epoch[:, i].numpy()
+
+            mse = mean_squared_error(y_true, y_pred)
+            mae = mean_absolute_error(y_true, y_pred)
+
+            pearson_r, pearson_p = pearsonr(y_true, y_pred)
+            spearman_r, spearman_p = spearmanr(y_true, y_pred)
+
+            r2 = r2_score(y_true, y_pred)
+
+            print(
+                f"{pathway}: "
+                f"MSE={mse:.4f}, "
+                f"MAE={mae:.4f}"
+                f"Pearson r={pearson_r:.3f}, "
+                f"Spearman r={spearman_r:.3f}"
+                f'R²={r2:.3f}'
+            )
+
+
+            task_fold_results.append({
+                "fold": fold,
+                "pathway": pathway,
+                "MSE": mse,
+                "MAE": mae,
+                "R2": r2,
+                "Pearson": pearson_r,
+                "Spearman": spearman_r
+            })
+
+
 
         # Loss plot
         plt.figure(figsize=(6, 4))
@@ -1277,7 +1354,36 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/orth_recon/fold_{fold + 1}_shared_loss.png",
+            f"training_plots/orth_recon_task/fold_{fold + 1}_shared_loss.png",
+            dpi=300
+        )
+
+        plt.close()
+
+        # Task Loss plot
+        plt.figure(figsize=(6, 4))
+
+        plt.plot(
+            epochs_range,
+            train_losses_task,
+            label="Task MSE Train loss"
+        )
+
+        plt.plot(
+            epochs_range,
+            val_losses_task,
+            label="Task MSE Validation loss"
+        )
+
+        plt.xlabel("Epoch")
+        plt.ylabel("Task Loss")
+        plt.legend()
+        plt.title(f"Fold {fold + 1} Loss")
+
+        plt.tight_layout()
+
+        plt.savefig(
+            f"training_plots/orth_recon_task/fold_{fold + 1}_task_loss.png",
             dpi=300
         )
 
@@ -1308,7 +1414,7 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/orth_recon/fold_{fold + 1}_orth_loss.png",
+            f"training_plots/orth_recon_task/fold_{fold + 1}_orth_loss.png",
             dpi=300
         )
 
@@ -1352,7 +1458,7 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/orth_recon/fold_{fold + 1}_recon_loss.png",
+            f"training_plots/orth_recon_task/fold_{fold + 1}_recon_loss.png",
             dpi=300
         )
 
@@ -1382,7 +1488,7 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/orth_recon/fold_{fold + 1}_similarity_proj.png",
+            f"training_plots/orth_recon_task/fold_{fold + 1}_similarity_proj.png",
             dpi=300
         )
 
@@ -1412,7 +1518,7 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/orth_recon/fold_{fold + 1}_retrieval_acc.png",
+            f"training_plots/orth_recon_task/fold_{fold + 1}_retrieval_acc.png",
             dpi=300
         )
 
@@ -1441,16 +1547,30 @@ def training_loop(lamda_orth =0.1, lamda_recon =0.1, lamda_task =0.1):
         plt.tight_layout()
 
         plt.savefig(
-            f"training_plots/orth_recon/fold_{fold + 1}_median_rank.png",
+            f"training_plots/orth_recon_task/fold_{fold + 1}_median_rank.png",
             dpi=300
         )
 
         plt.close()
 
 
-        torch.save(  fold_embeddings,f"embeddings_orth_recon/fold_{fold}_embeddings.pt" )
-        torch.save(fold_embeddings_proj, f"embeddings_orth_recon/fold_{fold}_embeddings_proj.pt")
-        torch.save(best_embeddings_proj, f"embeddings_orth_recon/fold_{fold}_best_embeddings_proj.pt")
+        torch.save(  fold_embeddings,f"embeddings_orth_recon_task/fold_{fold}_embeddings.pt" )
+        torch.save(fold_embeddings_proj, f"embeddings_orth_recon_task/fold_{fold}_embeddings_proj.pt")
+        torch.save(best_embeddings_proj, f"embeddings_orth_recon_task/fold_{fold}_best_embeddings_proj.pt")
+
+    return task_fold_results
 
 
-#training_loop()
+task_fold_results = training_loop()
+results_df = pd.DataFrame(task_fold_results)
+summary = (
+    results_df
+    .groupby("pathway")
+    [["MSE", "MAE", "R2", "Spearman"]]
+    .agg(["mean", "std"])
+)
+
+results_df.to_csv('training_plots/orth_recon_task/task_results.csv', index=False)
+print(summary.head())
+
+

@@ -732,6 +732,7 @@ def training_loop():
                 encoder_tissue.eval()
                 encoder_plasma.eval()
                 projector_shared.eval()
+
                 for tissue, plasma in val_loader:
 
                     tissue = tissue.to(device)
@@ -866,7 +867,7 @@ def training_loop():
 
                     if (correct_retrieval_proj/total_samples)> best_val_retrieval:
                         best_val_retrieval = (correct_retrieval_proj/total_samples)
-                        best_epoch = epoch
+
                         # move back to CPU
                         # tissue_emb = tissue_emb.cpu()
                         # plasma_emb = plasma_emb.cpu()
@@ -1039,23 +1040,13 @@ def training_loop():
         plt.plot(
             epochs_range,
             retrieval_accuracy_proj_train,
-            label="Recall@1 proj train"
-        )
-        plt.plot(
-            epochs_range,
-            train_recall,
-            label="Recall@5 train"
+            label="Retrieval accuracy train"
         )
 
         plt.plot(
             epochs_range,
             retrieval_accuracy_proj_val,
-            label="Recall@1 proj val"
-        )
-        plt.plot(
-            epochs_range,
-            val_recall,
-            label="Recall@5 Val"
+            label="Retrieval accuracy val"
         )
 
         plt.xlabel("Epoch")
