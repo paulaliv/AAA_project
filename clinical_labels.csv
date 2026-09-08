@@ -1,0 +1,62 @@
+,Sample_index,Measurement_index,Patiëntnummer,Institute,Inclusion,Date_surgery,Date_processed,Pathology,SimplePathology,Sex,Age,BMI,Size_AA,Smoking,Years_to_quitting,Diabetes,DM_meds,Hypertension,HyperCholstero,Previous_vascu_surgery,Renal_dysfunction,Clinical presentation,Angio related familial history,Previous growth (mm/year),Type Aneurysms,Type surgery,Remark,In_Tara_patientfile,From BioBank,In PAREL biobank
+1,Sample 60,2.0,2000155525,DLZ,Include,,2019-11-29,AAA,AAA,F,76.0,28,,Stopped 1999,20.0,Ja,,Ja,Nee,Nee,Ja,Unknown,,,Suprarenal,,,,,Nee
+2,Sample 65,3.0,0581016,Vumc,Include,,2019-12-11,Myocotisch AAA,Special_AAA,M,69.0,25.3,44,Stopped 1993,26.0,Nee,,Ja,Ja,Nee,Nee,Unknown,,,,,,,,Ja
+6,Sample 18,8.0,9474674,Vumc,Include,,2020-04-28,AAA,AAA,M,63.0,26.4,63,Stopped 1996,24.0,Nee,,Nee,Nee,Nee,Nee,Unknown,Nee,,Juxtarenal,,Had a TIA in 2017,,,Ja
+7,Sample 59,10.0,1025855960,DLZ,Include,,2020-06-17,AAA,AAA,F,73.0,28.2,,Ja,0.0,Nee,,Nee,Nee,Nee,Nee,Unknown,,,Infrarenal,,,,,Nee
+10,Sample 42,14.0,1898322,Vumc,Include,,2020-09-22,AAA,AAA,M,76.0,?,90,Stopped 2018,2.0,Nee,,Ja,Nee,Nee,Nee,Unknown,Nee,,Infrarenal,,,Nee,,Ja
+11,Sample 30,16.0,1809992,Vumc,Include,,2020-11-03,AAA,AAA,F,74.0,23.9,61,Stopped 2020,1.0,Nee,,Ja,Nee,Ja,Ja,Unknown,Nee,,Infrarenal,,,,,Onduidelijk
+12,Sample 31,17.0,1611486,Vumc,Include,,2020-11-10,AAA,AAA,F,65.0,34,50,Nee,100.0,Ja,Insulin,Ja,Nee,Ja,Nee,Unknown,Nee,,Infrarenal,,Type 1 diabetes,,,Ja
+14,Sample 77,20.0,1706216,Vumc,Include,,2020-11-27,AAA,AAA,M,85.0,21.1,64,Stopped 1970,50.0,Nee,,Ja,Nee,Ja,Ja,Unknown,Nee,,,,,,,Nee
+15,Sample 32,22.0,5854095,Excluded,Exclude,2021-05-04,2021-05-04,PAD,Dissection,M,68.0,,,Ja,0.0,Ja,Metformine,Ja,,Ja,Ja,Unknown,,,,,Wrong diagnosis,Ja,,Nee
+18,Sample 7,26.0,8894798,Amc,Include,2021-07-07,2021-07-07,AAA distaal,AAA,F,59.0,34.5,60,Stopped 2014,7.0,Nee,,Ja,Nee,Ja,Nee,Unknown,"Ja, MI",,Infrarenal,,,Ja,,Ja
+19,Sample 55,28.0,9371131,Amc,Include,2021-07-23,2021-07-23,AAA,AAA,M,77.0,27.8,55,Ja,0.0,Nee,,Nee,Nee,Nee,Nee,Asymptomatic,Nee,,,,,Ja,,Ja
+20,Sample 76,15.0,1529979,Amc,Include,2021-08-09,2021-08-09,AAA,AAA,M,71.0,25.7,67,Ja,0.0,Ja,Geen,Ja,Ja,Nee,Nee,Asymptomatic,"Ja, AAA",,Infrarenal,,,Ja,,Ja
+21,Sample 28,29.0,5021489,Amc,Include,2021-08-25,2021-08-25,Iliac aneurysm,Special_AAA,M,53.0,21.28,40,Ja,0.0,Ja,Metformine,Nee,Nee,Nee,Ja,Asymptomatic,Nee,,,,Other CVD,Ja,,Ja
+23,Sample 72,31.0,2076890,Amc,Include,2021-10-25,2021-10-26,Myocotisch AAA,Special_AAA,M,78.0,28.4,52,Unknown,,Nee,,Ja,Nee,Ja,Ja,Asymptomatic,Nee,,Infrarenal,,Mycotisch aaa,Ja,,Ja
+24,Sample 88,32.0,2047021,Amc,Include,2021-11-03,2021-11-05,AAA,AAA,M,70.0,21.87,70,Ja,0.0,Nee,,Nee,Nee,Nee,Nee,Symptomatic,Nee,,Suprarenal,,,Ja,,Ja
+25,Sample 11,27.0, 2022244 (in case data heavily diverges from expected; there is also another patient 7061110),Amc,Include,2021-11-26,2021-11-26,AAA,AAA,M,81.0,23.88,63,Ja,0.0,Ja,metformine ,Ja,Ja,Ja,Ja,Asymptomatic,Nee,,Juxtarenal,,,,,Onduidelijk
+26,Sample 64,34.0,1548603,Amc,Include,2021-11-30,2021-12-01,AAA,AAA,M,84.0,23.67,61,Stopped 1998,23.0,Nee,,Ja,Nee,Nee,Nee,Asymptomatic,Nee,,Infrarenal,,,Ja,,Nee
+28,Sample 91,37.0,7851433,Amc,Include,2021-12-28,2021-12-31,AAA Marfan,Special_AAA,M,54.0,17.33,58,Stopped ???,,Nee,,Nee,Nee,Ja,Ja,Unknown,,,Infrarenal,,Marfan?,,,Ja
+29,Sample 25,33.0,7835757,Amc,Include,2022-01-04,2022-01-06,AAA,AAA,M,68.0,22.47,?,Stopped ???,,Ja,metformine,Ja,Nee,Ja,Nee,Unknown,,,,24-1-2021 revisie ivm type 1a endoleak middels open procedure; verwijderen EVAR plaatsen aortabuisprothese,"18-11-2021 EVAR ivm symptomatisch AAA; 4-1-2021 opname ICU ivm hypovolemische shock bij fors rectaal bloedverlies; 30-12-2021 opname ivm verdenking geinfecteerd haematoom rondom prothese, wv start vancomycine",Ja,,Ja
+30,Sample 78,38.0,2073933,Amc,Include,2022-01-10,2022-01-10,AAA,AAA,F,85.0,21.67,62,Nee,100.0,Nee,,Ja,Nee,Nee,Ja,Unknown,,,Infrarenal,,,Ja,,Nee
+31,Sample 83,40.0,2061583,Amc,Include,2022-01-17,2022-01-18,AAA,AAA,M,67.0,29.73,65,Nee,100.0,Nee,,Ja,Nee,Ja,Ja,Unknown,,,Juxtarenal,Loeyz-dietz,type 4 thoracoabdominaal aneurysma bij aortadissectie,Ja,,Nee
+32,Sample 80,41.0,1052107,Amc,Include,2022-01-24,2022-01-24,AAA,AAA,F,76.0,?,55,Ja,0.0,Nee,,Ja,Ja,Ja,Nee,Asymptomatic,,,Infrarenal,,"021-2 Ambulant doorgemaakt onderwand infarct, waarvoor PCI van de distale RCA,",Ja,,Ja
+33,Sample 70,43.0,6823605,Amc,Include,2022-02-03,2022-02-04,AAA,AAA,F,74.0,22.32,80,Ja,0.0,Nee,,Ja,Nee,Nee,Ja,Asymptomatic,,,Infrarenal,,,Ja,,Nee
+34,Sample 90,44.0,2233478,Amc,Include,2022-02-10,2022-02-10,AAA,AAA,M,64.0,?,52,Ja,0.0,Nee,,Nee,Nee,Nee,Ja,Asymptomatic,,,Infrarenal,,,Ja,,Ja
+35,Sample 8,46.0,2131310,Amc,Include,2022-02-28,2022-03-01,AAA,AAA,M,69.0,?,61,Ja,0.0,Nee,,Nee,Nee,Nee,Nee,Asymptomatic,Ja,,,,,Ja,,Ja
+37,Sample 45,49.0,9227945,Amc,Include,2022-03-04,2022-03-04,AAA,AAA,M,74.0,24.7,57,Ja,0.0,Nee,,Ja,Nee,Ja,Nee,Unknown,Nee,,Infrarenal,,"myocardinfarct '02 met VF,PCI",Ja,,Ja
+38,Sample 85,50.0,1891689,Amc,Include,2022-03-24,2022-03-24,AAA,AAA,F,74.0,21.8,52,Ja,0.0,Nee,,Ja,Nee,Nee,Ja,Unknown,Nee,,Infrarenal,,,Ja,,Nee
+39,Sample 84,52.0,2140044,Amc,Include,2022-04-20,2022-04-21,AAA,AAA,M,78.0,27,66,Stopped 2007,15.0,Nee,,Ja,Nee,Nee,Nee,Unknown,Nee,,,,,Ja,,Nee
+40,Sample 17,53.0,7408156,Amc,Include,2022-05-02,2022-05-03,AAA,AAA,M,63.0,34.09,65,Ja,0.0,Nee,,Nee,Nee,Nee,Nee,Unknown,Nee,,Infrarenal,,"2 on date, unclear which one",Ja,Ja,Nee
+41,Sample 44,55.0,2163398,Amc,Include,2022-05-06,2022-05-06,AAA,AAA,M,72.0,27,95,Stopped 2015,7.0,Nee,,Nee,Nee,Ja,Nee,Asymptomatic,Nee,,Juxtarenal,,,Ja,,Ja
+42,Sample 22,56.0,2136073,Amc,Include,2022-05-10,2022-05-10,AAA,AAA,M,75.0,?,57,Ja,0.0,Nee,,Ja,Nee,Nee,Nee,Unknown,,,,,,Ja,,Nee
+43,Sample 68,58.0,1785724,Amc,Include,2022-06-03,2022-06-03,AAA,AAA,M,75.0,24.97,55,Stopped 2000,22.0,Nee,,Nee,Nee,Nee,Nee,Unknown,Nee,,Infrarenal,,,Ja,,Ja
+44,Sample 57,59.0,6774633,Amc,Include,2022-06-24,2022-06-28,AAA,AAA,M,76.0,32.32,96,Stopped ???,,Nee,,Ja,Ja,Nee,Ja,Symptomatic,Ja,,,,,,,Nee
+45,Sample 66,61.0,2197771,Excluded,Exclude,2022-06-30,2022-06-30,ASC-ANEUR Dissection,Dissection,F,79.0,23.9,64,Nee,100.0,Nee,,Ja,Nee,Nee,Nee,Symptomatic,,,,,,,,Nee
+46,Sample 38,62.0,0986693,Amc,Include,2022-07-08,2022-07-08,AAA,AAA,M,79.0,?,57,Stopped 2000,22.0,Nee,,Nee,Nee,Nee,Ja,Asymptomatic,,,Juxtarenal,,,,,Nee
+48,Sample 82,65.0,2230691,Amc,Include,2022-09-23,2022-09-26,Myocotisch AAA,Special_AAA,M,74.0,27.86,65,Stopped 2019,3.0,Ja,Metformine,Nee,Ja,Nee,Nee,Unknown,Nee,,,,,,,Nee
+49,Sample 39,67.0,8106659,Amc,Include,2022-10-17,2022-10-17,AAA,AAA,F,76.0,?,54,Stopped 2019,3.0,Nee,,Ja,Nee,Nee,Nee,Asymptomatic,Ja,,Infrarenal,,,,,Ja
+50,Sample 37,68.0,2259443,Amc,Include,2022-11-02,2022-11-03,AAA,AAA,F,87.0,?,90,Unknown,,Nee,,Ja,Nee,Nee,Ja,Ruptured,,,,,,,,Nee
+52,Sample 61,39.0,5644434,Amc,Include,2022-11-25,2022-11-28,AAA,AAA,F,78.0,?,55,Stopped 2007,15.0,Ja,Metformine,Ja,Nee,Ja,Nee,Asymptomatic,Ja,,Suprarenal,,,Ja,,Ja
+53,Sample 16,71.0,8302760,Amc,Include,2024-04-16,2024-04-16,AAA,AAA,M,78.0,24.8,72,Stopped 2017,5.0,Nee,,Nee,Nee,Nee,Nee,Asymptomatic,Nee,,,,,,,Ja
+54,Sample 23,73.0,5821049,Amc,Include,2024-04-23,2024-04-23,AAA,AAA,F,57.0,29,59,Ja,0.0,Nee,,Ja,Nee,Ja,Nee,Asymptomatic,Nee,,,,,Ja,,Nee
+55,Sample 24,45.0,9886861,Amc,Include,2024-04-26,2024-04-26,AAA,AAA,M,74.0,25.18,51,Nee,100.0,Ja,Geen,Ja,Nee,Ja,Nee,Asymptomatic,"Ja, AAA",,,,,Ja,,Ja
+56,Sample 87,74.0,8270210,Amc,Include,2024-06-12,2024-06-12,AAA,AAA,M,74.0,24.6,57,Ja,0.0,Nee,,Ja,Nee,Nee,Nee,Unknown,Nee,,Juxtarenal,,,Ja,,Ja
+57,Sample 4,76.0,1623728,Amc,Include,2024-07-02,2024-07-02,AAA,AAA,M,71.0,29,60,Ja,0.0,Nee,,Nee,Ja,Nee,Nee,Asymptomatic,Nee,,Juxtarenal,,,Ja,,Ja
+75,Sample 73,79.0,4601661,Amc,Include,2024-01-16,2024-04-04,AAA,AAA,M,70.0,24.12,53,Stopped 1995,29.0,Nee,,Nee,Ja,Nee,Ja,Asymptomatic,"Ja, AAA",,Infrarenal,,,,,Ja
+76,Sample 15,80.0,2310299,Amc,Include,2023-05-15,2024-04-04,AAA,AAA,M,81.0,28.04,64,Stopped 1986,38.0,Nee,,Ja,Nee,Ja,Nee,Asymptomatic,Nee,,Suprarenal,,,Ja,,Ja
+77,Sample 49,82.0,8871957,Amc,Include,2023-10-30,2024-04-04,AAA,AAA,F,61.0,25.5,51,Ja,0.0,Nee,,Ja,Nee,Nee,Nee,Asymptomatic,"Ja, AAA",,Infrarenal,,,Ja,,Ja
+78,Sample 75,83.0,2131050,Amc,Include,2023-10-13,2024-04-04,AAA,AAA,M,75.0,30.6,60,Nee,100.0,Nee,,Nee,Nee,Ja,Ja,Asymptomatic,Nee,,Juxtarenal,,,,,Ja
+79,Sample 79,85.0,2365158,Amc,Include,2023-09-05,2024-04-04,AAA,AAA,F,65.0,32.24,67,Stopped 2015,9.0,Nee,,Ja,Ja,Nee,Nee,Asymptomatic,"Ja, cerebral an",,Suprarenal,,,Ja,,Ja
+81,Sample 34,88.0,2285053,Amc,Include,2023-07-11,2024-04-04,AAA,AAA,M,52.0,24.8,74.5,Nee,100.0,Nee,,Nee,Nee,Nee,Nee,Asymptomatic,Nee,,Juxtarenal,,,Ja,,Nee
+82,Sample 1,89.0,1012188,Amc,Include,2023-07-10,2024-04-04,AAA,AAA,M,62.0,25,70,Stopped 2018,6.0,Ja,Dapagliflozine,Ja,Nee,Ja,Ja,Ruptured,Nee,,Infrarenal,,,,,Nee
+84,Sample 36,91.0,9436615,Amc,Include,2023-07-06,2024-04-04,AAA,AAA,M,76.0,25,60,Ja,0.0,Ja,Geen,Ja,Nee,Nee,Nee,Asymptomatic,Nee,,Suprarenal,,,Nee,,Nee
+85,Sample 29,92.0,6610205 (there is also a ThAA same date),Amc,Include,2023-07-04,2024-04-04,AAA,AAA,M,78.0,22.33,109,Stopped 1990,33.0,Ja,Dapagliflozine,Ja,Ja,Ja,Nee,Symptomatic,Nee,,Suprarenal,,,Ja,,Nee
+86,Sample 5,93.0,4419774,Amc,Include,2023-06-29,2024-04-04,AAA,AAA,M,77.0,24.87,103,Stopped 2009,15.0,Nee,,Ja,Nee,Ja,Nee,Asymptomatic,Nee,,Infrarenal,,,Ja,,Ja
+87,Sample 86,94.0,1319594,Amc,Include,2023-06-13,2024-04-04,AAA,AAA,M,82.0,27.2,62,Stopped 2000,24.0,Nee,,Ja,Nee,Nee,Nee,Asymptomatic,Nee,,Juxtarenal,,,Ja,,Ja
+88,Sample 52,95.0,2332525,Amc,Include,2023-06-02,2024-04-04,AAA,AAA,M,82.0,25.3,96,Nee,100.0,Nee,,Ja,Nee,Ja,Nee,Asymptomatic,Nee,,Infrarenal,,,Ja,,Ja
+89,Sample 12,51.0,1323881,Vumc,Include,2017-07-28,,AAA,AAA,M,78.0,25.2,90,Nee,100.0,Ja,Metformine,Ja,Nee,Ja,Ja,Asymptomatic,Nee,,Suprarenal,,,,,Nee
+90,Sample 95,57.0,1893317,Vumc,Include,2020-09-23,,AAA,AAA,M,67.0,30.3,78,Stopped 1997,23.0,Ja,Metformine,Ja,Ja,Ja,Nee,Asymptomatic,"Ja, AAA",,Infrarenal,,,,,Ja
+91,Sample 20,63.0,1022349550,DLZ,Include,2021-03-08,,AAA,AAA,M,74.0,37,55,Nee,100.0,Ja,Metformine,Ja,,Nee,Nee,Unknown,,,Infrarenal,,,,Nee,Nee
+92,Sample 51,69.0,0262040,Amc,Include,2021-03-15,,AAA,AAA,M,71.0,26.73,70,Ja,0.0,Ja,Metformine,Ja,Nee,Ja,Nee,Asymptomatic,Nee,,Juxtrarenal,,,,,Nee
+93,Sample 48,75.0,0795078,Amc,Include,2021-06-01,,AAA,AAA,M,62.0,32.1,60,Ja,0.0,Ja,Metformine,Ja,Nee,Nee,Ja,Asymptomatic,"Ja, angio oedeem",,Suprarenal,,,Nee,,Nee
