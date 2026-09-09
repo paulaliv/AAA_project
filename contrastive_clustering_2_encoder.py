@@ -488,12 +488,8 @@ def training_loop():
         best_embeddings_proj = {
             "epoch": 0,
             "tissue": {
-                "shared": {},
-                "private": {}
             },
             "plasma": {
-                "shared": {},
-                "private": {}
             }
         }
 
@@ -661,7 +657,7 @@ def training_loop():
                     f'Mean similarity projection space: positive similarity: {cross_sim_proj.diag().mean().item():.4f} | negative similarity: {cross_sim_proj[mask].mean().item():.4f} | Difference: {cross_sim_proj.diag().mean().item() - cross_sim_proj[mask].mean().item():.4f}'
                 )
 
-                predicted = cross_sim_proj.argmax(dim=1)
+                predicted_proj = cross_sim_proj.argmax(dim=1)
                 true_proj = torch.arange(
                     cross_sim_proj.size(0)
                 )
@@ -719,7 +715,7 @@ def training_loop():
             retrieval_accuracy_proj_train.append(epoch_retrieval_accuracy_proj)
             print(
                 f"Epoch {epoch}: "
-                f"Train Loss: {epoch_train_loss:.4f} | retrieval accuracy embedding: {epoch_retrieval_accuracy:.4f}  | retrieval accuracy proj: {epoch_retrieval_accuracy_proj:.4f | recall@5: {epoch_recall_5:.4f} | median rank: {median_rank:.4f}}"
+                f"Train Loss: {epoch_train_loss:.4f} | retrieval accuracy embedding: {epoch_retrieval_accuracy:.4f}  | retrieval accuracy proj: {epoch_retrieval_accuracy_proj:.4f} | recall@5: {epoch_recall_5:.4f} | median rank: {median_rank:.4f}"
             )
 
             val_loss_total = 0
@@ -738,13 +734,26 @@ def training_loop():
                     tissue = tissue.to(device)
                     plasma = plasma.to(device)
 
-                    # graph encoder
+                    # # graph encoder
+                    # print("\n--- BATCH DEBUG ---")
+                    # print("len patient_id:", len(tissue.patient_id))
+                    # print("patient_id:", tissue.patient_id)
+                    #
+                    # print("tissue.num_graphs:", tissue.num_graphs)
+                    # print("unique batch IDs:", torch.unique(tissue.batch))
+                    # print("max batch ID:", tissue.batch.max().item())
+                    # print("batch shape:", tissue.batch.shape)
+                    #
+
 
                     tissue_emb = encoder_tissue(
                         tissue.x,
                         tissue.edge_index,
                         tissue.batch
                     )
+
+                    print("embedding shape:", tissue_emb.shape)
+                    print("-------------------\n")
 
                     plasma_emb = encoder_plasma(
                         plasma.x,
@@ -876,22 +885,20 @@ def training_loop():
                         tissue_ids = tissue.patient_id
                         plasma_ids = plasma.patient_id
 
+
+
                         epoch_name = f"epoch{epoch}"
                         best_embeddings_proj['epoch'] = epoch_name
                         for i, patient_id in enumerate(tissue_ids):
 
-                            best_embeddings_proj["tissue"]["shared"][patient_id] = \
-                                tissue_proj_shared[i].cpu()
-
-                            best_embeddings_proj["tissue"]["private"][patient_id] = \
+                            best_embeddings_proj["tissue"][patient_id] = \
                                 tissue_proj[i].cpu()
 
                         for i, patient_id in enumerate(plasma_ids):
-                            best_embeddings_proj["plasma"]["shared"][patient_id] = \
-                                plasma_proj_shared[i].cpu()
-
-                            best_embeddings_proj["plasma"]["private"][patient_id] = \
+                            best_embeddings_proj["plasma"][patient_id] = \
                                 plasma_proj[i].cpu()
+
+
 
                     inspection = [0, epochs-1]
                     if epoch in inspection:
