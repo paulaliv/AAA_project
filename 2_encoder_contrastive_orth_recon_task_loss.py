@@ -547,6 +547,28 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
     }
     explainer_fold_results_plasma = {}
 
+    shared_loss_all_folds = []
+    shared_loss_val_all_folds = []
+
+    orth_loss_all_folds = []
+    orth_loss_val_all_folds = []
+
+    recon_loss_plasma_all_folds = []
+    recon_loss_tissue_all_folds = []
+    recon_loss_plasma_val_all_folds = []
+    recon_loss_tissue_val_all_folds = []
+
+    task_loss_all_folds = []
+    task_loss_val_all_folds = []
+
+    retrieval_acc_all_folds = []
+    retrieval_acc_tissue_all_folds =[]
+    retrieval_acc_plasma_all_folds = []
+    retrieval_acc_val_all_folds = []
+    retrieval_acc_plasma_val_all_folds = []
+    retrieval_acc_tissue_val_all_folds = []
+
+
     kf = KFold(
         n_splits=5,
         shuffle=True,
@@ -822,11 +844,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
 
 
 
-                # print(
-                #     f'Mean similarity embedding space: positive similarity: {cross_sim.diag().mean().item():.4f} | negative similarity: {cross_sim[mask].mean().item():.4f} | Difference: {cross_sim.diag().mean().item() - cross_sim[mask_cross].mean().item():.4f}'
-                # )
-
-
                 # projection space
 
                 tissue_proj = projector_tissue(
@@ -931,10 +948,7 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                 ### Difference Loss
                 #Difference between modality-invariant and specific representations
                 loss_diff = orthogonal_loss(plasma_proj_shared, plasma_proj) + orthogonal_loss(tissue_proj_shared, tissue_proj)
-                #Difference between the two modality specific representations
-                #loss_diff_2 = orthogonal_loss(plasma_proj, tissue_proj)
 
-                #loss_diff = loss_diff_1 + loss_diff_2
 
                 ### Similarity Loss: currently contrastive loss. Could add CMD loss for general distribution alignment(not patient specifc)
                 loss_shared = symmetric_contrastive_loss(
@@ -1010,6 +1024,7 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             retrieval_accuracy_proj_train.append(epoch_retrieval_accuracy_proj)
             retrieval_accuracy_tissue_train.append(epoch_retrieval_accuracy_tissue)
             retrieval_accuracy_plasma_train.append(epoch_retrieval_accuracy_plasma)
+
 
             print(
                 f"Epoch {epoch}: "
@@ -1390,6 +1405,23 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
 
             epochs_range = range(1, epochs + 1)
 
+        retrieval_acc_all_folds.append(retrieval_accuracy_proj_train)
+        retrieval_acc_plasma_all_folds(retrieval_accuracy_plasma_train)
+        retrieval_acc_tissue_all_folds(retrieval_accuracy_tissue_train)
+        shared_loss_all_folds.append(train_losses_shared)
+        orth_loss_all_folds.append(train_losses_orth)
+        recon_loss_plasma_all_folds.append(train_losses_recon_plasma)
+        recon_loss_tissue_all_folds.append(train_losses_recon_tissue)
+
+        retrieval_acc_val_all_folds.append(retrieval_accuracy_proj_val)
+        retrieval_acc_plasma_val_all_folds(retrieval_accuracy_private_plasma_val)
+        retrieval_acc_tissue_val_all_folds(retrieval_accuracy_private_tissue_val)
+        shared_loss_val_all_folds.append(val_losses_shared)
+        orth_loss_val_all_folds.append(val_losses_diff)
+        recon_loss_plasma_val_all_folds.append(val_losses_recon_plasma)
+        recon_loss_tissue_val_all_folds(val_losses_recon_tissue)
+
+
         ############### GNN_EXPLAINER #################
         from torch_geometric.explain import Explainer
         from torch_geometric.explain import GNNExplainer
@@ -1603,273 +1635,272 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             })
 
 
-
-        # Loss plot
-        plt.figure(figsize=(6, 4))
-
-        plt.plot(
-            epochs_range,
-            train_losses_shared,
-            label="Contrastive Train loss"
-        )
-
-        plt.plot(
-            epochs_range,
-            val_losses_shared,
-            label="Contrastive Validation loss"
-        )
-
-        plt.xlabel("Epoch")
-        plt.ylabel("Loss")
-        plt.legend()
-        plt.title(f"Fold {fold + 1} Loss")
-
-        plt.tight_layout()
-
-        plt.savefig(
-            f"training_plots/orth_recon_task/fold_{fold + 1}_shared_loss.png",
-            dpi=300
-        )
-
-        plt.close()
-
-        # Task Loss plot
-        plt.figure(figsize=(6, 4))
-
-        plt.plot(
-            epochs_range,
-            train_losses_task,
-            label="Task MSE Train loss"
-        )
-
-        plt.plot(
-            epochs_range,
-            val_losses_task,
-            label="Task MSE Validation loss"
-        )
-
-        plt.xlabel("Epoch")
-        plt.ylabel("Task Loss")
-        plt.legend()
-        plt.title(f"Fold {fold + 1} Loss")
-
-        plt.tight_layout()
-
-        plt.savefig(
-            f"training_plots/orth_recon_task/fold_{fold + 1}_task_loss.png",
-            dpi=300
-        )
-
-        plt.close()
-
-        # Loss plot
-        plt.figure(figsize=(6, 4))
-
-
-        plt.plot(
-            epochs_range,
-            train_losses_orth,
-            label="Lamda * Orthogonality Train loss")
-
-
-        plt.plot(
-            epochs_range,
-            val_losses_diff,
-            label="Lamda * Orthogonality Validation loss"
-        )
-
-
-        plt.xlabel("Epoch")
-        plt.ylabel("Orthogonal Loss")
-        plt.legend()
-        plt.title(f"Fold {fold + 1} Loss")
-
-        plt.tight_layout()
-
-        plt.savefig(
-            f"training_plots/orth_recon_task/fold_{fold + 1}_orth_loss.png",
-            dpi=300
-        )
-
-        plt.close()
-
-        # Loss plot
-        plt.figure(figsize=(6, 4))
-
-
-        plt.plot(
-            epochs_range,
-            train_losses_recon_plasma,
-            label="Lamda * Plasma Reconstruction Train loss"
-        )
-
-        plt.plot(
-            epochs_range,
-            val_losses_recon_plasma,
-            label="Lamda * Plasma Reconstruction Validation loss"
-        )
-
-        plt.plot(
-            epochs_range,
-            train_losses_recon_tissue,
-            label="Lamda * Tissue Reconstruction Train loss"
-        )
-
-        plt.plot(
-            epochs_range,
-            val_losses_recon_tissue,
-            label="Lamda * Tissue Reconstruction Validation loss"
-        )
-
-
-
-        plt.xlabel("Epoch")
-        plt.ylabel("Reconstruction Loss")
-        plt.legend()
-        plt.title(f"Fold {fold + 1} Loss")
-
-        plt.tight_layout()
-
-        plt.savefig(
-            f"training_plots/orth_recon_task/fold_{fold + 1}_recon_loss.png",
-            dpi=300
-        )
-
-        plt.close()
-
-
-        # Similarity plot proj
-        plt.figure(figsize=(6, 4))
-
-        plt.plot(
-            epochs_range,
-            positive_similarities_proj,
-            label="Positive similarity"
-        )
-
-        plt.plot(
-            epochs_range,
-            negative_similarities_proj,
-            label="Negative similarity"
-        )
-
-        plt.xlabel("Epoch")
-        plt.ylabel("Cosine similarity")
-        plt.legend()
-        plt.title(f"Fold {fold + 1} Similarity Projection Space")
-
-        plt.tight_layout()
-
-        plt.savefig(
-            f"training_plots/orth_recon_task/fold_{fold + 1}_similarity_proj.png",
-            dpi=300
-        )
-
-        plt.close()
-
-        # Similarity plot proj
-        plt.figure(figsize=(6, 4))
-
-        plt.plot(
-            epochs_range,
-            retrieval_accuracy_proj_train,
-            label="Retrieval accuracy train"
-        )
-
-        plt.plot(
-            epochs_range,
-            retrieval_accuracy_proj_val,
-            label="Retrieval accuracy val"
-        )
-
-
-        plt.xlabel("Epoch")
-        plt.ylabel("Retrieval accuracy")
-        plt.legend()
-        plt.title(f"Fold {fold + 1} Retrieval Accuracy")
-
-        plt.tight_layout()
-
-        plt.savefig(
-            f"training_plots/orth_recon_task/fold_{fold + 1}_retrieval_acc.png",
-            dpi=300
-        )
-
-        plt.close()
-
-        # retrieval acc shared vs private
-        plt.figure(figsize=(6, 4))
-
-        plt.plot(
-            epochs_range,
-            retrieval_accuracy_plasma_train,
-            label="Retrieval accuracy plasma train"
-        )
-
-        plt.plot(
-            epochs_range,
-            retrieval_accuracy_private_plasma_val,
-            label="Retrieval accuracy plasma val"
-        )
-        plt.plot(
-            epochs_range,
-            retrieval_accuracy_tissue_train,
-            label="Retrieval accuracy tissue train"
-        )
-
-        plt.plot(
-            epochs_range,
-            retrieval_accuracy_private_tissue_val,
-            label="Retrieval accuracy tissue val"
-        )
-
-        plt.xlabel("Epoch")
-        plt.ylabel("Retrieval accuracy shared <-> private")
-        plt.legend()
-        plt.title(f"Fold {fold + 1} Retrieval Accuracy")
-
-        plt.tight_layout()
-
-        plt.savefig(
-            f"training_plots/orth_recon_task/fold_{fold + 1}_retrieval_acc_private.png",
-            dpi=300
-        )
-
-        plt.close()
-
-        # Median rank plot proj
-        plt.figure(figsize=(6, 4))
-
-        plt.plot(
-            epochs_range,
-            train_rank,
-            label="Median rank train"
-        )
-
-        plt.plot(
-            epochs_range,
-            val_rank,
-            label="Median rank val"
-        )
-
-        plt.xlabel("Epoch")
-        plt.ylabel("Median rank")
-        plt.legend()
-        plt.title(f"Fold {fold + 1} Median Rank Similarity")
-
-        plt.tight_layout()
-
-        plt.savefig(
-            f"training_plots/orth_recon_task/fold_{fold + 1}_median_rank.png",
-            dpi=300
-        )
-
-        plt.close()
-
-
         torch.save(  fold_embeddings,f"embeddings_orth_recon_task/fold_{fold}_embeddings.pt" )
         torch.save(fold_embeddings_proj, f"embeddings_orth_recon_task/fold_{fold}_embeddings_proj.pt")
         torch.save(best_embeddings_proj, f"embeddings_orth_recon_task/fold_{fold}_best_embeddings_proj.pt")
+
+    # Loss plot
+    plt.figure(figsize=(6, 4))
+
+    plt.plot(
+        epochs_range,
+        np.array(shared_loss_all_folds).mean(axis=0),
+        label="Contrastive Train loss"
+    )
+
+    plt.plot(
+        epochs_range,
+        np.array(shared_loss_val_all_folds).mean(axis=0),
+        label="Contrastive Validation loss"
+    )
+
+    plt.xlabel("Epoch")
+    plt.ylabel("Contrastive Loss")
+    plt.legend()
+    plt.title(f"Loss over all folds")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        f"training_plots/orth_recon_task/shared_loss.png",
+        dpi=300
+    )
+
+    plt.close()
+
+    # Task Loss plot
+    plt.figure(figsize=(6, 4))
+
+    plt.plot(
+        epochs_range,
+        np.array(task_loss_all_folds).mean(axis=0),
+        label="Task MSE Train loss"
+    )
+
+    plt.plot(
+        epochs_range,
+        np.array(task_loss_val_all_folds).mean(axis=0),
+        label="Task MSE Validation loss"
+    )
+
+    plt.xlabel("Epoch")
+    plt.ylabel("Task Loss")
+    plt.legend()
+    plt.title(f"Loss")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        f"training_plots/orth_recon_task/task_loss.png",
+        dpi=300
+    )
+
+    plt.close()
+
+    # Loss plot
+    plt.figure(figsize=(6, 4))
+
+    plt.plot(
+        epochs_range,
+        np.array(orth_loss_all_folds).mean(axis=0),
+        label="Lamda * Orthogonality Train loss")
+
+    plt.plot(
+        epochs_range,
+        np.array(orth_loss_val_all_folds).mean(axis=0),
+        label="Lamda * Orthogonality Validation loss"
+    )
+
+    plt.xlabel("Epoch")
+    plt.ylabel("Orthogonal Loss")
+    plt.legend()
+    plt.title(f"Loss")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        f"training_plots/orth_recon_task/orth_loss.png",
+        dpi=300
+    )
+
+    plt.close()
+
+    # Loss plot
+    plt.figure(figsize=(6, 4))
+
+    plt.plot(
+        epochs_range,
+        np.array(recon_loss_plasma_all_folds).mean(axis=0),
+        label="Lamda * Plasma Reconstruction Train loss"
+    )
+
+    plt.plot(
+        epochs_range,
+        np.array(recon_loss_plasma_val_all_folds).mean(axis=0),
+        label="Lamda * Plasma Reconstruction Validation loss"
+    )
+
+    plt.plot(
+        epochs_range,
+        np.array(recon_loss_tissue_all_folds).mean(axis=0),
+        label="Lamda * Tissue Reconstruction Train loss"
+    )
+
+    plt.plot(
+        epochs_range,
+        np.array(recon_loss_tissue_val_all_folds).meam(axis=0),
+        label="Lamda * Tissue Reconstruction Validation loss"
+    )
+
+    plt.xlabel("Epoch")
+    plt.ylabel("Reconstruction Loss")
+    plt.legend()
+    plt.title(f" Loss")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        f"training_plots/orth_recon_task/recon_loss.png",
+        dpi=300
+    )
+
+    plt.close()
+
+
+    # Similarity plot proj
+    plt.figure(figsize=(6, 4))
+
+    plt.plot(
+        epochs_range,
+        np.array(retrieval_acc_all_folds).mean(axis=0),
+        label="Retrieval accuracy train"
+    )
+
+    plt.plot(
+        epochs_range,
+        np.array(retrieval_acc_val_all_folds).mean(axis=0),
+        label="Retrieval accuracy val"
+    )
+
+    plt.xlabel("Epoch")
+    plt.ylabel("Retrieval accuracy")
+    plt.legend()
+    plt.title(f"Retrieval accuracy shared embeddings")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        f"training_plots/orth_recon_task/retrieval_acc.png",
+        dpi=300
+    )
+
+    plt.close()
+
+    # retrieval acc shared vs private
+    plt.figure(figsize=(6, 4))
+
+    plt.plot(
+        epochs_range,
+        np.array(retrieval_acc_plasma_all_folds).mean(axis=0),
+        label="Retrieval accuracy plasma train"
+    )
+
+    plt.plot(
+        epochs_range,
+        np.array(retrieval_acc_plasma_val_all_folds).mean(axis=0),
+        label="Retrieval accuracy plasma val"
+    )
+    plt.plot(
+        epochs_range,
+        np.array(retrieval_acc_tissue_all_folds).mean(axis=0),
+        label="Retrieval accuracy tissue train"
+    )
+
+    plt.plot(
+        epochs_range,
+        np.array(retrieval_acc_plasma_val_all_folds).mean(axis=0),
+        label="Retrieval accuracy tissue val"
+    )
+
+    plt.xlabel("Epoch")
+    plt.ylabel("Retrieval accuracy ")
+    plt.legend()
+    plt.title(f"Retrieval accuracy shared <-> private embeddings")
+
+    plt.tight_layout()
+
+    plt.savefig(
+        f"training_plots/orth_recon_task/retrieval_acc_private.png",
+        dpi=300
+    )
+
+    plt.close()
+
+    ######## get neat gnn_explainer results
+    idx_to_gene = dict(
+        zip(gene_to_idx_tissue["idx"], gene_to_idx_tissue["Gene"])
+    )
+    all_explanations = []
+
+    for fold, fold_results in tissue_results.items():
+
+        for sample_key, explanation in fold_results.items():
+
+            # sample_key is something like ('Sample 15',)
+            sample = sample_key[0]
+
+            importance = (
+                explanation.node_mask
+                .detach()
+                .cpu()
+                .numpy()
+                .squeeze()
+            )
+
+            for idx, score in enumerate(importance):
+                all_explanations.append({
+                    "fold": fold,
+                    "sample": sample,
+                    "idx": idx,
+                    "gene": idx_to_gene[idx],
+                    "importance": score
+                })
+
+    tissue_explanations_df = pd.DataFrame(all_explanations)
+    tissue_explanations_df.to_csv('training_plots/orth_recon_task/tissue_gnn_explainer_results.csv')
+    all_explanations_plasma = []
+    idx_to_gene_plasma = dict(
+        zip(gene_to_idx_plasma["idx"], gene_to_idx_plasma["Gene"])
+    )
+    for fold, fold_results in plasma_results.items():
+
+        for sample_key, explanation in fold_results.items():
+
+            # sample_key is something like ('Sample 15',)
+            sample = sample_key[0]
+            print(sample)
+
+            importance = (
+                explanation.node_mask
+                .detach()
+                .cpu()
+                .numpy()
+                .squeeze()
+            )
+            print(importance)
+
+            for idx, score in enumerate(importance):
+                all_explanations_plasma.append({
+                    "fold": fold,
+                    "sample": sample,
+                    "idx": idx,
+                    "gene": idx_to_gene_plasma[idx],
+                    "importance": score
+                })
+
+    plasma_explanations_df = pd.DataFrame(all_explanations_plasma)
+    plasma_explanations_df.to_csv('training_plots/orth_recon_task/plasma_gnn_explainer_results.csv')
+
 
     return task_fold_results
 
