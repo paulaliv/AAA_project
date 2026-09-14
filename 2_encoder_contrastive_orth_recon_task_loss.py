@@ -1406,20 +1406,24 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             epochs_range = range(1, epochs + 1)
 
         retrieval_acc_all_folds.append(retrieval_accuracy_proj_train)
-        retrieval_acc_plasma_all_folds(retrieval_accuracy_plasma_train)
-        retrieval_acc_tissue_all_folds(retrieval_accuracy_tissue_train)
+        retrieval_acc_plasma_all_folds.append(retrieval_accuracy_plasma_train)
+        retrieval_acc_tissue_all_folds.append(retrieval_accuracy_tissue_train)
         shared_loss_all_folds.append(train_losses_shared)
         orth_loss_all_folds.append(train_losses_orth)
         recon_loss_plasma_all_folds.append(train_losses_recon_plasma)
         recon_loss_tissue_all_folds.append(train_losses_recon_tissue)
+        task_loss_all_folds.append(train_losses_task)
+
 
         retrieval_acc_val_all_folds.append(retrieval_accuracy_proj_val)
-        retrieval_acc_plasma_val_all_folds(retrieval_accuracy_private_plasma_val)
-        retrieval_acc_tissue_val_all_folds(retrieval_accuracy_private_tissue_val)
+        retrieval_acc_plasma_val_all_folds.append(retrieval_accuracy_private_plasma_val)
+        retrieval_acc_tissue_val_all_folds.append(retrieval_accuracy_private_tissue_val)
         shared_loss_val_all_folds.append(val_losses_shared)
         orth_loss_val_all_folds.append(val_losses_diff)
         recon_loss_plasma_val_all_folds.append(val_losses_recon_plasma)
-        recon_loss_tissue_val_all_folds(val_losses_recon_tissue)
+        recon_loss_tissue_val_all_folds.append(val_losses_recon_tissue)
+        task_loss_val_all_folds.append(val_losses_task)
+
 
 
         ############### GNN_EXPLAINER #################
@@ -1445,6 +1449,7 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
         projector_tissue.load_state_dict(
             torch.load('best_tissue_projector.pt')
         )
+
         plasma_explainer_results ={}
         tissue_explainer_results ={}
 
@@ -1455,6 +1460,7 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
         projector_tissue.eval()
         projector_shared.eval()
         # explanation loader
+
         val_explanation_loader = DataLoader(
             val_dataset,
             batch_size=1,
@@ -1484,93 +1490,131 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                     dim=-1
                 )
 
+                # ==================================================
+                # 4. Tissue explanation
+                # ==================================================
+            tissue_masks = []
+            for run in range(10):
+                tissue_model = Tissue_Graph_Similarity(
+                    encoder_tissue,
+                    projector_shared,
+                    z_plasma
+                )
+
+                tissue_explainer = Explainer(
+                    model=tissue_model,
+
+                    algorithm=GNNExplainer(
+                        epochs=200,
+                        lr=0.01
+                    ),
+
+                    explanation_type="model",
+
+                    node_mask_type="object",
+
+                    edge_mask_type=None,
+
+                    model_config=ModelConfig(
+                        mode="regression",
+                        task_level="graph",
+                        return_type="raw"
+                    )
+                )
+
+                tissue_explanation = tissue_explainer(
+                    tissue.x,
+                    tissue.edge_index,
+
+                    target=None,
+
+                    batch=tissue.batch
+                )
+
+
+                tissue_masks.append(tissue_explanation.node_mask.detach().cpu().numpy())
+                print(
+                    "run", run,
+                    "min", tissue_explanation.node_mask.min(),
+                    "max", tissue_explanation.node_mask.max(),
+                    "mean", tissue_explanation.node_mask.mean(),
+                    "nonzero", np.count_nonzero(tissue_explanation.node_mask)
+                )
+
+            tissue_masks = np.array(tissue_masks)
+            tissue_mean = tissue_masks.mean(axis=0)
+
+            tissue_std = tissue_masks.std(axis=0)
+
+            print("BEFORE SAVE")
+            print(tissue_mean.max(), tissue_mean.mean(), np.count_nonzero(tissue_mean))
+
+            tissue_explainer_results[patient] = {
+                "mean": tissue_mean,
+                "std": tissue_std
+            }
+
             # ==================================================
             # 3. Plasma explanation
             # ==================================================
-
-            plasma_model = Plasma_Graph_Similarity(
-                encoder_plasma,
-                projector_shared,
-                z_tissue
-            )
-
-            plasma_explainer = Explainer(
-                model=plasma_model,
-
-                algorithm=GNNExplainer(
-                    epochs=200,
-                    lr=0.01
-                ),
-
-                explanation_type="model",
-
-                node_mask_type="object",
-
-                edge_mask_type=None,
-
-                model_config=ModelConfig(
-                    mode="regression",
-                    task_level="graph",
-                    return_type="raw"
+            plasma_masks = []
+            for run in range(10):
+                plasma_model = Plasma_Graph_Similarity(
+                    encoder_plasma,
+                    projector_shared,
+                    z_tissue
                 )
-            )
 
-            plasma_explanation = plasma_explainer(
-                plasma.x,
-                plasma.edge_index,
+                plasma_explainer = Explainer(
+                    model=plasma_model,
 
-                target=original_similarity,
+                    algorithm=GNNExplainer(
+                        epochs=200,
+                        lr=0.01
+                    ),
 
-                batch=plasma.batch
-            )
+                    explanation_type="model",
 
-            # ==================================================
-            # 4. Tissue explanation
-            # ==================================================
+                    node_mask_type="object",
 
-            tissue_model = Tissue_Graph_Similarity(
-                encoder_tissue,
-                projector_shared,
-                z_plasma
-            )
+                    edge_mask_type=None,
 
-            tissue_explainer = Explainer(
-                model=tissue_model,
-
-                algorithm=GNNExplainer(
-                    epochs=200,
-                    lr=0.01
-                ),
-
-                explanation_type="model",
-
-                node_mask_type="object",
-
-                edge_mask_type=None,
-
-                model_config=ModelConfig(
-                    mode="regression",
-                    task_level="graph",
-                    return_type="raw"
+                    model_config=ModelConfig(
+                        mode="regression",
+                        task_level="graph",
+                        return_type="raw"
+                    )
                 )
-            )
 
-            tissue_explanation = tissue_explainer(
-                tissue.x,
-                tissue.edge_index,
+                plasma_explanation = plasma_explainer(
+                    plasma.x,
+                    plasma.edge_index,
 
-                target=original_similarity,
+                    target=None,
 
-                batch=tissue.batch
-            )
+                    batch=plasma.batch
+                )
+                plasma_masks.append(
+                    plasma_explanation.node_mask.detach().cpu().numpy()
+                )
+
+            plasma_masks = np.array(plasma_masks)
+            plasma_mean = plasma_masks.mean(axis=0)
+            plasma_std = plasma_masks.std(axis=0)
 
             # ==================================================
             # 5. Save
             # ==================================================
 
-            plasma_explainer_results[patient] = plasma_explanation
+            plasma_explainer_results[patient] = {
+                "mean": plasma_mean,
+                "std": plasma_std
+            }
 
-            tissue_explainer_results[patient] = tissue_explanation
+            tissue_explainer_results[patient] = {
+                "mean": tissue_mean,
+                "std": tissue_std
+            }
 
             print('PLASMA EXPLAINER')
             print(plasma_explainer_results)
@@ -1589,9 +1633,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             explainer_fold_results_tissue,
             'training_plots/orth_recon_task/explainer_fold_results_tissue.pt'
         )
-
-
-
 
 
 
@@ -1640,6 +1681,12 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
         torch.save(best_embeddings_proj, f"embeddings_orth_recon_task/fold_{fold}_best_embeddings_proj.pt")
 
     # Loss plot
+
+    print("shared:", np.array(shared_loss_all_folds).shape)
+    print("orth:", np.array(orth_loss_all_folds).shape)
+    print("recon plasma:", np.array(recon_loss_plasma_all_folds).shape)
+    print("recon tissue:", np.array(recon_loss_tissue_all_folds).shape)
+    print("task:", np.array(task_loss_all_folds).shape)
     plt.figure(figsize=(6, 4))
 
     plt.plot(
@@ -1842,7 +1889,7 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
     )
     all_explanations = []
 
-    for fold, fold_results in tissue_results.items():
+    for fold, fold_results in tissue_explainer_results.items():
 
         for sample_key, explanation in fold_results.items():
 
@@ -1868,11 +1915,18 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
 
     tissue_explanations_df = pd.DataFrame(all_explanations)
     tissue_explanations_df.to_csv('training_plots/orth_recon_task/tissue_gnn_explainer_results.csv')
+    # Cohort-level importance per protein
+    node_importance_tissue = (
+        tissue_explanations_df
+        .groupby("idx")["importance"]
+        .median()
+    )
+
     all_explanations_plasma = []
     idx_to_gene_plasma = dict(
         zip(gene_to_idx_plasma["idx"], gene_to_idx_plasma["Gene"])
     )
-    for fold, fold_results in plasma_results.items():
+    for fold, fold_results in plasma_explainer_results.items():
 
         for sample_key, explanation in fold_results.items():
 
@@ -1913,6 +1967,7 @@ summary = (
     [["MSE", "MAE", "R2", "Spearman"]]
     .agg(["mean", "std"])
 )
+
 
 results_df.to_csv('training_plots/orth_recon_task/task_results.csv', index=False)
 print(summary.head())
