@@ -34,28 +34,6 @@ gene_to_idx_tissue = pd.read_csv('PR80_30/gene_to_idx_400_tissue.csv')
 graphs_plasma = torch.load("PR80_30/proteins_graphs_400_plasma.pt", weights_only=False)
 graphs_tissue = torch.load("PR80_30/proteins_graphs_400_tissue.pt", weights_only=False)
 
-tissue_scores = pd.read_csv('PR80_30/tissue_pathway_scores.csv')
-plasma_scores = pd.read_csv('PR80_30/plasma_pathway_scores.csv')
-pathways_1 = set(tissue_scores.columns).intersection(plasma_scores.columns)
-# for column in tissue_scores.columns:
-#     print(column)
-
-#tissue_scores.columns.to_csv('tissue_pathways.csv')
-#pathways_1.to_csv('common_pathways.csv')
-print('common:')
-for column in pathways_1:
-    print(column)
-#pathways_1.remove('patient')
-
-tissue_scores_common = tissue_scores[list(pathways_1)]
-plasma_scores_common = plasma_scores[list(pathways_1)]
-print(tissue_scores_common.shape)
-print(plasma_scores.shape)
-print(tissue_scores.shape)
-print(plasma_scores.head())
-
-pred_pathways = ['REACTOME_ELASTIC_FIBRE_FORMATION', 'REACTOME_NON_INTEGRIN_MEMBRANE_ECM_INTERACTIONS','REACTOME_COLLAGEN_FORMATION','REACTOME_COLLAGEN_DEGRADATION','REACTOME_DEGRADATION_OF_THE_EXTRACELLULAR_MATRIX','REACTOME_INTEGRIN_CELL_SURFACE_INTERACTIONS',' REACTOME_EXTRACELLULAR_MATRIX_ORGANIZATION']
-
 # # Separate sample IDs from pathway scores
 # pathway_data = tissue_scores_common.drop(columns=["Name"])
 #
@@ -324,47 +302,6 @@ class ProjectionHead_Tissue(nn.Module):
         return self.net(x)
 
 
-class Decoder(nn.Module):
-    def __init__(self,shared_dim=32, private_dim=32, n_pathways=317):
-        super().__init__()
-        self.decoder = nn.Linear(
-            shared_dim + private_dim,
-            n_pathways
-        )
-
-    def forward(self, shared, private):
-        x = torch.cat([shared, private], dim=1)
-        return self.decoder(x)
-
-class Decoder_MLP(nn.Module):
-
-    def __init__(self, shared_dim=32, private_dim=32, n_pathways=85):
-        super().__init__()
-
-        self.decoder = nn.Sequential(
-            nn.Linear(shared_dim + private_dim, 64),
-            nn.ReLU(),
-            nn.Linear(64, n_pathways)
-        )
-
-    def forward(self, shared, private):
-        x = torch.cat([shared, private], dim=1)
-        return self.decoder(x)
-
-
-class Task_Head(nn.Module):
-    def __init__(self,in_dimensions, n_pathways=9):
-        super().__init__()
-        self.task_head = nn.Sequential(
-            nn.Linear(in_dimensions, 64),
-            nn.ReLU(),
-            nn.Linear(64, n_pathways)
-        )
-
-    def forward(self, plasma_proj_shared):
-            return self.task_head(plasma_proj_shared)
-
-
 class Plasma_Graph_Similarity(nn.Module):
     def __init__(self,
                  plasma_encoder,
@@ -416,47 +353,6 @@ class Tissue_Graph_Similarity(nn.Module):
         )
         return similarity
 
-
-class PrivateOrthogonality(nn.Module):
-
-    def __init__(
-        self,
-        encoder,
-        shared_projector,
-        private_projector
-    ):
-        super().__init__()
-
-        self.encoder = encoder
-        self.shared_projector = shared_projector
-        self.private_projector = private_projector
-
-    def forward(self, x, edge_index, batch):
-
-        emb = self.encoder(
-            x,
-            edge_index,
-            batch
-        )
-
-        z_shared = self.shared_projector(emb)
-        z_private = self.private_projector(emb)
-
-        similarity = F.cosine_similarity(
-            z_shared,
-            z_private,
-            dim=-1
-        )
-        orthogonality_loss = similarity.pow(2)
-
-        return orthogonality_loss
-
-
-def task_loss(pred,target):
-    return F.mse_loss(pred, target)
-
-def reconstruction_loss(pred, target):
-    return F.mse_loss(pred, target)
 
 def pair_collate(batch):
 
@@ -533,46 +429,6 @@ def symmetric_contrastive_loss(
 
 
     return loss
-
-
-def orthogonal_loss(shared, private):
-
-    cross = shared.T @ private
-
-    return torch.sum(cross ** 2)
-
-
-def get_pathways(patients, pathway_scores):
-    pathway_scores = pathway_scores[pathway_scores['Name'].isin(patients)]
-
-    pathway_scores = pathway_scores.drop(
-        columns=["Name"]
-    )
-    mean_scores = pathway_scores.mean(axis=0)
-    #keep only ca top 90% pathways (318*0.9 = 286)
-    mean_scores = mean_scores.nlargest(286).index
-    std_scores = pathway_scores.std(axis=0)
-    top_100_std_scores = std_scores.nlargest(100).index
-
-    pathway_scores_mean = pathway_scores[list(mean_scores)]
-
-    # Keep only those pathways
-    pathway_scores_top100_std = pathway_scores[list(top_100_std_scores)]
-
-    top_scores = set(pathway_scores_mean.columns).intersection(pathway_scores_top100_std.columns)
-    filtered_pathways = pathway_scores[list(top_scores)]
-    print(f'number of pathways to reconstruct: {len(filtered_pathways.columns)}')
-    return len(filtered_pathways.columns), filtered_pathways
-
-
-def get_pathway_scores(patients, fold_pathways, pathway_scores):
-    pathway_scores = pathway_scores[['Name'] + list(fold_pathways)]
-    pathway_scores = pathway_scores[pathway_scores['Name'].isin(patients)]
-
-    pathway_scores = pathway_scores.set_index('Name')
-
-
-    return pathway_scores
 
 
 def node_to_edge_importance(edge_index, node_importance):
@@ -799,10 +655,6 @@ def create_subnetworks_global(
         .values
     )
 
-
-
-
-
     # Node importance → edge importance
     edge_importance = node_to_edge_importance(
         edge_index,
@@ -906,39 +758,20 @@ def run_ora(
         f"Saved {len(ora_significant_df)} significant pathways → "
         f"{output_path}"
     )
-def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
+def training_loop():
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
-    prediction_pathways = ['REACTOME_NON_INTEGRIN_MEMBRANE_ECM_INTERACTIONS','REACTOME_COLLAGEN_DEGRADATION','REACTOME_DEGRADATION_OF_THE_EXTRACELLULAR_MATRIX','REACTOME_INTEGRIN_SIGNALING','REACTOME_EXTRACELLULAR_MATRIX_ORGANIZATION']
-
-    task_fold_results = []
     explainer_fold_results_tissue = {
     }
     explainer_fold_results_plasma = {}
-    explainer_fold_results_tissue_private = {
-    }
-    explainer_fold_results_plasma_private = {}
 
     shared_loss_all_folds = []
     shared_loss_val_all_folds = []
-
-    orth_loss_all_folds = []
-    orth_loss_val_all_folds = []
-
-    recon_loss_plasma_all_folds = []
-    recon_loss_tissue_all_folds = []
-    recon_loss_plasma_val_all_folds = []
-    recon_loss_tissue_val_all_folds = []
-
-    task_loss_all_folds = []
-    task_loss_val_all_folds = []
 
     retrieval_acc_all_folds = []
     retrieval_acc_tissue_all_folds =[]
     retrieval_acc_plasma_all_folds = []
     retrieval_acc_val_all_folds = []
-    retrieval_acc_plasma_val_all_folds = []
-    retrieval_acc_tissue_val_all_folds = []
 
 
     kf = KFold(
@@ -950,17 +783,9 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
     for fold, (train_idx, val_idx) in enumerate(kf.split(patients)):
         train_losses = []
         train_losses_shared = []
-        train_losses_orth =[]
-        train_losses_recon_plasma = []
-        train_losses_recon_tissue = []
-        train_losses_task = []
 
         val_losses = []
         val_losses_shared = []
-        val_losses_diff = []
-        val_losses_recon_plasma = []
-        val_losses_recon_tissue = []
-        val_losses_task = []
 
         positive_similarities_emb = []
         negative_similarities_emb = []
@@ -974,9 +799,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
 
         retrieval_accuracy_emb_val = []
         retrieval_accuracy_proj_val = []
-        retrieval_accuracy_private_tissue_val = []
-        retrieval_accuracy_private_plasma_val = []
-
 
         val_recall = []
         train_recall = []
@@ -991,38 +813,30 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
         fold_embeddings_proj = {
             "epoch0": {
                 "tissue": {
-                    "shared": {},
-                    "private": {}
+
                 },
                 "plasma": {
-                    "shared": {},
-                    "private": {}
+
                 }
             },
             "epoch99": {
                 "tissue": {
-                    "shared": {},
-                    "private": {}
+
                 },
                 "plasma": {
-                    "shared": {},
-                    "private": {}
+
                 }
             }
         }
         best_embeddings_proj = {
             "epoch":0,
             "tissue": {
-                "shared": {},
-                "private": {}
+
             },
             "plasma": {
-                "shared": {},
-                "private": {}
+
             }
         }
-
-
 
         print(
             f"Fold {fold + 1}"
@@ -1061,37 +875,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             collate_fn=pair_collate
         )
 
-        decoder_dims, fold_pathways_plasma = get_pathways(train_patients, plasma_scores_common)
-        decoder_dims_tissue, fold_pathways_tissue = get_pathways(train_patients, tissue_scores_common)
-
-        fold_pathway_scores_plasma = get_pathway_scores(train_patients,fold_pathways_plasma,plasma_scores_common)
-        fold_pathway_scores_tissue = get_pathway_scores(train_patients,fold_pathways_tissue,tissue_scores_common)
-
-        fold_target_pathway_scores = get_pathway_scores(train_patients,prediction_pathways, tissue_scores_common)
-
-        #Standardize pathway scores in each training fold
-        scaler_plasma = StandardScaler()
-        scaler_tissue = StandardScaler()
-
-        scaler_task = StandardScaler()
-
-        fold_plasma_pathway_scores_scaled = pd.DataFrame(
-            scaler_plasma.fit_transform(fold_pathway_scores_plasma),
-            index=fold_pathway_scores_plasma.index,
-            columns=fold_pathway_scores_plasma.columns
-        )
-
-        fold_tissue_pathway_scores_scaled = pd.DataFrame(
-            scaler_tissue.fit_transform(fold_pathway_scores_tissue),
-            index=fold_pathway_scores_tissue.index,
-            columns=fold_pathway_scores_tissue.columns
-        )
-
-        fold_target_tissue_pathways_scaled = pd.DataFrame(
-            scaler_task.fit_transform(fold_target_pathway_scores),
-            index= fold_target_pathway_scores.index,
-            columns=fold_target_pathway_scores.columns
-        )
 
         encoder_tissue = GraphEncoder_Tissue(
             hidden_dim=64
@@ -1102,16 +885,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
         projector_shared = ProjectionHead_Shared(
         ).to(device)
 
-        projector_plasma = ProjectionHead_Plasma(
-        ).to(device)
-
-        projector_tissue = ProjectionHead_Tissue(
-        ).to(device)
-
-        decoder_plasma = Decoder_MLP(n_pathways=decoder_dims).to(device)
-        decoder_tissue = Decoder_MLP(n_pathways=decoder_dims_tissue).to(device)
-
-        task_head = Task_Head(in_dimensions=32,n_pathways=5).to(device)
 
         optimizer = torch.optim.AdamW(
             list(encoder_tissue.parameters())
@@ -1119,16 +892,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             list(encoder_plasma.parameters())
             +
             list(projector_shared.parameters())
-            +
-            list(projector_plasma.parameters())
-            +
-            list(projector_tissue.parameters())
-            +
-            list(decoder_plasma.parameters())
-            +
-            list(decoder_tissue.parameters())
-            +
-            list(task_head.parameters())
             ,
             lr=1e-4,
             weight_decay=1e-5
@@ -1142,17 +905,10 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             encoder_tissue.train()
             encoder_plasma.train()
             projector_shared.train()
-            projector_plasma.train()
-            projector_tissue.train()
-            decoder_plasma.train()
-            task_head.train()
 
             total_loss = 0
             total_loss_shared = 0
-            total_loss_diff = 0
-            total_loss_recon_plasma = 0
-            total_loss_recon_tissue = 0
-            total_loss_task = 0
+
 
             correct_retrieval = 0
             total_samples = 0
@@ -1218,14 +974,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
 
                 # projection space
 
-                tissue_proj = projector_tissue(
-                    tissue_emb
-                )
-
-                plasma_proj = projector_plasma(
-                    plasma_emb
-                )
-
                 tissue_proj_shared = projector_shared(
                     tissue_emb
                 )
@@ -1233,7 +981,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                 plasma_proj_shared = projector_shared(
                     plasma_emb
                 )
-
 
 
                 ### Compute cosine similarity and retrieval accuracy for shared embeddings
@@ -1249,30 +996,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                         predicted_proj == true_proj
                 ).sum().item()
 
-                ### Compute cosine similarity and retrieval accuracy for private embeddings
-                tissue_proj_norm_private = F.normalize(tissue_proj, dim=1)
-                plasma_proj_norm_private = F.normalize(plasma_proj, dim=1)
-
-                cross_sim_proj_tissue = tissue_proj_norm_private @ tissue_proj_norm.T
-
-                cross_sim_proj_plasma = plasma_proj_norm_private @ plasma_proj_norm.T
-
-                predicted_proj_tissue = cross_sim_proj_tissue.argmax(dim=1)
-                true_proj_tissue = torch.arange(
-                    cross_sim_proj_tissue.size(0)
-                )
-                correct_retrieval_proj_tissue += (
-                        predicted_proj_tissue == true_proj_tissue
-                ).sum().item()
-
-                predicted_proj_plasma = cross_sim_proj_plasma.argmax(dim=1)
-                true_proj_plasma = torch.arange(
-                    cross_sim_proj_plasma.size(0)
-                )
-                correct_retrieval_proj_plasma += (
-                        predicted_proj_plasma == true_proj_plasma
-                ).sum().item()
-
 
 
                 ranks = torch.argsort(
@@ -1284,82 +1007,23 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                 all_ranks.extend(true_ranks.cpu().tolist())
 
 
-                #### reconstruction loss
-                ## standardize pathway scores
-
-                batch_plasma_pathways = fold_plasma_pathway_scores_scaled.loc[list(patient)]
-
-                batch_plasma_pathways = torch.tensor(
-                    batch_plasma_pathways.values,
-                    dtype=torch.float32,
-                    device=device
-                )
-
-                batch_tissue_pathways = fold_tissue_pathway_scores_scaled.loc[list(patient)]
-
-                target_pathways_scaled = fold_target_tissue_pathways_scaled.loc[list(patient)]
-
-
-                target_pathways_scaled = torch.tensor(
-                    target_pathways_scaled.values,
-                    dtype=torch.float32,
-                    device=device
-                )
-                batch_tissue_pathways = torch.tensor(batch_tissue_pathways.values,dtype=torch.float32,device=device)
-
-
-
-                decoded_plasma = decoder_plasma(plasma_proj_shared,plasma_proj)
-                decoded_tissue = decoder_tissue(tissue_proj_shared,tissue_proj)
-
-                loss_recon_plasma = reconstruction_loss(decoded_plasma, batch_plasma_pathways)
-                loss_recon_tissue = reconstruction_loss(decoded_tissue, batch_tissue_pathways)
-
-
-
-                ### Difference Loss
-                #Difference between modality-invariant and specific representations
-                loss_diff = orthogonal_loss(plasma_proj_shared, plasma_proj) + orthogonal_loss(tissue_proj_shared, tissue_proj)
-
-
                 ### Similarity Loss: currently contrastive loss. Could add CMD loss for general distribution alignment(not patient specifc)
                 loss_shared = symmetric_contrastive_loss(
                     tissue_proj_shared,
                     plasma_proj_shared
                 )
 
-                ###### Task Loss
-                pred_task = task_head(plasma_proj_shared)
-
-                loss_task = task_loss(pred_task,target_pathways_scaled)
-
-
-
-
-
-                loss_total = loss_shared + lamda_orth * loss_diff + lamda_recon * loss_recon_plasma + lamda_recon * loss_recon_tissue + lamda_task * loss_task
-
+                loss_total = loss_shared
 
                 optimizer.zero_grad()
 
                 loss_total.backward()
-                # print(
-                #     "Tissue encoder gradient:",
-                #     encoder_tissue.conv1.lin_l.weight.grad.norm().item()
-                # )
-                #
-                # print(
-                #     "Plasma encoder gradient:",
-                #     encoder_plasma.conv1.lin_l.weight.grad.norm().item()
-                # )
+
 
                 optimizer.step()
 
                 total_loss_shared += loss_shared.item()
-                total_loss_recon_plasma += loss_recon_plasma.item()
-                total_loss_recon_tissue += loss_recon_tissue.item()
-                total_loss_diff += loss_diff.item()
-                total_loss_task += loss_task.item()
+
                 total_loss += loss_total.item()
 
             epoch_recall_5 = np.mean(
@@ -1369,18 +1033,10 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
 
             epoch_train_loss = total_loss / len(train_loader)
             epoch_train_loss_shared = total_loss_shared / len(train_loader)
-            epoch_train_loss_diff = total_loss_diff / len(train_loader)
-            epoch_train_loss_recon_plasma = total_loss_recon_plasma/len(train_loader)
-            epoch_train_loss_recon_tissue = total_loss_recon_tissue/ len(train_loader)
-            epoch_train_loss_task = total_loss_task/len(train_loader)
-
 
             train_losses.append(epoch_train_loss)
             train_losses_shared.append(epoch_train_loss_shared)
-            train_losses_orth.append(lamda_orth*epoch_train_loss_diff)
-            train_losses_recon_plasma.append(lamda_recon*epoch_train_loss_recon_plasma)
-            train_losses_recon_tissue.append(lamda_recon * epoch_train_loss_recon_tissue)
-            train_losses_task.append(lamda_task * epoch_train_loss_task)
+
 
             epoch_retrieval_accuracy = (correct_retrieval / total_samples)
             epoch_retrieval_accuracy_proj = (
@@ -1397,41 +1053,29 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             retrieval_accuracy_tissue_train.append(epoch_retrieval_accuracy_tissue)
             retrieval_accuracy_plasma_train.append(epoch_retrieval_accuracy_plasma)
 
-
             print(
                 f"Epoch {epoch}: "
                 f"Train Loss: {epoch_train_loss:.4f} | Train Loss Shared: {epoch_train_loss_shared:.4f} |\n "
-                f"Train Loss Orth: {lamda_orth*epoch_train_loss_diff:.4f}  | Train Loss Recon: Plasma: {lamda_orth*epoch_train_loss_recon_plasma:.4f} Tissue: {lamda_recon*epoch_train_loss_recon_tissue:.4f}| f'Train task loss : {lamda_task * epoch_train_loss_task:.4f}| \n"
+            
                 f"retrieval accuracy embedding: {epoch_retrieval_accuracy:.4f} | retrieval accuracy proj: {epoch_retrieval_accuracy_proj:.4f} | Median Rank: {median_rank} | \n"
-                f'retrieval accuracy private<->shared: tissue: {epoch_retrieval_accuracy_tissue:.4f}, plasma: {epoch_retrieval_accuracy_plasma:.4f}'
+
             )
 
             val_loss_Total = 0
             val_loss_Total_shared = 0
-            val_loss_Total_diff = 0
-            val_loss_Total_recon_plasma = 0
-            val_loss_Total_recon_tissue = 0
-            val_loss_Total_task = 0
+
             val_batches = 0
             correct_retrieval = 0
             correct_retrieval_proj = 0
-            correct_retrieval_proj_tissue = 0
-            correct_retrieval_proj_plasma = 0
 
             total_samples = 0
             all_ranks_val = []
-            all_preds_epoch = []
-            all_targets_epoch = []
 
             with torch.no_grad():
                 encoder_tissue.eval()
                 encoder_plasma.eval()
                 projector_shared.eval()
-                projector_tissue.eval()
-                projector_plasma.eval()
-                decoder_plasma.eval()
-                decoder_tissue.eval()
-                task_head.eval()
+
                 for tissue, plasma, patient in val_loader:
 
                     tissue = tissue.to(device)
@@ -1451,14 +1095,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                         plasma.batch
                     )
 
-                    # projection space
-                    tissue_proj = projector_tissue(
-                        tissue_emb
-                    )
-
-                    plasma_proj = projector_plasma(
-                        plasma_emb
-                    )
 
                     tissue_proj_shared = projector_shared(
                         tissue_emb
@@ -1468,48 +1104,7 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                         plasma_emb
                     )
 
-                    plasma_pathways = get_pathway_scores(patient, fold_pathways_plasma,plasma_scores_common)
-                    tissue_pathways = get_pathway_scores(patient, fold_pathways_tissue,tissue_scores_common)
 
-
-                    plasma_pathways_scaled = scaler_plasma.transform(plasma_pathways)
-                    plasma_pathways_scaled = torch.tensor(
-                        plasma_pathways_scaled,
-                        dtype=torch.float32,
-                        device=device
-                    )
-
-                    tissue_pathways_scaled = scaler_tissue.transform(tissue_pathways)
-                    tissue_scores_common_val = tissue_scores_common.copy()
-                    tissue_scores_common_val = tissue_scores_common_val.set_index('Name')
-
-
-                    target_pathways = tissue_scores_common_val.loc[
-                        list(patient), prediction_pathways
-                    ]
-                    target_pathways_scaled = scaler_task.transform(target_pathways)
-                    target_pathways_scaled = torch.tensor(
-                        target_pathways_scaled, dtype=torch.float32,device=device
-                    )
-
-                    tissue_pathways_scaled = torch.tensor(
-                        tissue_pathways_scaled,
-                        dtype=torch.float32,
-                        device=device
-                    )
-
-
-                    decoded_plasma = decoder_plasma(plasma_proj_shared,plasma_proj)
-                    decoded_tissue = decoder_tissue(tissue_proj_shared,tissue_proj)
-                    val_loss_recon_plasma = reconstruction_loss(decoded_plasma, plasma_pathways_scaled)
-                    val_loss_recon_tissue = reconstruction_loss(decoded_tissue, tissue_pathways_scaled)
-
-                    val_loss_diff = orthogonal_loss(plasma_proj_shared, plasma_proj) + orthogonal_loss(tissue_proj_shared,
-                                                                                                     tissue_proj)
-                    # Difference between the two modality specific representations
-                    #val_loss_diff_2 = orthogonal_loss(plasma_proj, tissue_proj)
-                    #
-                    # val_loss_diff = val_loss_diff_1 + val_loss_diff_2
 
                     ### Similarity Loss: currently contrastive loss. Could add CMD loss for general distribution alignment(not patient specifc)
                     val_loss_shared = symmetric_contrastive_loss(
@@ -1517,32 +1112,18 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                         plasma_proj_shared
                     )
 
-                    #### Task Loss
 
-                    pred_val = task_head(plasma_proj_shared)
-
-                    val_loss_task = task_loss(pred_val, target_pathways_scaled)
-                    all_preds_epoch.append(pred_val)
-                    all_targets_epoch.append(target_pathways_scaled)
-
-
-
-                    val_loss_total = val_loss_shared + lamda_orth * val_loss_diff + lamda_recon*val_loss_recon_plasma + lamda_recon * val_loss_recon_tissue +lamda_task *val_loss_task
+                    val_loss_total = val_loss_shared
 
 
                     val_loss_Total += val_loss_total.item()
                     val_loss_Total_shared += val_loss_shared.item()
-                    val_loss_Total_diff += val_loss_diff.item()
-                    val_loss_Total_recon_plasma += val_loss_recon_plasma.item()
-                    val_loss_Total_recon_tissue += val_loss_recon_tissue.item()
-                    val_loss_Total_task += val_loss_task.item()
+
                     val_batches += 1
 
                     tissue_proj_shared_norm = F.normalize(tissue_proj_shared, dim=1)
                     plasma_proj_shared_norm = F.normalize(plasma_proj_shared, dim=1)
 
-                    tissue_proj_norm = F.normalize(tissue_proj, dim=1)
-                    plasma_proj_norm = F.normalize(plasma_proj, dim=1)
 
                     tissue_emb_norm = F.normalize(
                         tissue_emb,
@@ -1567,10 +1148,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                     negative_similarity = similarity_matrix[mask]
                     mean_negative_similarity = negative_similarity.mean()
 
-                    # print(
-                    #     f'Mean similarity embedding space: positive similarity: {mean_positive_similarity:.4f} | negative similarity: {mean_negative_similarity:.4f} | Difference: {mean_negative_similarity - mean_positive_similarity:.4f}'
-                    # )
-
 
                     predicted = similarity_matrix.argmax(dim=1)
                     true = torch.arange(
@@ -1581,8 +1158,7 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
 
 
                     similarity_matrix_proj = tissue_proj_shared_norm @ plasma_proj_shared_norm.T
-                    similarity_matrix_proj_tissue = tissue_proj_norm @ tissue_proj_shared_norm.T
-                    similarity_matrix_proj_plasma = plasma_proj_norm @ plasma_proj_shared_norm.T
+
 
                     positive_similarity_proj = similarity_matrix_proj.diag()
                     mean_positive_similarity_proj = positive_similarity_proj.mean()
@@ -1602,10 +1178,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                     true_ranks = ranks[torch.arange(similarity_matrix_proj.size(0)), torch.arange(similarity_matrix_proj.size(0))]
                     all_ranks_val.extend(true_ranks.cpu().tolist())
 
-                    # print(
-                    #     f'Mean similarity projection space: positive similarity: {mean_positive_similarity_proj:.4f} | negative similarity: {mean_negative_similarity_proj:.4f} | Difference: {mean_positive_similarity_proj - mean_negative_similarity_proj:.4f}'
-                    # )
-
                     predicted_proj = similarity_matrix_proj.argmax(dim=1)
                     true_proj= torch.arange(
                         similarity_matrix_proj.size(0)
@@ -1614,13 +1186,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                             predicted_proj == true_proj
                     ).sum().item()
 
-                    predicted_proj_plasma = similarity_matrix_proj_plasma.argmax(dim=1)
-                    true_proj_plasma = torch.arange(similarity_matrix_proj_plasma.shape[0])
-                    correct_retrieval_proj_plasma += (predicted_proj_plasma == true_proj_plasma).sum().item()
-
-                    predicted_proj_tissue = similarity_matrix_proj_tissue.argmax(dim=1)
-                    true_proj_tissue = torch.arange(similarity_matrix_proj_tissue.shape[0])
-                    correct_retrieval_proj_tissue += (predicted_proj_tissue == true_proj_tissue).sum().item()
 
 
                     positive_similarities_emb.append(
@@ -1660,31 +1225,20 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                             'best_shared_projector.pt'
                         )
 
-                        torch.save(
-                            projector_plasma.state_dict(),
-                            'best_plasma_projector.pt'
-                        )
 
-                        torch.save(
-                            projector_tissue.state_dict(),
-                            'best_tissue_projector.pt'
-                        )
 
                         best_embeddings_proj['epoch'] = epoch_name
                         for i, patient_id in enumerate(tissue_ids):
 
-                            best_embeddings_proj["tissue"]["shared"][patient_id] = \
+                            best_embeddings_proj["tissue"][patient_id] = \
                                 tissue_proj_shared[i].cpu()
 
-                            best_embeddings_proj["tissue"]["private"][patient_id] = \
-                                tissue_proj[i].cpu()
+
 
                         for i, patient_id in enumerate(plasma_ids):
-                            best_embeddings_proj["plasma"]["shared"][patient_id] = \
+                            best_embeddings_proj["plasma"][patient_id] = \
                                 plasma_proj_shared[i].cpu()
 
-                            best_embeddings_proj["plasma"]["private"][patient_id] = \
-                                plasma_proj[i].cpu()
 
 
                     if epoch in inspection:
@@ -1702,20 +1256,13 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                             fold_embeddings[epoch_name]["plasma"][patient_id] = plasma_emb[i]
 
                         for i, patient_id in enumerate(tissue_ids):
-                            fold_embeddings_proj[epoch_name]["tissue"]["shared"][patient_id] = \
+                            fold_embeddings_proj[epoch_name]["tissue"][patient_id] = \
                                 tissue_proj_shared[i].cpu()
 
-                            fold_embeddings_proj[epoch_name]["tissue"]["private"][patient_id] = \
-                                tissue_proj[i].cpu()
 
                         for i, patient_id in enumerate(plasma_ids):
-                            fold_embeddings_proj[epoch_name]["plasma"]["shared"][patient_id] = \
+                            fold_embeddings_proj[epoch_name]["plasma"][patient_id] = \
                                 plasma_proj_shared[i].cpu()
-
-                            fold_embeddings_proj[epoch_name]["plasma"]["private"][patient_id] = \
-                                plasma_proj[i].cpu()
-
-
 
 
             epoch_val_loss = val_loss_Total / val_batches
@@ -1728,16 +1275,9 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             median_rank = np.median(all_ranks_val)
 
             epoch_val_loss_shared = val_loss_Total_shared / val_batches
-            epoch_val_loss_diff = val_loss_Total_diff / val_batches
-            epoch_val_loss_recon_plasma = val_loss_Total_recon_plasma / val_batches
-            epoch_val_loss_recon_tissue = val_loss_Total_recon_tissue / val_batches
-            epoch_val_loss_task = val_loss_Total_task / val_batches
 
             val_losses_shared.append(epoch_val_loss_shared)
-            val_losses_diff.append(lamda_orth*epoch_val_loss_diff)
-            val_losses_recon_plasma.append(lamda_recon*epoch_val_loss_recon_plasma)
-            val_losses_recon_tissue.append(lamda_recon*epoch_val_loss_recon_tissue)
-            val_losses_task.append(lamda_task*epoch_val_loss_task)
+
 
 
             epoch_val_retrieval_accuracy = (
@@ -1747,33 +1287,17 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             epoch_val_retrieval_accuracy_proj = (
                     correct_retrieval_proj / total_samples
             )
-            epoch_val_retrieval_accuracy_proj_tissue = (
-                correct_retrieval_proj_tissue/total_samples
-            )
-            epoch_val_retrieval_accuracy_proj_plasma = (
-                correct_retrieval_proj_plasma/total_samples
-            )
 
             retrieval_accuracy_emb_val.append(epoch_val_retrieval_accuracy)
             retrieval_accuracy_proj_val.append(epoch_val_retrieval_accuracy_proj)
-            retrieval_accuracy_private_tissue_val.append(epoch_val_retrieval_accuracy_proj_tissue)
-            retrieval_accuracy_private_plasma_val.append(epoch_val_retrieval_accuracy_proj_plasma)
             val_recall.append(epoch_val_recall_5)
             val_rank.append(median_rank)
-
-            all_preds_epoch = torch.cat(all_preds_epoch, dim=0)
-            all_targets_epoch = torch.cat(all_targets_epoch, dim=0)
 
 
             print(
                 f"Val Loss: {epoch_val_loss:.4f} | Val Loss Shared: {epoch_val_loss_shared:.4f} | \n"
-                f"Val Loss Orth: {lamda_orth*epoch_val_loss_diff:.4f} | Val Loss Recon: Plasma: {lamda_recon*epoch_val_loss_recon_plasma:.4f}, Tissue: {lamda_recon*epoch_val_loss_recon_tissue:.4f} | Val Task loss: {lamda_task*epoch_val_loss_task:.4f} |  \n"
                 f"retrieval accuracy: embedding: {epoch_val_retrieval_accuracy:.4f}, proj: {epoch_val_retrieval_accuracy_proj:.4f} | \n"
-                f'retrieval accuracy private<->shared: plasma: {epoch_val_retrieval_accuracy_proj_plasma:.4f} | tissue: {epoch_val_retrieval_accuracy_proj_tissue:.4f} | '
             )
-
-
-
 
             epochs_range = range(1, epochs + 1)
 
@@ -1781,19 +1305,10 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
         retrieval_acc_plasma_all_folds.append(retrieval_accuracy_plasma_train)
         retrieval_acc_tissue_all_folds.append(retrieval_accuracy_tissue_train)
         shared_loss_all_folds.append(train_losses_shared)
-        orth_loss_all_folds.append(train_losses_orth)
-        task_loss_all_folds.append(train_losses_task)
-        recon_loss_plasma_all_folds.append(train_losses_recon_plasma)
-        recon_loss_tissue_all_folds.append(train_losses_recon_tissue)
+
 
         retrieval_acc_val_all_folds.append(retrieval_accuracy_proj_val)
-        retrieval_acc_plasma_val_all_folds.append(retrieval_accuracy_private_plasma_val)
-        retrieval_acc_tissue_val_all_folds.append(retrieval_accuracy_private_tissue_val)
         shared_loss_val_all_folds.append(val_losses_shared)
-        orth_loss_val_all_folds.append(val_losses_diff)
-        task_loss_val_all_folds.append(val_losses_task)
-        recon_loss_plasma_val_all_folds.append(val_losses_recon_plasma)
-        recon_loss_tissue_val_all_folds.append(val_losses_recon_tissue)
 
 
         ############### GNN_EXPLAINER #################
@@ -1812,23 +1327,14 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             torch.load('best_shared_projector.pt')
         )
 
-        projector_plasma.load_state_dict(
-            torch.load('best_plasma_projector.pt')
-        )
 
-        projector_tissue.load_state_dict(
-            torch.load('best_tissue_projector.pt')
-        )
         plasma_explainer_results ={}
         tissue_explainer_results ={}
-        plasma_explainer_results_private = {}
-        tissue_explainer_results_private = {}
+
 
 
         encoder_plasma.eval()
         encoder_tissue.eval()
-        projector_plasma.eval()
-        projector_tissue.eval()
         projector_shared.eval()
         # explanation loader
         val_explanation_loader = DataLoader(
@@ -1848,10 +1354,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                     plasma.batch)
                 z_tissue = projector_shared(emb_tissue)
                 z_plasma = projector_shared(emb_plasma)
-                z_tissue_private = projector_tissue(emb_tissue)
-                z_plasma_private = projector_plasma(emb_plasma)
-
-
 
             # ==================================================
             # 4. Tissue explanation (shared projector)
@@ -1943,95 +1445,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             plasma_mean = plasma_masks.mean(axis=0)
             plasma_std = plasma_masks.std(axis=0)
 
-            # ==================================================
-            # 4. Tissue explanation (private projector)
-            # ==================================================
-
-            tissue_masks_private = []
-
-            for run in range(10):
-                tissue_model_private = PrivateOrthogonality(
-                    encoder_tissue,
-                    projector_tissue,
-                    projector_shared
-                )
-
-                tissue_explainer_private = Explainer(
-                    model=tissue_model_private,
-                    algorithm=GNNExplainer(
-                        epochs=200,
-                        lr=0.01
-                    ),
-                    explanation_type="model",
-                    node_mask_type="object",
-                    edge_mask_type=None,
-                    model_config=ModelConfig(
-                        mode="regression",
-                        task_level="graph",
-                        return_type="raw"
-                    )
-                )
-
-                tissue_explanation_private = tissue_explainer_private(
-                    tissue.x,
-                    tissue.edge_index,
-                    target=None,
-                    batch=tissue.batch
-                )
-
-                tissue_masks_private.append(
-                    tissue_explanation_private.node_mask.detach().cpu().numpy()
-                )
-
-            tissue_masks_private= np.array(tissue_masks_private)
-
-            tissue_mean_private = tissue_masks_private.mean(axis=0)
-            tissue_std_private = tissue_masks_private.std(axis=0)
-
-            # ==================================================
-            # 4. Plasma explanation (private projector)
-            # ==================================================
-
-            plasma_masks_private = []
-
-            for run in range(10):
-                plasma_model_private = PrivateOrthogonality(
-                    encoder_plasma,
-                    projector_plasma,
-                    projector_shared
-                )
-
-                plasma_explainer_private = Explainer(
-                    model=plasma_model_private,
-                    algorithm=GNNExplainer(
-                        epochs=200,
-                        lr=0.01
-                    ),
-                    explanation_type="model",
-                    node_mask_type="object",
-                    edge_mask_type=None,
-                    model_config=ModelConfig(
-                        mode="regression",
-                        task_level="graph",
-                        return_type="raw"
-                    )
-                )
-
-                plasma_explanation_private = plasma_explainer_private(
-                    plasma.x,
-                    plasma.edge_index,
-                    target=None,
-                    batch=plasma.batch
-                )
-
-                plasma_masks_private.append(
-                    plasma_explanation_private.node_mask.detach().cpu().numpy()
-                )
-
-            plasma_masks_private = np.array(plasma_masks_private)
-
-            plasma_mean_private = plasma_masks_private.mean(axis=0)
-            plasma_std_private = plasma_masks_private.std(axis=0)
 
             # ==================================================
             # 5. Save
@@ -2046,15 +1459,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
                 "mean": tissue_mean.copy(),
                 "std": tissue_std.copy()
             }
-            plasma_explainer_results_private[patient] = {
-                "mean": plasma_mean_private,
-                "std": plasma_std_private
-            }
-
-            tissue_explainer_results_private[patient] = {
-                "mean": tissue_mean_private.copy(),
-                "std": tissue_std_private.copy()
-            }
 
             print("PLASMA EXPLAINER")
             print(plasma_explainer_results)
@@ -2062,91 +1466,23 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
             print("TISSUE EXPLAINER")
             print(tissue_explainer_results)
 
-            print("PLASMA EXPLAINER PRIVATE")
-            print(plasma_explainer_results_private)
-
-            print("TISSUE EXPLAINER PRIVATE")
-            print(tissue_explainer_results_private)
 
             explainer_fold_results_tissue[fold] = tissue_explainer_results
             explainer_fold_results_plasma[fold] = plasma_explainer_results
-            explainer_fold_results_tissue_private[fold] = tissue_explainer_results_private
-            explainer_fold_results_plasma_private[fold] = plasma_explainer_results_private
-
-
-
 
             torch.save(
                 explainer_fold_results_plasma,
-                "training_plots/orth_recon_task/explainer_fold_results_plasma.pt"
+                "training_plots/baseline/explainer_fold_results_plasma.pt"
             )
 
             torch.save(
                 explainer_fold_results_tissue,
-                "training_plots/orth_recon_task/explainer_fold_results_tissue.pt"
-            )
-            torch.save(
-                explainer_fold_results_plasma_private,
-                "training_plots/orth_recon_task/explainer_fold_results_plasma_private.pt"
+                "training_plots/baseline/explainer_fold_results_tissue.pt"
             )
 
-            torch.save(
-                explainer_fold_results_tissue_private,
-                "training_plots/orth_recon_task/explainer_fold_results_tissue_private.pt"
-            )
-
-
-
-
-
-
-
-
-
-
-
-
-        from sklearn.metrics import mean_squared_error, mean_absolute_error
-        from scipy.stats import pearsonr, spearmanr
-        from sklearn.metrics import r2_score
-
-
-        for i, pathway in enumerate(prediction_pathways):
-            y_true = all_targets_epoch[:, i].numpy()
-            y_pred = all_preds_epoch[:, i].numpy()
-
-            mse = mean_squared_error(y_true, y_pred)
-            mae = mean_absolute_error(y_true, y_pred)
-
-            pearson_r, pearson_p = pearsonr(y_true, y_pred)
-            spearman_r, spearman_p = spearmanr(y_true, y_pred)
-
-            r2 = r2_score(y_true, y_pred)
-
-            print(
-                f"{pathway}: "
-                f"MSE={mse:.4f}, "
-                f"MAE={mae:.4f}"
-                f"Pearson r={pearson_r:.3f}, "
-                f"Spearman r={spearman_r:.3f}"
-                f'R²={r2:.3f}'
-            )
-
-
-            task_fold_results.append({
-                "fold": fold,
-                "pathway": pathway,
-                "MSE": mse,
-                "MAE": mae,
-                "R2": r2,
-                "Pearson": pearson_r,
-                "Spearman": spearman_r
-            })
-
-
-        torch.save(  fold_embeddings,f"embeddings_orth_recon_task/fold_{fold}_embeddings.pt" )
-        torch.save(fold_embeddings_proj, f"embeddings_orth_recon_task/fold_{fold}_embeddings_proj.pt")
-        torch.save(best_embeddings_proj, f"embeddings_orth_recon_task/fold_{fold}_best_embeddings_proj.pt")
+        torch.save(  fold_embeddings,f"embeddings_baseline/fold_{fold}_embeddings.pt" )
+        torch.save(fold_embeddings_proj, f"embeddings_baseline/fold_{fold}_embeddings_proj.pt")
+        torch.save(best_embeddings_proj, f"embeddings_baseline/fold_{fold}_best_embeddings_proj.pt")
 
     # Loss plot
     plt.figure(figsize=(6, 4))
@@ -2171,105 +1507,7 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
     plt.tight_layout()
 
     plt.savefig(
-        f"training_plots/orth_recon_task/shared_loss.png",
-        dpi=300
-    )
-
-    plt.close()
-
-    # Task Loss plot
-    plt.figure(figsize=(6, 4))
-
-    plt.plot(
-        epochs_range,
-        np.array(task_loss_all_folds).mean(axis=0),
-        label="Task MSE Train loss"
-    )
-
-    plt.plot(
-        epochs_range,
-        np.array(task_loss_val_all_folds).mean(axis=0),
-        label="Task MSE Validation loss"
-    )
-
-    plt.xlabel("Epoch")
-    plt.ylabel("Task Loss")
-    plt.legend()
-    plt.title(f"Loss")
-
-    plt.tight_layout()
-
-    plt.savefig(
-        f"training_plots/orth_recon_task/task_loss.png",
-        dpi=300
-    )
-
-    plt.close()
-
-    # Loss plot
-    plt.figure(figsize=(6, 4))
-
-    plt.plot(
-        epochs_range,
-        np.array(orth_loss_all_folds).mean(axis=0),
-        label="Lamda * Orthogonality Train loss")
-
-    plt.plot(
-        epochs_range,
-        np.array(orth_loss_val_all_folds).mean(axis=0),
-        label="Lamda * Orthogonality Validation loss"
-    )
-
-    plt.xlabel("Epoch")
-    plt.ylabel("Orthogonal Loss")
-    plt.legend()
-    plt.title(f"Loss")
-
-    plt.tight_layout()
-
-    plt.savefig(
-        f"training_plots/orth_recon_task/orth_loss.png",
-        dpi=300
-    )
-
-    plt.close()
-
-    # Loss plot
-    plt.figure(figsize=(6, 4))
-
-    plt.plot(
-        epochs_range,
-        np.array(recon_loss_plasma_all_folds).mean(axis=0),
-        label="Lamda * Plasma Reconstruction Train loss"
-    )
-
-    plt.plot(
-        epochs_range,
-        np.array(recon_loss_plasma_val_all_folds).mean(axis=0),
-        label="Lamda * Plasma Reconstruction Validation loss"
-    )
-
-    plt.plot(
-        epochs_range,
-        np.array(recon_loss_tissue_all_folds).mean(axis=0),
-        label="Lamda * Tissue Reconstruction Train loss"
-    )
-
-    plt.plot(
-        epochs_range,
-        np.array(recon_loss_tissue_val_all_folds).mean(axis=0),
-        label="Lamda * Tissue Reconstruction Validation loss"
-    )
-
-    plt.xlabel("Epoch")
-    plt.ylabel("Reconstruction Loss")
-    plt.legend()
-    plt.title(f" Loss")
-
-    plt.tight_layout()
-
-    plt.savefig(
-        f"training_plots/orth_recon_task/recon_loss.png",
+        f"training_plots/baseline/shared_loss.png",
         dpi=300
     )
 
@@ -2299,51 +1537,13 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
     plt.tight_layout()
 
     plt.savefig(
-        f"training_plots/orth_recon_task/retrieval_acc.png",
+        f"training_plots/baseline/retrieval_acc.png",
         dpi=300
     )
 
     plt.close()
 
-    # retrieval acc shared vs private
-    plt.figure(figsize=(6, 4))
 
-    plt.plot(
-        epochs_range,
-        np.array(retrieval_acc_plasma_all_folds).mean(axis=0),
-        label="Retrieval accuracy plasma train"
-    )
-
-    plt.plot(
-        epochs_range,
-        np.array(retrieval_acc_plasma_val_all_folds).mean(axis=0),
-        label="Retrieval accuracy plasma val"
-    )
-    plt.plot(
-        epochs_range,
-        np.array(retrieval_acc_tissue_all_folds).mean(axis=0),
-        label="Retrieval accuracy tissue train"
-    )
-
-    plt.plot(
-        epochs_range,
-        np.array(retrieval_acc_tissue_val_all_folds).mean(axis=0),
-        label="Retrieval accuracy tissue val"
-    )
-
-    plt.xlabel("Epoch")
-    plt.ylabel("Retrieval accuracy ")
-    plt.legend()
-    plt.title(f"Retrieval accuracy shared <-> private embeddings")
-
-    plt.tight_layout()
-
-    plt.savefig(
-        f"training_plots/orth_recon_task/retrieval_acc_private.png",
-        dpi=300
-    )
-
-    plt.close()
 
     ######## get neat gnn_explainer results
     idx_to_gene_tissue = dict(
@@ -2367,25 +1567,13 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
         idx_to_gene_plasma
     )
 
-    # --------------------------------------------------
-    # Private explanations
-    # --------------------------------------------------
 
-    tissue_explanations_private_df = explanation_dict_to_df(
-        explainer_fold_results_tissue_private,
-        idx_to_gene_tissue
-    )
-
-    plasma_explanations_private_df = explanation_dict_to_df(
-        explainer_fold_results_plasma_private,
-        idx_to_gene_plasma
-    )
 
     # --------------------------------------------------
     # Save GNNExplainer results
     # --------------------------------------------------
 
-    output_dir = "training_plots/orth_recon_task"
+    output_dir = "training_plots/baseline"
 
     tissue_explanations_df.to_csv(
         f"{output_dir}/tissue_gnn_explainer_results.csv",
@@ -2397,15 +1585,7 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
         index=False
     )
 
-    tissue_explanations_private_df.to_csv(
-        f"{output_dir}/tissue_gnn_explainer_results_private.csv",
-        index=False
-    )
 
-    plasma_explanations_private_df.to_csv(
-        f"{output_dir}/plasma_gnn_explainer_results_private.csv",
-        index=False
-    )
 
     ##### Create edge masks
 
@@ -2429,20 +1609,6 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
         "PLASMA shared"
     )
 
-    # Private
-    subnetworks_tissue_private = create_subnetworks_global(
-        tissue_explanations_private_df,
-        idx_to_gene_tissue,
-        edge_index_tissue,
-        "TISSUE private"
-    )
-
-    subnetworks_plasma_private = create_subnetworks_global(
-        plasma_explanations_private_df,
-        idx_to_gene_plasma,
-        edge_index_plasma,
-        "PLASMA private"
-    )
     # ==================================================
     # Run ORA
     # ==================================================
@@ -2460,7 +1626,7 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
     run_ora(
         subnetworks_tissue,
         background_genes_tissue,
-        "training_plots/orth_recon_task/tissue_subcommunities_enrichment_results_GLOBAL.xlsx"
+        "training_plots/baseline/tissue_subcommunities_enrichment_results_GLOBAL.xlsx"
     )
 
 
@@ -2468,40 +1634,12 @@ def training_loop(lamda_orth=0.1, lamda_recon=0.1, lamda_task=0.1):
     run_ora(
         subnetworks_plasma,
         background_genes_plasma,
-        "training_plots/orth_recon_task/plasma_subcommunities_enrichment_results_GLOBAL.xlsx"
+        "training_plots/baseline/plasma_subcommunities_enrichment_results_GLOBAL.xlsx"
     )
 
 
-    # Private tissue
-    run_ora(
-        subnetworks_tissue_private,
-        background_genes_tissue,
-        "training_plots/orth_recon_task/tissue_private_subcommunities_enrichment_results_GLOBAL.xlsx"
-    )
 
+training_loop()
 
-    # Private plasma
-    run_ora(
-        subnetworks_plasma_private,
-        background_genes_plasma,
-        "training_plots/orth_recon_task/plasma_private_subcommunities_enrichment_results_GLOBAL.xlsx"
-    )
-
-
-    return task_fold_results
-
-
-task_fold_results = training_loop()
-
-results_df = pd.DataFrame(task_fold_results)
-summary = (
-    results_df
-    .groupby("pathway")
-    [["MSE", "MAE", "R2", "Spearman"]]
-    .agg(["mean", "std"])
-)
-
-results_df.to_csv('training_plots/orth_recon_task/task_results.csv', index=False)
-print(summary.head())
 
 
