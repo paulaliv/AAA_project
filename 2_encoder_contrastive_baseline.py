@@ -11,6 +11,7 @@ from torch_geometric.loader import DataLoader
 from torch_geometric.nn import SAGEConv
 from torch_geometric.nn import GlobalAttention
 import matplotlib.pyplot as plt
+import json
 from sklearn.preprocessing import StandardScaler
 import igraph
 import gseapy as gp
@@ -33,39 +34,6 @@ gene_to_idx_tissue = pd.read_csv('PR80_30/gene_to_idx_400_tissue.csv')
 
 graphs_plasma = torch.load("PR80_30/proteins_graphs_400_plasma.pt", weights_only=False)
 graphs_tissue = torch.load("PR80_30/proteins_graphs_400_tissue.pt", weights_only=False)
-
-# # Separate sample IDs from pathway scores
-# pathway_data = tissue_scores_common.drop(columns=["Name"])
-#
-# # Calculate mean score for each pathway across samples
-# mean_scores = pathway_data.mean(axis=0)
-# # print(mean_scores.describe())
-# # Get the top 100 pathways
-# top_100_pathways_mean = mean_scores.nlargest(286).index
-#
-# std_scores = pathway_data.std(axis=0)
-# # print(std_scores.describe())
-#
-#
-# top_100_pathways_std = std_scores.nlargest(100).index
-#
-# pathway_scores_top100_mean = tissue_scores_common[["Name"] + list(top_100_pathways_mean)]
-# # Keep only those pathways
-# pathway_scores_top100_std = tissue_scores_common[["Name"] + list(top_100_pathways_std)]
-#
-# top_scores= set(pathway_scores_top100_mean.columns).intersection(pathway_scores_top100_std.columns)
-# top_scores.discard('Name')
-# top_scores.discard('REACTOME_INFLUENZA_INFECTION')
-# top_scores.discard('REACTOME_SARS_COV_1_MODULATES_HOST_TRANSLATION_MACHINERY')
-# print(f'top pathways: {len(top_scores)}')
-# for pathway in top_scores:
-#     print(pathway)
-
-# pd.DataFrame({"pathway":list(top_scores)}).to_csv(
-#     "top_std_tissue_pathways.csv",
-#     index=False
-# )
-
 
 print(graphs_plasma)
 print(graphs_tissue)
@@ -90,6 +58,7 @@ plasma_dict = {
 }
 print(plasma_dict)
 
+
 patients = sorted(
     set(tissue_dict.keys())
     &
@@ -98,7 +67,75 @@ patients = sorted(
 patients = np.array(patients)
 print(patients)
 
+##Load tissue pathway scores and select targets
+tissue_pathway_scores = pd.read_csv('PR80_30/tissue_pathway_scores.csv')
+target_pathway_names = ['REACTOME_EXTRACELLULAR_MATRIX_ORGANIZATION', 'REACTOME_DEGRADATION_OF_THE_EXTRACELLULAR_MATRIX', 'REACTOME_INTEGRIN_CELL_SURFACE_INTERACTIONS',
+                   'REACTOME_NON_INTEGRIN_MEMBRANE_ECM_INTERACTIONS']
+tissue_pathway_scores = tissue_pathway_scores.set_index('Name')
+target_pathway_scores = tissue_pathway_scores[target_pathway_names]
 
+class GetData(Dataset):
+    def __init__(
+        self,
+        patients,
+        plasma_graphs,
+        pathways
+    ):
+
+        self.patients = list(patients)
+        self.plasma_graphs = plasma_graphs
+        self.pathways = pathways
+
+
+    def __len__(self):
+
+        return len(self.patients)
+
+
+    def __getitem__(self, idx):
+
+        patient = self.patients[idx]
+
+        plasma = self.plasma_graphs[patient]
+
+        target = self.pathways.loc[
+            patient, target_pathway_names
+        ].to_numpy(dtype=np.float32)
+
+        return plasma, patient, torch.tensor(target)
+
+class Tissue_Pathway_Predictor(nn.Module):
+    def __init__(self,
+                 encoder,
+                 projector):
+        super().__init__()
+
+        self.encoder = encoder
+        self.projector = projector
+
+        # Freeze pretrained modules
+        self.encoder.requires_grad_(False)
+        self.projector.requires_grad_(False)
+
+        self.predictor = nn.Sequential(
+            nn.Linear(64, 64),
+            nn.ReLU(),
+            nn.Linear(64, 4)
+        )
+
+    def forward(self,plasma):
+        with torch.no_grad():
+            x = self.encoder(plasma)
+            z = self.projector(x)
+        return self.predictor(z)
+
+    def train(self, mode=True):
+        # Prevent parent train() calls from enabling training mode
+        # in the frozen pretrained modules.
+        super().train(mode)
+        self.encoder.eval()
+        self.projector.eval()
+        return self
 class CreatePairs(Dataset):
     def __init__(
         self,
@@ -758,6 +795,136 @@ def run_ora(
         f"Saved {len(ora_significant_df)} significant pathways → "
         f"{output_path}"
     )
+from torch_geometric.explain import Explainer
+from torch_geometric.explain import GNNExplainer
+from torch_geometric.explain import ModelConfig
+def run_explainer(val_explanation_loader, encoder_tissue, encoder_plasma,projector_shared):
+    plasma_explainer_results = {}
+    tissue_explainer_results = {}
+    for tissue, plasma, patient in val_explanation_loader:
+
+            with torch.no_grad():
+                emb_tissue = encoder_tissue(tissue.x,
+                    tissue.edge_index,
+                    tissue.batch)
+                emb_plasma = encoder_plasma(plasma.x,
+                    plasma.edge_index,
+                    plasma.batch)
+                z_tissue = projector_shared(emb_tissue)
+                z_plasma = projector_shared(emb_plasma)
+
+            # ==================================================
+            # 4. Tissue explanation (shared projector)
+            # ==================================================
+
+            tissue_masks = []
+
+            for run in range(10):
+                tissue_model = Tissue_Graph_Similarity(
+                    encoder_tissue,
+                    projector_shared,
+                    z_plasma
+                )
+
+                tissue_explainer = Explainer(
+                    model=tissue_model,
+                    algorithm=GNNExplainer(
+                        epochs=200,
+                        lr=0.01
+                    ),
+                    explanation_type="model",
+                    node_mask_type="object",
+                    edge_mask_type=None,
+                    model_config=ModelConfig(
+                        mode="regression",
+                        task_level="graph",
+                        return_type="raw"
+                    )
+                )
+
+                tissue_explanation = tissue_explainer(
+                    tissue.x,
+                    tissue.edge_index,
+                    target=None,
+                    batch=tissue.batch
+                )
+
+                tissue_masks.append(
+                    tissue_explanation.node_mask.detach().cpu().numpy()
+                )
+
+            tissue_masks = np.array(tissue_masks)
+
+            tissue_mean = tissue_masks.mean(axis=0)
+            tissue_std = tissue_masks.std(axis=0)
+
+            # ==================================================
+            # 3. Plasma explanation
+            # ==================================================
+
+            plasma_masks = []
+
+            for run in range(10):
+                plasma_model = Plasma_Graph_Similarity(
+                    encoder_plasma,
+                    projector_shared,
+                    z_tissue
+                )
+
+                plasma_explainer = Explainer(
+                    model=plasma_model,
+                    algorithm=GNNExplainer(
+                        epochs=200,
+                        lr=0.01
+                    ),
+                    explanation_type="model",
+                    node_mask_type="object",
+                    edge_mask_type=None,
+                    model_config=ModelConfig(
+                        mode="regression",
+                        task_level="graph",
+                        return_type="raw"
+                    )
+                )
+
+                plasma_explanation = plasma_explainer(
+                    plasma.x,
+                    plasma.edge_index,
+                    target=None,
+                    batch=plasma.batch
+                )
+
+                plasma_masks.append(
+                    plasma_explanation.node_mask.detach().cpu().numpy()
+                )
+
+            plasma_masks = np.array(plasma_masks)
+
+            plasma_mean = plasma_masks.mean(axis=0)
+            plasma_std = plasma_masks.std(axis=0)
+
+    plasma_explainer_results[patient] = {
+        "mean": plasma_mean,
+        "std": plasma_std
+    }
+
+    tissue_explainer_results[patient] = {
+        "mean": tissue_mean.copy(),
+        "std": tissue_std.copy()
+    }
+
+    print("PLASMA EXPLAINER")
+    print(plasma_explainer_results)
+
+    print("TISSUE EXPLAINER")
+    print(tissue_explainer_results)
+
+    return plasma_explainer_results, tissue_explainer_results
+
+
+
+
+
 def training_loop():
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -779,8 +946,15 @@ def training_loop():
         shuffle=True,
         random_state=42
     )
-
+    fold_splits = {}
     for fold, (train_idx, val_idx) in enumerate(kf.split(patients)):
+        fold_splits[str(fold)] = {
+            "train_patients": patients[train_idx].tolist(),
+            "val_patients": patients[val_idx].tolist()
+        }
+
+        with open("pretraining_fold_splits.json", "w") as f:
+            json.dump(fold_splits, f, indent=2)
         train_losses = []
         train_losses_shared = []
 
@@ -1212,7 +1386,7 @@ def training_loop():
                         epoch_name = f"epoch{epoch}"
                         torch.save(
                             encoder_plasma.state_dict(),
-                            'best_plasma_encoder.pt'
+                            f'best_plasma_encoder_{fold}.pt'
                         )
 
                         torch.save(
@@ -1222,7 +1396,7 @@ def training_loop():
 
                         torch.save(
                             projector_shared.state_dict(),
-                            'best_shared_projector.pt'
+                            f'best_shared_projector_{fold}.pt'
                         )
 
 
@@ -1310,179 +1484,55 @@ def training_loop():
         retrieval_acc_val_all_folds.append(retrieval_accuracy_proj_val)
         shared_loss_val_all_folds.append(val_losses_shared)
 
-
-        ############### GNN_EXPLAINER #################
-        from torch_geometric.explain import Explainer
-        from torch_geometric.explain import GNNExplainer
-        from torch_geometric.explain import ModelConfig
-        encoder_plasma.load_state_dict(
-            torch.load('best_plasma_encoder.pt')
-        )
-
-        encoder_tissue.load_state_dict(
-            torch.load('best_tissue_encoder.pt')
-        )
-
-        projector_shared.load_state_dict(
-            torch.load('best_shared_projector.pt')
-        )
-
-
-        plasma_explainer_results ={}
-        tissue_explainer_results ={}
-
-
-
-        encoder_plasma.eval()
-        encoder_tissue.eval()
-        projector_shared.eval()
-        # explanation loader
-        val_explanation_loader = DataLoader(
-            val_dataset,
-            batch_size=1,
-            shuffle=False
-        )
-
-        for tissue, plasma, patient in val_explanation_loader:
-
-            with torch.no_grad():
-                emb_tissue = encoder_tissue(tissue.x,
-                    tissue.edge_index,
-                    tissue.batch)
-                emb_plasma = encoder_plasma(plasma.x,
-                    plasma.edge_index,
-                    plasma.batch)
-                z_tissue = projector_shared(emb_tissue)
-                z_plasma = projector_shared(emb_plasma)
-
-            # ==================================================
-            # 4. Tissue explanation (shared projector)
-            # ==================================================
-
-            tissue_masks = []
-
-            for run in range(10):
-                tissue_model = Tissue_Graph_Similarity(
-                    encoder_tissue,
-                    projector_shared,
-                    z_plasma
-                )
-
-                tissue_explainer = Explainer(
-                    model=tissue_model,
-                    algorithm=GNNExplainer(
-                        epochs=200,
-                        lr=0.01
-                    ),
-                    explanation_type="model",
-                    node_mask_type="object",
-                    edge_mask_type=None,
-                    model_config=ModelConfig(
-                        mode="regression",
-                        task_level="graph",
-                        return_type="raw"
-                    )
-                )
-
-                tissue_explanation = tissue_explainer(
-                    tissue.x,
-                    tissue.edge_index,
-                    target=None,
-                    batch=tissue.batch
-                )
-
-                tissue_masks.append(
-                    tissue_explanation.node_mask.detach().cpu().numpy()
-                )
-
-            tissue_masks = np.array(tissue_masks)
-
-            tissue_mean = tissue_masks.mean(axis=0)
-            tissue_std = tissue_masks.std(axis=0)
-
-            # ==================================================
-            # 3. Plasma explanation
-            # ==================================================
-
-            plasma_masks = []
-
-            for run in range(10):
-                plasma_model = Plasma_Graph_Similarity(
-                    encoder_plasma,
-                    projector_shared,
-                    z_tissue
-                )
-
-                plasma_explainer = Explainer(
-                    model=plasma_model,
-                    algorithm=GNNExplainer(
-                        epochs=200,
-                        lr=0.01
-                    ),
-                    explanation_type="model",
-                    node_mask_type="object",
-                    edge_mask_type=None,
-                    model_config=ModelConfig(
-                        mode="regression",
-                        task_level="graph",
-                        return_type="raw"
-                    )
-                )
-
-                plasma_explanation = plasma_explainer(
-                    plasma.x,
-                    plasma.edge_index,
-                    target=None,
-                    batch=plasma.batch
-                )
-
-                plasma_masks.append(
-                    plasma_explanation.node_mask.detach().cpu().numpy()
-                )
-
-            plasma_masks = np.array(plasma_masks)
-
-            plasma_mean = plasma_masks.mean(axis=0)
-            plasma_std = plasma_masks.std(axis=0)
-
-
-            # ==================================================
-            # 5. Save
-            # ==================================================
-
-            plasma_explainer_results[patient] = {
-                "mean": plasma_mean,
-                "std": plasma_std
-            }
-
-            tissue_explainer_results[patient] = {
-                "mean": tissue_mean.copy(),
-                "std": tissue_std.copy()
-            }
-
-            print("PLASMA EXPLAINER")
-            print(plasma_explainer_results)
-
-            print("TISSUE EXPLAINER")
-            print(tissue_explainer_results)
-
-
-            explainer_fold_results_tissue[fold] = tissue_explainer_results
-            explainer_fold_results_plasma[fold] = plasma_explainer_results
-
-            torch.save(
-                explainer_fold_results_plasma,
-                "training_plots/baseline/explainer_fold_results_plasma.pt"
-            )
-
-            torch.save(
-                explainer_fold_results_tissue,
-                "training_plots/baseline/explainer_fold_results_tissue.pt"
-            )
-
-        torch.save(  fold_embeddings,f"embeddings_baseline/fold_{fold}_embeddings.pt" )
+        #
+        # ############### GNN_EXPLAINER #################
+        #
+        # encoder_plasma.load_state_dict(
+        #     torch.load('best_plasma_encoder.pt')
+        # )
+        #
+        # encoder_tissue.load_state_dict(
+        #     torch.load('best_tissue_encoder.pt')
+        # )
+        #
+        # projector_shared.load_state_dict(
+        #     torch.load('best_shared_projector.pt')
+        # )
+        #
+        # encoder_plasma.eval()
+        # encoder_tissue.eval()
+        # projector_shared.eval()
+        # # explanation loader
+        # val_explanation_loader = DataLoader(
+        #     val_dataset,
+        #     batch_size=1,
+        #     shuffle=False
+        # )
+        # tissue_explainer_results, plasma_explainer_results = run_explainer(val_explanation_loader, encoder_plasma, encoder_tissue, projector_shared)
+        #
+        # # ==================================================
+        # # 5. Save
+        # # ==================================================
+        #
+        #
+        # explainer_fold_results_tissue[fold] = tissue_explainer_results
+        # explainer_fold_results_plasma[fold] = plasma_explainer_results
+        #
+        # torch.save(
+        #     explainer_fold_results_plasma,
+        #     "training_plots/baseline/explainer_fold_results_plasma.pt"
+        # )
+        #
+        # torch.save(
+        #     explainer_fold_results_tissue,
+        #     "training_plots/baseline/explainer_fold_results_tissue.pt"
+        # )
+        torch.save(fold_embeddings, f"embeddings_baseline/fold_{fold}_embeddings.pt")
         torch.save(fold_embeddings_proj, f"embeddings_baseline/fold_{fold}_embeddings_proj.pt")
         torch.save(best_embeddings_proj, f"embeddings_baseline/fold_{fold}_best_embeddings_proj.pt")
+
+
+
 
     # Loss plot
     plt.figure(figsize=(6, 4))
@@ -1544,98 +1594,98 @@ def training_loop():
     plt.close()
 
 
-
-    ######## get neat gnn_explainer results
-    idx_to_gene_tissue = dict(
-        zip(gene_to_idx_tissue["idx"], gene_to_idx_tissue["Gene"])
-    )
-    idx_to_gene_plasma = dict(
-        zip(gene_to_idx_plasma["idx"], gene_to_idx_plasma["Gene"])
-    )
-
-    # --------------------------------------------------
-    # Shared explanations
-    # --------------------------------------------------
-
-    tissue_explanations_df = explanation_dict_to_df(
-        explainer_fold_results_tissue,
-        idx_to_gene_tissue
-    )
-
-    plasma_explanations_df = explanation_dict_to_df(
-        explainer_fold_results_plasma,
-        idx_to_gene_plasma
-    )
-
-
-
-    # --------------------------------------------------
-    # Save GNNExplainer results
-    # --------------------------------------------------
-
-    output_dir = "training_plots/baseline"
-
-    tissue_explanations_df.to_csv(
-        f"{output_dir}/tissue_gnn_explainer_results.csv",
-        index=False
-    )
-
-    plasma_explanations_df.to_csv(
-        f"{output_dir}/plasma_gnn_explainer_results.csv",
-        index=False
-    )
-
-
-
-    ##### Create edge masks
-
-    g0_plasma = graphs_plasma[0]
-    g0_tissue = graphs_tissue[0]
-
-    edge_index_tissue = g0_tissue.edge_index
-    edge_index_plasma = g0_plasma.edge_index
-
-    subnetworks_tissue = create_subnetworks_global(
-        tissue_explanations_df,
-        idx_to_gene_tissue,
-        edge_index_tissue,
-        "TISSUE shared"
-    )
-
-    subnetworks_plasma = create_subnetworks_global(
-        plasma_explanations_df,
-        idx_to_gene_plasma,
-        edge_index_plasma,
-        "PLASMA shared"
-    )
-
-    # ==================================================
-    # Run ORA
-    # ==================================================
-
-    background_genes_tissue = set(
-        idx_to_gene_tissue.values()
-    )
-
-    background_genes_plasma = set(
-        idx_to_gene_plasma.values()
-    )
-
-
-    # Shared tissue
-    run_ora(
-        subnetworks_tissue,
-        background_genes_tissue,
-        "training_plots/baseline/tissue_subcommunities_enrichment_results_GLOBAL.xlsx"
-    )
-
-
-    # Shared plasma
-    run_ora(
-        subnetworks_plasma,
-        background_genes_plasma,
-        "training_plots/baseline/plasma_subcommunities_enrichment_results_GLOBAL.xlsx"
-    )
+    #
+    # ######## get neat gnn_explainer results
+    # idx_to_gene_tissue = dict(
+    #     zip(gene_to_idx_tissue["idx"], gene_to_idx_tissue["Gene"])
+    # )
+    # idx_to_gene_plasma = dict(
+    #     zip(gene_to_idx_plasma["idx"], gene_to_idx_plasma["Gene"])
+    # )
+    #
+    # # --------------------------------------------------
+    # # Shared explanations
+    # # --------------------------------------------------
+    #
+    # tissue_explanations_df = explanation_dict_to_df(
+    #     explainer_fold_results_tissue,
+    #     idx_to_gene_tissue
+    # )
+    #
+    # plasma_explanations_df = explanation_dict_to_df(
+    #     explainer_fold_results_plasma,
+    #     idx_to_gene_plasma
+    # )
+    #
+    #
+    #
+    # # --------------------------------------------------
+    # # Save GNNExplainer results
+    # # --------------------------------------------------
+    #
+    # output_dir = "training_plots/baseline"
+    #
+    # tissue_explanations_df.to_csv(
+    #     f"{output_dir}/tissue_gnn_explainer_results.csv",
+    #     index=False
+    # )
+    #
+    # plasma_explanations_df.to_csv(
+    #     f"{output_dir}/plasma_gnn_explainer_results.csv",
+    #     index=False
+    # )
+    #
+    #
+    #
+    # ##### Create edge masks
+    #
+    # g0_plasma = graphs_plasma[0]
+    # g0_tissue = graphs_tissue[0]
+    #
+    # edge_index_tissue = g0_tissue.edge_index
+    # edge_index_plasma = g0_plasma.edge_index
+    #
+    # subnetworks_tissue = create_subnetworks_global(
+    #     tissue_explanations_df,
+    #     idx_to_gene_tissue,
+    #     edge_index_tissue,
+    #     "TISSUE shared"
+    # )
+    #
+    # subnetworks_plasma = create_subnetworks_global(
+    #     plasma_explanations_df,
+    #     idx_to_gene_plasma,
+    #     edge_index_plasma,
+    #     "PLASMA shared"
+    # )
+    #
+    # # ==================================================
+    # # Run ORA
+    # # ==================================================
+    #
+    # background_genes_tissue = set(
+    #     idx_to_gene_tissue.values()
+    # )
+    #
+    # background_genes_plasma = set(
+    #     idx_to_gene_plasma.values()
+    # )
+    #
+    #
+    # # Shared tissue
+    # run_ora(
+    #     subnetworks_tissue,
+    #     background_genes_tissue,
+    #     "training_plots/baseline/tissue_subcommunities_enrichment_results_GLOBAL.xlsx"
+    # )
+    #
+    #
+    # # Shared plasma
+    # run_ora(
+    #     subnetworks_plasma,
+    #     background_genes_plasma,
+    #     "training_plots/baseline/plasma_subcommunities_enrichment_results_GLOBAL.xlsx"
+    # )
 
 
 
