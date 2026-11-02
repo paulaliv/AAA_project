@@ -108,80 +108,7 @@ class GetData(Dataset):
 
         return plasma, patient, torch.tensor(target)
 
-class GraphEncoder_Tissue(nn.Module):
 
-    def __init__(self, hidden_dim=64):
-
-        super().__init__()
-
-        self.conv1 = SAGEConv(
-            1,
-            hidden_dim
-        )
-
-        self.conv2 = SAGEConv(
-            hidden_dim,
-            hidden_dim
-        )
-        self.mlp = nn.Sequential(
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, hidden_dim)
-        )
-
-        # self.conv1 = GCNConv(
-        #     1,
-        #     hidden_dim
-        # )
-
-        # self.conv2 = GCNConv(
-        #     hidden_dim,
-        #     hidden_dim
-        # )
-
-        # self.pool = global_mean_pool
-
-        self.pool = GlobalAttention(
-            gate_nn=nn.Sequential(
-                nn.Linear(hidden_dim,32),
-                nn.ReLU(),
-                nn.Linear(32,1)
-            )
-        )
-
-
-    def forward(self,x,edge_index,batch):
-
-
-        x = self.conv1(
-            x,
-            edge_index
-        )
-
-        x = torch.relu(x)
-
-
-        x = self.conv2(
-            x,
-            edge_index
-        )
-
-        x = torch.relu(x)
-
-
-        x = self.pool(
-            x,
-            batch
-        )
-
-        # x = global_mean_pool(
-        #     x,
-        #     batch
-        # )
-
-        #x = self.mlp(x)
-
-        return x
 
 class GraphEncoder_Plasma(nn.Module):
 
@@ -256,35 +183,43 @@ class ProjectionHead_Shared(nn.Module):
 
 class Tissue_Pathway_Predictor(nn.Module):
     def __init__(self,
-                 encoder,
-                 projector):
+                 encoder):
         super().__init__()
 
         self.encoder = encoder
-        self.projector = projector
+        # self.projector = projector
 
         # Freeze pretrained modules
         self.encoder.requires_grad_(False)
-        self.projector.requires_grad_(False)
+        self.encoder.conv2.requires_grad_(True)
+
+        # self.projector.requires_grad_(False)
 
         self.predictor = nn.Sequential(
-            nn.Linear(32, 32),
+            nn.Linear(64, 64),
             nn.ReLU(),
-            nn.Linear(32, 4)
+            nn.Dropout(0.2),
+            nn.Linear(64, 4)
         )
 
     def forward(self,plasma):
-        with torch.no_grad():
-            x = self.encoder(plasma.x, plasma.edge_index,plasma.batch)
-            z = self.projector(x)
-        return self.predictor(z)
+        # with torch.no_grad():
+        x = self.encoder(plasma.x, plasma.edge_index,plasma.batch)
+        # z = self.projector(x)
+        return self.predictor(x)
 
     def train(self, mode=True):
         # Prevent parent train() calls from enabling training mode
         # in the frozen pretrained modules.
         super().train(mode)
-        self.encoder.eval()
-        self.projector.eval()
+        # Keep frozen layers in evaluation mode
+        self.encoder.conv1.eval()
+        self.encoder.pool.eval()
+
+        # Allow conv2 to follow training mode
+        self.encoder.conv2.train(mode)
+        # self.encoder.eval()
+        # self.projector.eval()
         return self
 
 def training_loop():
@@ -380,20 +315,30 @@ def training_loop():
             )
         )
 
-        projector = ProjectionHead_Shared()
-        projector.load_state_dict(
-            torch.load(
-                f'best_shared_projector_{fold}.pt',
-                map_location=device,
-                weights_only=True
-            )
-        )
+        # projector = ProjectionHead_Shared()
+        # projector.load_state_dict(
+        #     torch.load(
+        #         f'best_shared_projector_{fold}.pt',
+        #         map_location=device,
+        #         weights_only=True
+        #     )
+        # )
 
-        predictor = Tissue_Pathway_Predictor(plasma_encoder,projector).to(device)
+        predictor = Tissue_Pathway_Predictor(plasma_encoder).to(device)
 
         criterion = nn.MSELoss()
 
-        optimizer = torch.optim.Adam(predictor.predictor.parameters(), lr=3e-4)
+        # optimizer = torch.optim.Adam(predictor.predictor.parameters(), lr=1e-4)
+        optimizer = torch.optim.AdamW([
+            {
+                "params": predictor.encoder.conv2.parameters(),
+                "lr": 1e-5
+            },
+            {
+                "params": predictor.predictor.parameters(),
+                "lr": 1e-4
+            }
+        ], weight_decay=1e-4)
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer,
             mode="min",
@@ -401,7 +346,7 @@ def training_loop():
             patience=3
         )
 
-        epochs = 200
+        epochs = 100
         best_val_loss = float("inf")
         best_val_preds = None
         best_val_targets = None
